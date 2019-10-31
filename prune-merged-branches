@@ -1,0 +1,31 @@
+#!/bin/bash
+### Courtesy of @nicksieger
+
+IGNORE=${IGNORE-}
+BEFORE=${BEFORE-`gdate -d "4 weeks ago" +%s`}
+BRANCH_OPTS=${BRANCH_OPTS--a}
+
+if [ "$IGNORE" ]; then
+    IGNORE="master\|$IGNORE"
+else
+    IGNORE="master"
+fi
+
+git checkout master
+git fetch -p origin
+
+git branch $BRANCH_OPTS --merged | grep -v "$IGNORE" | while read branch; do
+    timestamp=$(git log -n 1 --format=format:%at $branch)
+    if [ $timestamp -lt "$BEFORE" ]; then
+	if [ "$DRYRUN" ]; then
+	    echo $branch,$(gdate -d "@$timestamp" -Iseconds)
+	else
+	    bare_branch=${branch##remotes/origin/}
+	    if [ $branch = $bare_branch ]; then
+		git branch -d $branch
+	    else
+		git push --delete origin $bare_branch
+	    fi
+	fi
+    fi
+done
