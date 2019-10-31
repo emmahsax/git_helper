@@ -1,0 +1,5 @@
+#!/bin/bash
+
+pull_request_title=$@
+echo "Attempting to create a new pull request: $pull_request_title"
+ruby github/pull_request.rb create $pull_request_title
