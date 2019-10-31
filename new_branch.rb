@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 class NewBranch
   attr_accessor :branch_name
 
@@ -6,16 +8,30 @@ class NewBranch
   end
 
   def create_new_branch
-    if @branch_name
-      system("git branch --no-track #{@branch_name}")
-      system("git checkout #{@branch_name}")
-      system("git branch --set-upstream-to=origin #{@branch_name}")
-      system("git pull")
-      system("git push")
-    else
-      puts 'No branch name was provided.'
-    end
+    system("git branch --no-track #{@branch_name}")
+    system("git checkout #{@branch_name}")
+    system("git branch --set-upstream-to=origin #{@branch_name}")
+    system("git pull")
+    system("git push")
   end
 end
 
-NewBranch.new(ARGV[0]).create_new_branch
+arg = ARGV[0]
+
+if arg == '-h' || arg == '--help' || arg.nil? || arg == ''
+  puts """
+Usage for creating new branches:
+  # Run this script from within your local repository/branch
+  ruby new_branch.rb {branch_name}
+
+  -h, --help      - Displays this help information
+
+Required: branch_name
+Examples:
+  ruby new_branch.rb my_new_feature_branch
+    """
+    exit(0)
+end
+
+puts "\nAttempting to create a new branch: #{arg}", ''
+NewBranch.new(arg).create_new_branch
