@@ -16,7 +16,7 @@ class PullRequest
 
   def create
     begin
-      pr = octokit_client.create_pull_request(repository_from_local, "master", branch_from_local, @pr_title)
+      pr = octokit_client.create_pull_request(local_repo, "master", local_branch, @pr_title)
       puts "Pull request successfully created: #{pr.html_url}"
     rescue Octokit::UnprocessableEntity => e
       puts 'Could not create pull request:'
@@ -32,7 +32,7 @@ class PullRequest
 
   def merge
     begin
-      merge = octokit_client.merge_pull_request(repository_from_local, @pr_number, commit_message)
+      merge = octokit_client.merge_pull_request(local_repo, @pr_number)
       puts "Pull request successfully merged: #{merge.sha}"
     rescue Octokit::UnprocessableEntity => e
       puts 'Could not merge pull request:'
@@ -54,36 +54,20 @@ class PullRequest
     end
   end
 
-  private def repository_from_local
+  private def local_repo
     # Get the repository by looking in the remote URLs for the full repository name
     remotes = `git remote -v`
     return remotes.scan(/\S[\s]*[\S]+.com[\S]{1}([\S]*).git/).first.first
   end
 
-  private def branch_from_local
+  private def local_branch
     # Get the current branch by looking in the list of branches for the *
     branches = `git branch`
     return branches.scan(/\*\s([\S]*)/).first.first
   end
 
-  private def branch_from_pull_request
-    octokit_client.pull_request(repository_from_local, @pr_number).head.ref
-  end
-
-  private def commit_message
-    "Merge pull request ##{@pr_number} from #{github_username}/#{branch_from_pull_request}"
-  end
-
   private def octokit_client
-    @octokit_client ||= client_object.client
-  end
-
-  private def github_username
-    @github_username ||= client_object.github_username
-  end
-
-  private def client_object
-    @client_object ||= OctokitClient.new(@user)
+    @octokit_client ||= OctokitClient.new(@user).client
   end
 end
 
