@@ -14,10 +14,6 @@ class OctokitClient
     Octokit::Client.new(access_token: github_token)
   end
 
-  def github_username
-    @user ? config_file[@user][:github_user] : config_file[:github_user]
-  end
-
   private def github_token
     @user ? config_file[@user][:github_token] : config_file[:github_token]
   end
