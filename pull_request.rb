@@ -3,14 +3,15 @@
 require_relative './octokit_client.rb'
 
 class PullRequest
-  attr_accessor :pr_title, :pr_number
+  attr_accessor :pr_title, :pr_number, :user
 
-  def initialize(title_or_number)
+  def initialize(title_or_number, user)
     if title_or_number.to_i > 0
       @pr_number = title_or_number.to_i
     else
       @pr_title = title_or_number
     end
+    @user = user ? user.to_sym : nil
   end
 
   def create
@@ -82,12 +83,13 @@ class PullRequest
   end
 
   private def client_object
-    @client_object ||= OctokitClient.new
+    @client_object ||= OctokitClient.new(@user)
   end
 end
 
 arg = ARGV[0]
 option = ARGV[1]
+user = (ARGV[2] == '-u' || ARGV[2] == '--user') ? ARGV[3] : nil
 
 case arg
 when '-c', '--create'
@@ -98,22 +100,25 @@ when '-h', '--help', nil, ''
   puts """
 Usage for working with this pull requests script:
   # Run this script from within your local repository/branch
-  ruby pull_request.rb [-h|-c|-m] {option}
+  ./pull_request.rb [-h|-c|-m] {option} [-u] [github_user_code_from_~/.automation/config.yml]
 
   -h, --help      - Displays this help information
   -c, --create    - Create a new pull request with a title (the next argument)
   -m, --merge     - Merge the pull request that corresponds to the PR number (the next argument)
+  -u, --user      - Use a specific Octokit user to create/merge the pull request (the next argument)
 
 Required: create or merge, option
 Examples:
-  ruby pull_request.rb -c 'Title of pull request'
-  ruby pull_request.rb -m 101
+  ./pull_request.rb -c 'Title of pull request'
+  ./pull_request.rb -m 101
+  ./pull_request.rb --create 'Title of pull request' -u special_github_user_code
+  ./pull_request.rb --merge 101 --user special_github_user_code
     """
     exit(0)
 end
 
 puts "\nAttempting to #{action.to_s} pull request: #{option}", ''
-pull_request = PullRequest.new(option)
+pull_request = PullRequest.new(option, user)
 
 case action
 when :create
