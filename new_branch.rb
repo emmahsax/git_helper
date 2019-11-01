@@ -22,13 +22,13 @@ if arg == '-h' || arg == '--help' || arg.nil? || arg == ''
   puts """
 Usage for creating new branches:
   # Run this script from within your local repository/branch
-  ruby new_branch.rb {branch_name}
+  ./new_branch.rb {branch_name}
 
   -h, --help      - Displays this help information
 
 Required: branch_name
 Examples:
-  ruby new_branch.rb my_new_feature_branch
+  ./new_branch.rb my_new_feature_branch
     """
     exit(0)
 end
