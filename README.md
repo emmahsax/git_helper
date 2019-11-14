@@ -18,37 +18,34 @@ This script is particularly nice when you're in a repository that has a ton of s
 
 This script is useful for making new branches in a repository on the command line. I mostly use it with the base branch as `master`, but technically it'd work with any branch. To run the script, you must currently be `cd`ed into the repository on your local machine that you want to make the new branch for. Then, run:
 ```
-/path/to/this/directory/new_branch.rb my_new_feature_branch
+/path/to/this/directory/new_branch.rb
 ```
 
-If you're getting stuck, you can run the command with a `--help` flag instead, to get some more information.
+And the script will ask you for the name of the new branch. Make sure your input does not contain any spaces.
 
 #### `pull_request.rb`
 
 This script can be used to handily make new pull requests and to merge pull requests from the command line. The script uses the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) to do this, so make sure you have a `~/.automation/config.yml` file set up:
 ```
-# default GitHub user
-:github_user: github-user
-:github_token: QPHNXYfNwA1m1LTF7c8xY8pfj5t13vzb0GkA3ZoU
+# first GitHub user
+'github-user Name':
+  :github_user: github-user
+  :github_token: QPHNXYfNwA1m1LTF7c8xY8pfj5t13vzb0GkA3ZoU
 
 # other GitHub user
-:other:
+'other-github-user Name':
   :github_user: other-github-user
   :github_token: tEBvYBpZi4OIRtS43mLpjLdR6Sp14xSbMZgBgNsv
 ```
 
-Then, you can call the file, and send in a flag indicating whether to create a pull request (and then pass in the title of the PR) or to merge a pull request (and then pass in the number of the PR).
+The keys should be the "name" that appears when you run `git config user.name` in your repository. And then, the Octokit client will use whichever github token matches which GitHub user you use to commit in that specific repository.
+
+After this, you can call the file, and send in a flag indicating whether to create a pull request, `-c`, or to merge a pull request, `-m`.
 ```
-./pull_request.rb -c 'Title of pull request'
-./pull_request.rb -m 101
+/path/to/this/directory/pull_request.rb -c
+/path/to/this/directory/pull_request.rb -m
 ```
 
-To use the other user you have set up to merge/create, indicate that as the next flag:
-```
-./pull_request.rb -c 'Title of pull request' -u other
-./pull_request.rb -m 101 -u other
-```
-
-NOTE: The order of the flags is _very_ important... mainly because I don't feel like making the argument parser any fancier.
+The scripts will ask you either the ID of the pull request you wish to merge, or the title you would like to use on the new pull request. If you're trying to create a PR, then it will try to auto-generate a title based on your branch name (separated by `_`). You can always reject this auto-generated title and provide your own.
 
 If you're getting stuck, you can run the command with a `--help` flag instead, to get some more information.
