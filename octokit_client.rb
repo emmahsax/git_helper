@@ -24,6 +24,6 @@ class OctokitClient
   end
 
   private def github_config_file
-    ".automation/config.yml"
+    '.automation/config.yml'
   end
 end
