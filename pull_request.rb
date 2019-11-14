@@ -8,7 +8,7 @@ class PullRequest
     begin
       title = accept_auto_generated_title? ? auto_generated_title : cli.ask('Title?')
       puts "Creating pull request: #{title}"
-      pr = octokit_client.create_pull_request(local_repo, "master", local_branch, pr_data)
+      pr = octokit_client.create_pull_request(local_repo, "master", local_branch, title)
       puts "Pull request successfully created: #{pr.html_url}"
     rescue Octokit::UnprocessableEntity => e
       puts 'Could not create pull request:'
@@ -26,7 +26,7 @@ class PullRequest
     begin
       pr_id = cli.ask('Pull Request ID?')
       puts "Merging pull request: #{pr_id}"
-      merge = octokit_client.merge_pull_request(local_repo, pr_data)
+      merge = octokit_client.merge_pull_request(local_repo, pr_id)
       puts "Pull request successfully merged: #{merge.sha}"
     rescue Octokit::UnprocessableEntity => e
       puts 'Could not merge pull request:'
