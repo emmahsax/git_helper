@@ -1,22 +1,14 @@
 #!/usr/bin/env ruby
 
 require_relative './octokit_client.rb'
+require_relative './highline_cli.rb'
 
 class PullRequest
-  attr_accessor :pr_title, :pr_number, :user
-
-  def initialize(title_or_number, user)
-    if title_or_number.to_i > 0
-      @pr_number = title_or_number.to_i
-    else
-      @pr_title = title_or_number
-    end
-    @user = user ? user.to_sym : nil
-  end
-
   def create
     begin
-      pr = octokit_client.create_pull_request(local_repo, "master", local_branch, @pr_title)
+      title = accept_auto_generated_title? ? auto_generated_title : cli.ask('Title?')
+      puts "Creating pull request: #{title}"
+      pr = octokit_client.create_pull_request(local_repo, "master", local_branch, pr_data)
       puts "Pull request successfully created: #{pr.html_url}"
     rescue Octokit::UnprocessableEntity => e
       puts 'Could not create pull request:'
@@ -32,14 +24,16 @@ class PullRequest
 
   def merge
     begin
-      merge = octokit_client.merge_pull_request(local_repo, @pr_number)
+      pr_id = cli.ask('Pull Request ID?')
+      puts "Merging pull request: #{pr_id}"
+      merge = octokit_client.merge_pull_request(local_repo, pr_data)
       puts "Pull request successfully merged: #{merge.sha}"
     rescue Octokit::UnprocessableEntity => e
       puts 'Could not merge pull request:'
       puts e.message
     rescue Octokit::NotFound => e
       puts 'Could not merge pull request:'
-      puts '  Could not a locate a pull request to merge'
+      puts "  Could not a locate a pull request to merge with ID #{pr_id}"
     rescue Octokit::MethodNotAllowed => e
       puts 'Could not merge pull_request:'
       if e.message.include?('405 - Required status check')
@@ -66,14 +60,25 @@ class PullRequest
     return branches.scan(/\*\s([\S]*)/).first.first
   end
 
+  private def auto_generated_title
+    @auto_generated_title ||= local_branch.split('_')[0..-1].join(' ').capitalize
+  end
+
+  private def accept_auto_generated_title?
+    answer = cli.ask("Accept the auto-generated title: '#{auto_generated_title}' (y/n)")
+    !!(answer =~ /^y/i)
+  end
+
   private def octokit_client
-    @octokit_client ||= OctokitClient.new(@user).client
+    @octokit_client ||= OctokitClient.new.client
+  end
+
+  private def cli
+    @cli ||= HighlineCli.new
   end
 end
 
 arg = ARGV[0]
-option = ARGV[1]
-user = (ARGV[2] == '-u' || ARGV[2] == '--user') ? ARGV[3] : nil
 
 case arg
 when '-c', '--create'
@@ -84,25 +89,21 @@ when '-h', '--help', nil, ''
   puts """
 Usage for working with this pull requests script:
   # Run this script from within your local repository/branch
-  ./pull_request.rb [-h|-c|-m] {option} [-u] [github_user_code_from_~/.automation/config.yml]
+  ./pull_request.rb [-h|-c|-m]
 
   -h, --help      - Displays this help information
   -c, --create    - Create a new pull request with a title (the next argument)
   -m, --merge     - Merge the pull request that corresponds to the PR number (the next argument)
-  -u, --user      - Use a specific Octokit user to create/merge the pull request (the next argument)
 
-Required: create or merge, option
+Required: create or merge
 Examples:
-  ./pull_request.rb -c 'Title of pull request'
-  ./pull_request.rb -m 101
-  ./pull_request.rb --create 'Title of pull request' -u special_github_user_code
-  ./pull_request.rb --merge 101 --user special_github_user_code
+  ./pull_request.rb -c
+  ./pull_request.rb -m
     """
     exit(0)
 end
 
-puts "\nAttempting to #{action.to_s} pull request: #{option}", ''
-pull_request = PullRequest.new(option, user)
+pull_request = PullRequest.new
 
 case action
 when :create
