@@ -25,7 +25,7 @@ The script will ask you for the name of your new branch. Make sure your input do
 
 #### `pull_request.rb`
 
-This script can be used to handily make new pull requests and to merge pull requests from the command line. The script uses the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) to do this, so make sure you have a `.git_users.yml` file set up in this repository (the file will not be committed to GitHub):
+This script can be used to handily make new pull requests and to merge pull requests from the command line. The script uses the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) to do this, so make sure you have a `~/.scripts_git_users.yml` file set up in this repository (the file will not be committed to GitHub):
 ```
 # first GitHub user
 'github-user Name':
