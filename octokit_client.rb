@@ -16,10 +16,14 @@ class OctokitClient
   end
 
   private def config_file
-    YAML.load_file(github_config_file)
+    YAML.load_file(github_config_file_path)
+  end
+
+  private def github_config_file_path
+    Dir.pwd.scan(/\A\/[\w]*\/[\w]*\//).first << github_config_file
   end
 
   private def github_config_file
-    '.git_users.yml'
+    '.scripts_git_users.yml'
   end
 end
