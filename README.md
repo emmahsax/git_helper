@@ -25,20 +25,20 @@ The script will ask you for the name of your new branch. Make sure your input do
 
 #### `pull_request.rb`
 
-This script can be used to handily make new pull requests and to merge pull requests from the command line. The script uses the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) to do this, so make sure you have a `~/.scripts_git_users.yml` file set up in the home directory of your computer:
+This script can be used to handily make new pull requests and to merge pull requests from the command line. The script uses the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) to do this, so make sure you have a `~/.scripts/git_users.yml` file set up in the home directory of your computer:
 ```
 # first GitHub user
-'github-user Name':
-  :github_user: github-user
+'Firstname Lastname':
+  :github_user: github-username
   :github_token: QPHNXYfNwA1m1LTF7c8xY8pfj5t13vzb0GkA3ZoU
 
 # other GitHub user
-'other-github-user Name':
-  :github_user: other-github-user
+'another-github-username':
+  :github_user: another-github-username
   :github_token: tEBvYBpZi4OIRtS43mLpjLdR6Sp14xSbMZgBgNsv
 ```
 
-The keys should be the "name" that appears when you run `git config user.name` in your repository. And then, the Octokit client will use whichever github token matches which GitHub user you use to commit in that specific repository.
+The keys should be the "name" that appears when you run `git config user.name` in your repository. This could be a full name, a GitHub username, a nickname, etc. From this, the Octokit client will use whichever github token matches which GitHub user you use to commit in that specific repository.
 
 After this, you can call the file, and send in a flag indicating whether to create a pull request, `-c`, or to merge a pull request, `-m`.
 ```
