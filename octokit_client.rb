@@ -24,6 +24,6 @@ class OctokitClient
   end
 
   private def github_config_file
-    '.scripts_git_users.yml'
+    '.scripts/git_users.yml'
   end
 end
