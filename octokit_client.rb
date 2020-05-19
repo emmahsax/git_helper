@@ -2,6 +2,7 @@ require 'yaml'
 require 'octokit'
 
 class OctokitClient
+  # You'll want Octokit version >= 4.18.0, but in your local directory
   def client
     Octokit::Client.new(access_token: github_token)
   end
