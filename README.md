@@ -14,8 +14,6 @@ This script, courtesy of [@nicksieger](https://github.com/nicksieger), runs on a
 
 This script is particularly nice when you're in a repository that has a ton of stale branches.
 
-**Note: this script assumes the default branch of your repository is `master`.
-
 #### `new_branch.rb`
 
 This script is useful for making new branches in a repository on the command line. To run the script, you must currently be `cd`ed into the repository on your local machine that you want to make the new branch for. Then, run:
