@@ -1,4 +1,4 @@
-# scripts  [![Maintainability](https://api.codeclimate.com/v1/badges/ef132af18de9f1adb70e/maintainability)](https://codeclimate.com/github/emma-sax4/scripts/maintainability)
+# scripts [![Maintainability](https://api.codeclimate.com/v1/badges/ce1bdd719cc21b7c22a6/maintainability)](https://codeclimate.com/github/emmasax4/scripts/maintainability)
 
 Various scripts that I have written to be able to do things on the command line easier.
 
