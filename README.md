@@ -14,6 +14,10 @@ This script, courtesy of [@nicksieger](https://github.com/nicksieger), runs on a
 
 This script is particularly nice when you're in a repository that has a ton of stale branches.
 
+#### `prune_branches_from_repos.rb`
+
+This script makes use of the `prune-merged-branches` script, and can be used to loop through a bunch of repositories on somebody's machine (in a single directory), and will call the `prune-merged-branches` on every repository in that directory. Depending on the number of repositories and the amount of branches on each one, running this can take a LONG time.
+
 #### `new_branch.rb`
 
 This script is useful for making new branches in a repository on the command line. To run the script, you must currently be `cd`ed into the repository on your local machine that you want to make the new branch for. Then, run:
