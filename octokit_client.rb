@@ -20,6 +20,6 @@ class OctokitClient
   end
 
   private def github_config_file
-    '.scripts/github_config.yml'
+    '.github_config.yml'
   end
 end
