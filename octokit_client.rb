@@ -8,12 +8,7 @@ class OctokitClient
   end
 
   private def github_token
-    config_file[github_user][:github_token]
-  end
-
-  private def github_user
-    # Always user the GitHub user that the individual repo uses to commit with
-    @github_user ||= `git config user.name`.strip
+    config_file[:github_token]
   end
 
   private def config_file
@@ -25,6 +20,6 @@ class OctokitClient
   end
 
   private def github_config_file
-    '.scripts/git_users.yml'
+    '.github_config.yml'
   end
 end
