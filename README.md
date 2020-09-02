@@ -51,7 +51,7 @@ The script will ask you for the name of your new branch. Make sure your input do
 
 #### `pull_request.rb`
 
-This script can be used to handily make new GitHub pull requests and to merge pull requests from the command line. The script uses the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) to do this, so make sure you have a `.git_config.yml` file set up in the home directory of your computer. For instructions on how to do that, see the Setup section.
+This script can be used to handily make new GitHub pull requests and to merge pull requests from the command line. The script uses the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) to do this, so make sure you have a `.git_config.yml` file set up in the home directory of your computer. For instructions on how to do that, see [Setup](#setup).
 
 After setup is complete, you can call the file, and send in a flag indicating whether to create a pull request, `-c`, or to merge a pull request, `-m`.
 
@@ -66,7 +66,7 @@ If you're getting stuck, you can run the command with a `--help` flag instead, t
 
 #### `merge_request.rb`
 
-This script can be used to handily make new GitLab merge requests and to accept merge requests from the command line. The script uses the Ruby wrapper [`Gitlab`](https://github.com/NARKOZ/gitlab) to do this, so make sure you have a `.git_config.yml` file set up in the home directory of your computer. For instructions on how to do that, see the Setup section.
+This script can be used to handily make new GitLab merge requests and to accept merge requests from the command line. The script uses the Ruby wrapper [`Gitlab`](https://github.com/NARKOZ/gitlab) to do this, so make sure you have a `.git_config.yml` file set up in the home directory of your computer. For instructions on how to do that, see [Setup](#setup).
 
 After setup is complete, you can call the file, and send in a flag indicating whether to create a pull request, `-c`, or to merge a pull request, `-m`.
 
