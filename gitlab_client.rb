@@ -1,13 +1,12 @@
 require 'yaml'
-require 'octokit'
+require 'gitlab'
 
-class OctokitClient
-  # You'll want Octokit version >= 4.18.0, but in your local directory
+class GitLabClient
   def client
-    Octokit::Client.new(access_token: github_token)
+    Gitlab.client(endpoint: gitlab_endpoint, private_token: gitlab_token)
   end
 
-  private def github_token
+  private def gitlab_token
     config_file[:github_token]
   end
 
@@ -21,5 +20,9 @@ class OctokitClient
 
   private def git_config_file
     '.git_config.yml'
+  end
+
+  private def gitlab_endpoint
+    'https://gitlab.com/api/v4'
   end
 end

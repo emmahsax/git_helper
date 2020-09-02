@@ -3,7 +3,7 @@
 require_relative './octokit_client.rb'
 require_relative './highline_cli.rb'
 
-class PullRequest
+class GitHubPullRequest
   def create
     base_branch = base_branch_default? ? default_branch : cli.ask('Base branch?')
 
@@ -28,7 +28,7 @@ class PullRequest
     begin
       pr_id = cli.ask('Pull Request ID?')
       puts "Merging pull request: #{pr_id}"
-      merge = octokit_client.merge_pull_request(local_repo, pr_id)
+      merge = octokit_client.merge_pull_request(local_repo, pr_id) # , { merge_method: 'squash' })
       puts "Pull request successfully merged: #{merge.sha}"
     rescue Octokit::UnprocessableEntity => e
       puts 'Could not merge pull request:'
@@ -37,7 +37,7 @@ class PullRequest
       puts 'Could not merge pull request:'
       puts "  Could not a locate a pull request to merge with ID #{pr_id}"
     rescue Octokit::MethodNotAllowed => e
-      puts 'Could not merge pull_request:'
+      puts 'Could not merge pull request:'
       if e.message.include?('405 - Required status check')
         puts '  A required status check has not passed'
       elsif e.message.include?('405 - Base branch was modified')
@@ -114,7 +114,7 @@ Examples:
     exit(0)
 end
 
-pull_request = PullRequest.new
+pull_request = GitHubPullRequest.new
 
 case action
 when :create
