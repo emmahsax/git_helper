@@ -1,5 +1,5 @@
 OLD_USERNAME = 'emmasax1'
-NEW_USERNAME = 'emma-sax4'
+NEW_USERNAME = 'emmasax4'
 
 current_dir = Dir.pwd
 nested_dirs = Dir.entries(current_dir).select do |entry|
