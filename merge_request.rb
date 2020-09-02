@@ -17,13 +17,12 @@ class GitLabMergeRequest
       else
         puts "Merge request successfully created: #{mr.web_url}"
       end
-    rescue Gitlab::Error => e
+    rescue Gitlab::Error::Conflict => e
       puts 'Could not create merge request:'
-      if e.message.include?('open merge request already exists for this source branch')
-        puts '  A merge request already exists for this branch'
-      else
-        puts e.message
-      end
+      puts '  A merge request already exists for this branch'
+    rescue Exception => e
+      puts 'Could not create merge request:'
+      puts e.message
     end
   end
 
@@ -33,15 +32,15 @@ class GitLabMergeRequest
       puts "Merging merge request: #{mr_id}"
       merge = gitlab_client.accept_merge_request(local_repo, mr_id, { should_remove_source_branch: true, squash: true })
       puts "Merge request successfully merged: #{merge.merge_commit_sha}"
-    rescue Gitlab::Error => e
+    rescue Gitlab::Error::MethodNotAllowed => e
       puts 'Could not merge merge request:'
-      if e.message.include?('404 Not found')
-        puts "  Could not a locate a merge request to merge with ID #{mr_id}"
-      elsif e.message.include?('405 Method Not Allowed')
-        puts '  The merge request is not mergeable'
-      else
-        puts e.message
-      end
+      puts '  The merge request is not mergeable'
+    rescue Gitlab::Error::NotFound => e
+      puts 'Could not merge merge request:'
+      puts "  Could not a locate a merge request to merge with ID #{mr_id}"
+    rescue Exception => e
+      puts 'Could not merge merge request:'
+      puts e.message
     end
   end
 

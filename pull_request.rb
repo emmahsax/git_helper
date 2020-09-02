@@ -21,6 +21,9 @@ class GitHubPullRequest
       else
         puts e.message
       end
+    rescue Exception => e
+      puts 'Could not create pull request:'
+      puts e.message
     end
   end
 
@@ -47,6 +50,9 @@ class GitHubPullRequest
       else
         puts e.message
       end
+    rescue Exception => e
+      puts 'Could not merge pull request:'
+      puts e.message
     end
   end
 

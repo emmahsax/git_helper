@@ -7,7 +7,7 @@ class GitLabClient
   end
 
   private def gitlab_token
-    config_file[:github_token]
+    config_file[:gitlab_token]
   end
 
   private def config_file
