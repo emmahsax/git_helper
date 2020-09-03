@@ -3,8 +3,8 @@
 require_relative './highline_cli.rb'
 
 class NewBranch
-  def create_new_branch
-    branch_name = cli.ask('New branch name?')
+  def create_new_branch(new_branch_name = nil)
+    branch_name = new_branch_name || cli.ask('New branch name?')
     puts "Attempting to create a new branch: #{branch_name}"
     system("git pull")
     system("git branch --no-track #{branch_name}")
@@ -17,4 +17,4 @@ class NewBranch
   end
 end
 
-NewBranch.new.create_new_branch
+NewBranch.new.create_new_branch(ARGV[0])
