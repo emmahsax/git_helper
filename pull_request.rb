@@ -34,9 +34,9 @@ class GitHubPullRequest
       pr_id
       merge_method
 
-      puts "Squashing and merging pull request: #{pr_id}"
+      puts "Merging pull request: #{pr_id}"
       merge = octokit_client.merge_pull_request(local_repo, pr_id, existing_pr_title, { merge_method: merge_method })
-      puts "Pull request successfully squashed and merged: #{merge.sha}"
+      puts "Pull request successfully merged: #{merge.sha}"
     rescue Octokit::UnprocessableEntity => e
       puts 'Could not merge pull request:'
       puts e.message
@@ -51,6 +51,12 @@ class GitHubPullRequest
         puts '  The base branch has been modified'
       elsif e.message.include?('405 - Pull Request is not mergeable')
         puts '  The pull request is not mergeable'
+      elsif e.message.include?('405 - Rebase merges are not allowed on this repository')
+        puts '  Rebase merges are not allowed on this repository'
+      elsif e.message.include?('405 - Merge commits are not allowed on this repository')
+        puts '  Merge commits are not allowed on this repository'
+      elsif e.message.include?('405 - Squash commits are not allowed on this repository')
+        puts '  Squash merges are not allowed on this repository'
       else
         puts e.message
       end
@@ -81,7 +87,7 @@ class GitHubPullRequest
   end
 
   private def merge_method
-    @merge_method ||= accept_squashing? ? 'squash' : cli.ask("Merge method (options are 'merge' or 'rebase')?")
+    @merge_method ||= accept_squashing? ? 'squash' : ask_merge_method
   end
 
   private def new_pr_title
@@ -113,6 +119,15 @@ class GitHubPullRequest
   private def accept_squashing?
     answer = cli.ask("Accept this pull request will be squashed?'? (y/n)")
     !!(answer =~ /^y/i)
+  end
+
+  private def ask_merge_method
+    index = cli.ask_options("Merge method?", merge_options)
+    merge_options[index]
+  end
+
+  private def merge_options
+    [ 'merge', 'squash', 'rebase' ]
   end
 
   private def octokit_client
