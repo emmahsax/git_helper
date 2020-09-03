@@ -87,7 +87,7 @@ class GitHubPullRequest
   end
 
   private def merge_method
-    @merge_method ||= accept_squashing? ? 'squash' : ask_merge_method
+    @merge_method ||= ask_merge_method
   end
 
   private def new_pr_title
