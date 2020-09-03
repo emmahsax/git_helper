@@ -2,13 +2,13 @@
 
 ### Setup
 
-A couple of the scripts in this project utilize special GitHub or GitLab configuration. To provide access tokens for this, create a `.git_config.yml` file in your home directory. The contents should look like this (the tokens below are all fake):
+A couple of the scripts in this project utilize special GitHub or GitLab configuration. To provide access tokens for this, create a `.git_config.yml` file in your home directory. The contents should look like this:
 
 ```
-:github_user: github-username
-:github_token: QPHNXYfNwA1m1LTF7c8xY8pfj5t13vzb0GkA3ZoU
-:gitlab_user: gitlab-username
-:gitlab_token: dke_kd9ajdn31k_dk3_1
+:github_user: GITHUB-USERNAME
+:github_token: GITHUB-TOKEN
+:gitlab_user: GITLAB-USERNAME
+:gitlab_token: GITLAB-TOKEN
 ```
 
 To install required gem dependencies, run the following in your repository's directory:
