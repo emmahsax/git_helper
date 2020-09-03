@@ -30,8 +30,12 @@ class GitHubPullRequest
 
   def merge
     begin
+      # Ask these questions right away
+      pr_id
+      merge_method
+
       puts "Squashing and merging pull request: #{pr_id}"
-      merge = octokit_client.merge_pull_request(local_repo, pr_id, existing_pr_title, { merge_method: 'squash' })
+      merge = octokit_client.merge_pull_request(local_repo, pr_id, existing_pr_title, { merge_method: merge_method })
       puts "Pull request successfully squashed and merged: #{merge.sha}"
     rescue Octokit::UnprocessableEntity => e
       puts 'Could not merge pull request:'
