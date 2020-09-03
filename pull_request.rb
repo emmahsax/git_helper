@@ -6,6 +6,10 @@ require_relative './highline_cli.rb'
 class GitHubPullRequest
   def create
     begin
+      # Ask these questions right away
+      base_branch
+      new_pr_title
+
       puts "Creating pull request: #{new_pr_title}"
       pr = octokit_client.create_pull_request(local_repo, base_branch, local_branch, new_pr_title)
       puts "Pull request successfully created: #{pr.html_url}"
@@ -26,7 +30,7 @@ class GitHubPullRequest
 
   def merge
     begin
-      puts "Squash merging pull request: #{pr_id}"
+      puts "Squashing and merging pull request: #{pr_id}"
       merge = octokit_client.merge_pull_request(local_repo, pr_id, existing_pr_title, { merge_method: 'squash' })
       puts "Pull request successfully squashed and merged: #{merge.sha}"
     rescue Octokit::UnprocessableEntity => e
