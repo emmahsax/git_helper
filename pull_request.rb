@@ -29,18 +29,12 @@ class GitHubPullRequest
 
   def merge
     begin
-<<<<<<< Updated upstream
-      pr_id = cli.ask('Pull Request ID?')
-      puts "Merging pull request: #{pr_id}"
-      merge = octokit_client.merge_pull_request(local_repo, pr_id) # , { merge_method: 'squash' })
-=======
       # Ask these questions right away
       pr_id
       merge_method
 
       puts "Merging pull request: #{pr_id}"
       # merge = octokit_client.merge_pull_request(local_repo, pr_id, existing_pr_title, { merge_method: merge_method })
->>>>>>> Stashed changes
       puts "Pull request successfully merged: #{merge.sha}"
     rescue Octokit::UnprocessableEntity => e
       puts 'Could not merge pull request:'
@@ -119,8 +113,6 @@ class GitHubPullRequest
     !!(answer =~ /^y/i)
   end
 
-<<<<<<< Updated upstream
-=======
   private def accept_squashing?
     answer = cli.ask("Accept this pull request will be squashed? (y/n)")
     !!(answer =~ /^y/i)
@@ -132,7 +124,6 @@ class GitHubPullRequest
     merge_options[index]
   end
 
->>>>>>> Stashed changes
   private def octokit_client
     @octokit_client ||= OctokitClient.new.client
   end
