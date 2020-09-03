@@ -103,8 +103,9 @@ class GitHubPullRequest
   end
 
   private def merge_method
+    return @merge_method if @merge_method
     index = cli.ask_options("Merge method?", merge_options)
-    merge_options[index]
+    @merge_method = merge_options[index]
   end
 
   private def merge_options
