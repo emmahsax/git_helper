@@ -29,10 +29,16 @@ class GitLabMergeRequest
 
   def merge
     begin
-      mr_id = cli.ask('Merge Request ID?')
-      puts "Squashing and merging merge request: #{mr_id}"
-      merge = gitlab_client.accept_merge_request(local_repo, mr_id, { should_remove_source_branch: true, squash: true })
-      puts "Merge request successfully squashed and merged: #{merge.merge_commit_sha}"
+      # Ask these questions right away
+      mr_id
+      options = {}
+      options[:should_remove_source_branch] = remove_source_branch?
+      options[:squash] = squash_merge_request?
+      options[:squash_commit_message] = existing_mr_title
+
+      puts "Merging merge request: #{mr_id}"
+      merge = gitlab_client.accept_merge_request(local_repo, mr_id, options)
+      puts "Merge request successfully merged: #{merge.merge_commit_sha}"
     rescue Gitlab::Error::MethodNotAllowed => e
       puts 'Could not merge merge request:'
       puts '  The merge request is not mergeable'
@@ -55,6 +61,14 @@ class GitLabMergeRequest
     # Get the current branch by looking in the list of branches for the *
     branches = `git branch`
     return branches.scan(/\*\s([\S]*)/).first.first
+  end
+
+  private def mr_id
+    @mr_id ||= cli.ask('Merge Request ID?')
+  end
+
+  private def existing_mr_title
+    @existing_mr_title ||= gitlab_client.merge_request(local_repo, mr_id).title
   end
 
   private def new_mr_title
@@ -83,6 +97,16 @@ class GitLabMergeRequest
     !!(answer =~ /^y/i)
   end
 
+  private def squash_merge_request?
+    answer = cli.ask('Squash merge request? (y/n)')
+    !!(answer =~ /^y/i)
+  end
+
+  private def remove_source_branch?
+    answer = cli.ask('Remove source branch after merging? (y/n)')
+    !!(answer =~ /^y/i)
+  end
+
   private def gitlab_client
     @gitlab_client ||= GitLabClient.new.client
   end
@@ -106,8 +130,8 @@ Usage for working with this merge requests script:
   ./merge_request.rb [-h|-c|-m]
 
   -h, --help      - Displays this help information
-  -c, --create    - Create a new merge request with a title (the next argument)
-  -m, --merge     - Merge the merge request that corresponds to the PR number (the next argument)
+  -c, --create    - Create a new merge request
+  -m, --merge     - Merge an existing merge request
 
 Required: create or merge
 Examples:
