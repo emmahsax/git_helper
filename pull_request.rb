@@ -116,11 +116,6 @@ class GitHubPullRequest
     !!(answer =~ /^y/i)
   end
 
-  private def accept_squashing?
-    answer = cli.ask("Accept this pull request will be squashed?'? (y/n)")
-    !!(answer =~ /^y/i)
-  end
-
   private def ask_merge_method
     index = cli.ask_options("Merge method?", merge_options)
     merge_options[index]
