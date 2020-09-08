@@ -47,6 +47,7 @@ Please fill in the section that best describes your Issue.
 </details>
 
 <details><summary>Feature Request</summary>
+
 ## Is this feature request related to a problem?
 
 > A clear and concise description of what the problem is. Ex: I'm always frustrated when [...]
@@ -66,6 +67,7 @@ Please fill in the section that best describes your Issue.
 </details>
 
 <details><summary>Security Report</summary>
+
 ## What is the alert or vulnerability?
 
 > A clear and concise description of what the vulnerability is. Ex: The Ruby gem [...] has reported vulnerability CVE-[...].
