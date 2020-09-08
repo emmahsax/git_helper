@@ -148,18 +148,10 @@ class GitHubPullRequest
 
   private def read_template
     if pr_template_options.count == 1
-      if apply_template?(pr_template_options.first)
-        File.open(pr_template_options.first).read
-      else
-        nil
-      end
+      apply_template?(pr_template_options.first) ? File.open(pr_template_options.first).read : nil
     else
       template_file_name_to_apply = template_to_apply
-      if template_file_name_to_apply == "None"
-        nil
-      else
-        File.open(template_file_name_to_apply).read
-      end
+      template_file_name_to_apply == "None" ? nil : File.open(template_file_name_to_apply).read
     end
   end
 
