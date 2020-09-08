@@ -79,6 +79,19 @@ class GitHubPullRequest
     return branches.scan(/\*\s([\S]*)/).first.first
   end
 
+  private def read_template
+    if pr_template_options.count == 1
+      apply_template?(pr_template_options.first) ? File.open(pr_template_options.first).read : ''
+    else
+      template_file_name_to_apply = template_to_apply
+      template_file_name_to_apply == "None" ? '' : File.open(template_file_name_to_apply).read
+    end
+  end
+
+  private def merge_options
+    [ 'merge', 'squash', 'rebase' ]
+  end
+
   private def pr_id
     @pr_id ||= cli.ask('Pull Request ID?')
   end
@@ -113,10 +126,6 @@ class GitHubPullRequest
     @merge_method = merge_options[index]
   end
 
-  private def merge_options
-    [ 'merge', 'squash', 'rebase' ]
-  end
-
   private def pr_template_options
     return @pr_template_options if @pr_template_options
     nested_templates = Dir.glob(File.join("**/PULL_REQUEST_TEMPLATE", "*.md"), File::FNM_DOTMATCH | File::FNM_CASEFOLD)
@@ -144,15 +153,6 @@ class GitHubPullRequest
     complete_options = pr_template_options << 'None'
     index = cli.ask_options("Which pull request template should be applied?", complete_options)
     @template_to_apply = complete_options[index]
-  end
-
-  private def read_template
-    if pr_template_options.count == 1
-      apply_template?(pr_template_options.first) ? File.open(pr_template_options.first).read : ''
-    else
-      template_file_name_to_apply = template_to_apply
-      template_file_name_to_apply == "None" ? '' : File.open(template_file_name_to_apply).read
-    end
   end
 
   private def octokit_client
