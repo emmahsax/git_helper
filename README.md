@@ -1,5 +1,11 @@
 # scripts [![Maintainability](https://api.codeclimate.com/v1/badges/ce1bdd719cc21b7c22a6/maintainability)](https://codeclimate.com/github/emmasax4/scripts/maintainability)
 
+To submit a feature request, bug ticket, etc, please submit an official [GitHub Issue](https://github.com/emmasax4/scripts/issues/new).
+
+To report any security vulnerabilities, please view this project's [Security Policy](https://github.com/emmasax4/scripts/security/policy).
+
+This repository does have a standard [Code of Conduct](https://github.com/emmasax4/emmasax4.info/blob/main/.github/code_of_conduct.md).
+
 ### Setup
 
 A couple of the scripts in this project utilize special GitHub or GitLab configuration. To provide access tokens for this, create a `.git_config.yml` file in your home directory. The contents should look like this:
