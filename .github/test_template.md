@@ -1,7 +1,6 @@
 Please fill in the section that best describes your Issue.
 
-<details>
-  <summary>Bug Report</summary>
+<details><summary>Bug Report</summary>
 
 ## Bug Description
 
@@ -44,5 +43,47 @@ Please fill in the section that best describes your Issue.
 ## Additional Context
 
 > Add any other context about the problem here.
+
+</details>
+
+<details><summary>Feature Request</summary>
+## Is this feature request related to a problem?
+
+> A clear and concise description of what the problem is. Ex: I'm always frustrated when [...]
+
+## The Solution I'd Prefer
+
+> A clear and concise description of what you want to happen.
+
+## Alternative Solutions I've Considered
+
+> A clear and concise description of any alternative solutions or features you've considered.
+
+## Additional Context
+
+> Add any other context or screenshots about the feature request here.
+
+</details>
+
+<details><summary>Security Report</summary>
+## What is the alert or vulnerability?
+
+> A clear and concise description of what the vulnerability is. Ex: The Ruby gem [...] has reported vulnerability CVE-[...].
+
+## Where did you find out about this vulnerability?
+
+> A clear and concise description of where this vulnerability was first reported or where you heard about it.
+
+## What are the risks of doing nothing?
+
+> A clear and concise description of what will happen if we leave the vulnerability as is.
+
+## Suggestions for improvement?
+
+> A clear and concise description of what can be done to mitigate this vulnerability.
+
+## Additional Context
+
+> Add any other context, URLs, or screenshots about the alert or vulnerability.
 
 </details>

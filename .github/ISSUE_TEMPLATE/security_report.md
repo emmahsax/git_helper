@@ -25,4 +25,3 @@ assignees: ""
 ## Additional Context
 
 > Add any other context, URLs, or screenshots about the alert or vulnerability.
-
