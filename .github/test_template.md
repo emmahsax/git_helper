@@ -1,5 +1,5 @@
 <details>
-  <summary><h1>Bug Report</h1></summary>
+  <h1><summary>Bug Report</summary></h1>
 
 ## Bug Description
 
