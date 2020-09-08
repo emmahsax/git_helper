@@ -126,6 +126,13 @@ class GitHubPullRequest
     @merge_method = merge_options[index]
   end
 
+  private def template_to_apply
+    return @template_to_apply if @template_to_apply
+    complete_options = pr_template_options << 'None'
+    index = cli.ask_options("Which pull request template should be applied?", complete_options)
+    @template_to_apply = complete_options[index]
+  end
+
   private def pr_template_options
     return @pr_template_options if @pr_template_options
     nested_templates = Dir.glob(File.join("**/PULL_REQUEST_TEMPLATE", "*.md"), File::FNM_DOTMATCH | File::FNM_CASEFOLD)
@@ -146,13 +153,6 @@ class GitHubPullRequest
   private def apply_template?(template_file_name)
     answer = cli.ask("Apply the pull request template from #{template_file_name}? (y/n)")
     !!(answer =~ /^y/i)
-  end
-
-  private def template_to_apply
-    return @template_to_apply if @template_to_apply
-    complete_options = pr_template_options << 'None'
-    index = cli.ask_options("Which pull request template should be applied?", complete_options)
-    @template_to_apply = complete_options[index]
   end
 
   private def octokit_client
