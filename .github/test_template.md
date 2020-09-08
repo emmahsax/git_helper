@@ -1,5 +1,7 @@
+Please fill in the section that best describes your Issue.
+
 <details>
-  <h1><summary>Bug Report</summary></h1>
+  <summary>Bug Report</summary>
 
 ## Bug Description
 
