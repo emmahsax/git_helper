@@ -92,7 +92,7 @@ class GitHubPullRequest
   end
 
   private def new_pr_body
-    @new_pr_body ||= pr_template_options.empty? ? nil : read_template
+    @new_pr_body ||= pr_template_options.empty? ? '' : read_template
   end
 
   private def base_branch
@@ -148,10 +148,10 @@ class GitHubPullRequest
 
   private def read_template
     if pr_template_options.count == 1
-      apply_template?(pr_template_options.first) ? File.open(pr_template_options.first).read : nil
+      apply_template?(pr_template_options.first) ? File.open(pr_template_options.first).read : ''
     else
       template_file_name_to_apply = template_to_apply
-      template_file_name_to_apply == "None" ? nil : File.open(template_file_name_to_apply).read
+      template_file_name_to_apply == "None" ? '' : File.open(template_file_name_to_apply).read
     end
   end
 
