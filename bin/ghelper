@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'gli'
+require_relative '../lib/git_helper'
+
+include GLI::App
+
+program_desc 'GitHub and GitLab workflow scripts.'
+version GitHelper::VERSION
+
+autocomplete_commands false
+wrap_help_text :verbatim
+
+program_long_desc """
+DOCUMENTATION
+    For documentation and help in setting up your Git configuration files,
+    see Git Helper's GitHub repo: https://github.com/emmasax4/git_helper
+"""
+
+commands_from File.expand_path(File.dirname(__FILE__) + '../lib/git_helper/commands')
+
+exit run(ARGV)
