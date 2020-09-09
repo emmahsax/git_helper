@@ -1,4 +1,4 @@
-# git_helper [![Maintainability](https://api.codeclimate.com/v1/badges/d53da11f17c38cc81b5b/maintainability)](https://codeclimate.com/github/emmasax4/git_helper/maintainability)
+# git_helper [![Maintainability](https://api.codeclimate.com/v1/badges/d53da11f17c38cc81b5b/maintainability)](https://codeclimate.com/github/emmasax4/git_helper/maintainability) ![Develop](https://github.com/emmasax4/git_helper/workflows/Develop/badge.svg)
 
 ## Usage
 
