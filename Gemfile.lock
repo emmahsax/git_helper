@@ -3,6 +3,7 @@ PATH
   specs:
     git_helper (1.0.0)
       gitlab (~> 4.16)
+      gli (~> 2.13)
       highline (~> 2.0)
       octokit (~> 4.18)
 
@@ -20,6 +21,7 @@ GEM
     gitlab (4.16.1)
       httparty (~> 0.14, >= 0.14.0)
       terminal-table (~> 1.5, >= 1.5.1)
+    gli (2.19.2)
     guard (2.16.2)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)

@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 require_relative './highline_cli.rb'
 
 module GitHelper
