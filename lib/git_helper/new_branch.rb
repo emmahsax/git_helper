@@ -12,7 +12,7 @@ module GitHelper
     end
 
     private def cli
-      @cli ||= HighlineCli.new
+      @cli ||= GitHelper::HighlineCli.new
     end
   end
 end

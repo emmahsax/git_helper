@@ -155,11 +155,11 @@ module GitHelper
     end
 
     private def octokit_client
-      @octokit_client ||= OctokitClient.new.client
+      @octokit_client ||= GitHelper::OctokitClient.new.client
     end
 
     private def cli
-      @cli ||= HighlineCli.new
+      @cli ||= GitHelper::HighlineCli.new
     end
   end
 end

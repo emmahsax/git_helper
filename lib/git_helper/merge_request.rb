@@ -144,11 +144,11 @@ module GitHelper
     end
 
     private def gitlab_client
-      @gitlab_client ||= GitLabClient.new.client
+      @gitlab_client ||= GitHelper::GitLabClient.new.client
     end
 
     private def cli
-      @cli ||= HighlineCli.new
+      @cli ||= GitHelper::HighlineCli.new
     end
   end
 end
