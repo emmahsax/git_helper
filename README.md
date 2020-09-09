@@ -1,37 +1,41 @@
-# scripts [![Maintainability](https://api.codeclimate.com/v1/badges/ce1bdd719cc21b7c22a6/maintainability)](https://codeclimate.com/github/emmasax4/scripts/maintainability)
+# git_helper [![Maintainability](https://api.codeclimate.com/v1/badges/ce1bdd719cc21b7c22a6/maintainability)](https://codeclimate.com/github/emmasax4/git_helper/maintainability)
 
-To submit a feature request, bug ticket, etc, please submit an official [GitHub Issue](https://github.com/emmasax4/scripts/issues/new).
+To submit a feature request, bug ticket, etc, please submit an official [GitHub Issue](https://github.com/emmasax4/git_helper/issues/new).
 
-To report any security vulnerabilities, please view this project's [Security Policy](https://github.com/emmasax4/scripts/security/policy).
+To report any security vulnerabilities, please view this project's [Security Policy](https://github.com/emmasax4/git_helper/security/policy).
 
 This repository does have a standard [Code of Conduct](https://github.com/emmasax4/emmasax4.info/blob/main/.github/code_of_conduct.md).
 
-### Setup
+## Usage
 
-A couple of the scripts in this project utilize special GitHub or GitLab configuration. To provide access tokens for this, create a `.git_config.yml` file in your home directory. The contents should look like this:
-
+```bash
+gem install git_helper
 ```
+
+Some of the commands in this gem can be used without any additional configuration. However, others utilize special GitHub or GitLab configuration. To provide access tokens for this, create a `~/.git_config.yml` file. The contents should look like this:
+
+```bash
 :github_user: GITHUB-USERNAME
 :github_token: GITHUB-TOKEN
 :gitlab_user: GITLAB-USERNAME
 :gitlab_token: GITLAB-TOKEN
 ```
 
-To install required gem dependencies, run the following in your repository's directory:
-
-```
-gem install highline
-gem install octokit
-gem install gitlab
+To view the help screen, run:
+```bash
+ghelper --help
 ```
 
-### Scripts
+To see what version of git_helper you're running, run:
+```bash
+ghelper --version
+```
 
-Various scripts that I have written to be able to do things on the command line easier.
+### Commands
 
-#### `change_remote.rb`
+#### `ghelper change-remote OLD-OWNER NEW-OWNER`
 
-I used this script when I switched my GitHub username from `emmasax1` to `emmasax4`. When you switch a username, GitHub only makes some changes for you. I had to go through each repository "manually" and turn the remotes from each one into a remote with the new username.
+This can be used when switching the owners of a GitHub repo. When you switch a username, GitHub only makes some changes for you. With this script, you no longer have to manually walk through local repo and switch the remotes from each one into a remote with the new username.
 
 This script will go through every directory in a directory, see if it is a git directory, and then will check to see if the old username is included in the remote URL of that git directory. If it is, then the script will change the remote URL to instead point to the new username's remote URL.
 

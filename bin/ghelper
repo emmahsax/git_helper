@@ -24,7 +24,31 @@ command 'change-remote' do |c|
   c.action do |global_options, options, args|
     require_relative '../lib/git_helper/change_remote.rb'
     raise ArgumentError, 'You must specify an old owner and a new owner' unless args.count == 2
-    GitHelper::ChangeRemote.new.change_remote(args[0], args[1])
+    GitHelper::ChangeRemote.new.execute(args[0], args[1])
+  end
+end
+
+desc "Checks out the default branch of the repository based on the repository's local remote branches."
+command 'checkout-default' do |c|
+  c.action do |global_options, options, args|
+    require_relative '../lib/git_helper/checkout_default.rb'
+    GitHelper::CheckoutDefault.new.execute
+  end
+end
+
+desc "Clean a repository's git branches."
+command 'clean-git' do |c|
+  c.action do |global_options, options, args|
+    require_relative '../lib/git_helper/clean_git.rb'
+    GitHelper::CleanGit.new.execute
+  end
+end
+
+desc "Creates an empty commit with a basic commit message."
+command 'empty-commit' do |c|
+  c.action do |global_options, options, args|
+    require_relative '../lib/git_helper/empty_commit.rb'
+    GitHelper::EmptyCommit.new.execute
   end
 end
 
@@ -52,7 +76,7 @@ desc 'Create a new branch for features, bug fixes, or experimentation.'
 command 'new-branch' do |c|
   c.action do |global_options, options, args|
     require_relative '../lib/git_helper/new_branch.rb'
-    GitHelper::NewBranch.new.create_new_branch(args[0])
+    GitHelper::NewBranch.new.execute(args[0])
   end
 end
 
