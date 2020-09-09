@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.files = Dir['lib/git_helper/*.rb'] + Dir['lib/git_helper/scripts/*.rb'] + Dir['lib/git_helper/commands/*.rb'] + Dir['lib/*.rb'] + Dir['bin/*']
   gem.files += Dir['[A-Z]*'] + Dir['test/**/*']
   gem.files.reject! { |fn| fn.include? '.gem' }
-  # gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.name          = 'git_helper'
   gem.license       = 'MIT'
   gem.require_paths = ['lib']

@@ -29,9 +29,9 @@ ghelper --version
 
 ### `change-remote`
 
-This can be used when switching the owners of a GitHub repo. When you switch a username, GitHub only makes some changes for you. With this script, you no longer have to manually walk through local repo and switch the remotes from each one into a remote with the new username.
+This can be used when switching the owners of a GitHub repo. When you switch a username, GitHub only makes some changes for you. With this command, you no longer have to manually walk through local repo and switch the remotes from each one into a remote with the new username.
 
-This script will go through every directory in a directory, see if it is a git directory, and then will check to see if the old username is included in the remote URL of that git directory. If it is, then the script will change the remote URL to instead point to the new username's remote URL. To run the command, run:
+This command will go through every directory in a directory, see if it is a git directory, and then will check to see if the old username is included in the remote URL of that git directory. If it is, then the command will change the remote URL to instead point to the new username's remote URL. To run the command, run:
 
 ```
 ghelper change-remote OLD-OWNER NEW-OWNER
