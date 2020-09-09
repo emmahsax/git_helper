@@ -33,7 +33,7 @@ This can be used when switching the owners of a GitHub repo. When you switch a u
 
 This command will go through every directory in a directory, see if it is a git directory, and then will check to see if the old username is included in the remote URL of that git directory. If it is, then the command will change the remote URL to instead point to the new username's remote URL. To run the command, run:
 
-```
+```bash
 ghelper change-remote OLD-OWNER NEW-OWNER
 ```
 
@@ -41,13 +41,13 @@ ghelper change-remote OLD-OWNER NEW-OWNER
 
 This command will check out the default branch of whatever repository you're currently in. It looks at what branch the `origin/HEAD` remote is pointed to on your local machine, versus querying GitHub/GitLab for that, so if your local machine's remotes aren't up to date, then this command won't work as expected. To run this command, run:
 
-```
+```bash
 ghelper checkout-default
 ```
 
 If your local branches aren't right (run `git branch --remote` to see), then run:
 
-```
+```bash
 git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/CORRECT-DEFAULT-BRANCH-GOES-HERE
 ```
 
@@ -55,7 +55,7 @@ git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/CORRECT-DEFAULT-BR
 
 This command will bring you to the repository's default branch, `git pull`, `git fetch -p`, and will clean up your local branches on your machine by seeing which ones are existing on the remote, and updating yours accordingly. To run:
 
-```
+```bash
 ghelper clean-git
 ```
 
@@ -63,7 +63,7 @@ ghelper clean-git
 
 For some reason, I'm always forgetting the commands to create an empty commit. So with this command, it becomes easy. The commit message of this commit will be `'Empty commit'`. To run the command, run:
 
-```
+```bash
 ghelper empty-commit
 ```
 
@@ -71,7 +71,7 @@ ghelper empty-commit
 
 This command is useful for making new branches in a repository on the command line. To run the command, run:
 
-```
+```bash
 ghelper new-branch
 # OR
 ghelper new-branch NEW_BRANCH_NAME
@@ -85,7 +85,7 @@ This command can be used to handily make new GitHub pull requests and to merge p
 
 After setup is complete, you can call the file, and send in a flag indicating whether to create a pull request, `-c`, or to merge a pull request, `-m`.
 
-```
+```bash
 ghelper pull-request -c
 # OR
 ghelper pull-request -m
@@ -103,7 +103,7 @@ This command can be used to handily make new GitLab merge requests and to accept
 
 After setup is complete, you can call the file, and send in a flag indicating whether to create a pull request, `-c`, or to merge a pull request, `-m`.
 
-```
+```bash
 ghelper merge-request -c
 # OR
 ghelper merge-request -m
