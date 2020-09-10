@@ -61,6 +61,8 @@ alias gnb="git new-branch"
 
 And then, running `gnb` maps to `git new-branch`, which again routes to `git-helper new-branch`.
 
+For a full list of the git aliases I prefer to use, check out my [Git Aliases gist](https://gist.github.com/emmasax4/e8744fe253fba1f00a621c01a2bf68f5).
+
 If you're going to make using git workflows easier, might as well provide lots of options 😃.
 
 ## Commands
