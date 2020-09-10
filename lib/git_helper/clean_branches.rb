@@ -1,5 +1,5 @@
 module GitHelper
-  class CleanGit
+  class CleanBranches
     def execute
       system("git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed \"s@^refs/remotes/origin/@@\")")
       system("git pull")
