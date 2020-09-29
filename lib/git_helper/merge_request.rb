@@ -101,22 +101,20 @@ module GitHelper
     end
 
     private def default_branch
-      @default_branch ||= all_branches.select { |branch| branch.default }.first.name
-    end
-
-    private def all_branches
+      return @default_branch if @default_branch
       page_number = 1
       counter = 1
       branches = []
 
       while counter > 0
+        break if default_branch = branches.select { |branch| branch.default }.first
         page_branches = gitlab_client.branches(local_project, page: page_number, per_page: 100)
-        branches = branches.concat(page_branches)
+        branches = page_branches
         counter = page_branches.count
         page_number += 1
       end
 
-      return branches
+      @default_branch = default_branch.name
     end
 
     private def template_to_apply
