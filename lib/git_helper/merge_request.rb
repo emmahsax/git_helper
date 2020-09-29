@@ -15,7 +15,7 @@ module GitHelper
         }
 
         puts "Creating merge request: #{new_mr_title}"
-        mr = gitlab_client.create_merge_request(local_repo, new_mr_title, options)
+        mr = gitlab_client.create_merge_request(local_project, new_mr_title, options)
 
         if mr.diff_refs.base_sha == mr.diff_refs.head_sha
           puts "Merge request was created, but no commits have been pushed to GitLab: #{mr.web_url}"
@@ -41,7 +41,7 @@ module GitHelper
         options[:squash_commit_message] = existing_mr_title
 
         puts "Merging merge request: #{mr_id}"
-        merge = gitlab_client.accept_merge_request(local_repo, mr_id, options)
+        merge = gitlab_client.accept_merge_request(local_project, mr_id, options)
         puts "Merge request successfully merged: #{merge.merge_commit_sha}"
       rescue Gitlab::Error::MethodNotAllowed => e
         puts 'Could not merge merge request:'
@@ -55,8 +55,8 @@ module GitHelper
       end
     end
 
-    private def local_repo
-      # Get the repository by looking in the remote URLs for the full repository name
+    private def local_project
+      # Get the project by looking in the remote URLs for the full project name
       remotes = `git remote -v`
       return remotes.scan(/\S[\s]*[\S]+.com[\S]{1}([\S]*).git/).first.first
     end
@@ -81,7 +81,7 @@ module GitHelper
     end
 
     private def existing_mr_title
-      @existing_mr_title ||= gitlab_client.merge_request(local_repo, mr_id).title
+      @existing_mr_title ||= gitlab_client.merge_request(local_project, mr_id).title
     end
 
     private def new_mr_title
@@ -101,7 +101,20 @@ module GitHelper
     end
 
     private def default_branch
-      @default_branch ||= gitlab_client.branches(local_repo).select { |branch| branch.default }.first.name
+      return @default_branch if @default_branch
+      page_number = 1
+      counter = 1
+      branches = []
+
+      while counter > 0
+        break if default_branch = branches.select { |branch| branch.default }.first
+        page_branches = gitlab_client.branches(local_project, page: page_number, per_page: 100)
+        branches = page_branches
+        counter = page_branches.count
+        page_number += 1
+      end
+
+      @default_branch = default_branch.name
     end
 
     private def template_to_apply
