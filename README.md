@@ -162,3 +162,16 @@ To submit a feature request, bug ticket, etc, please submit an official [GitHub 
 To report any security vulnerabilities, please view this project's [Security Policy](https://github.com/emmasax4/git_helper/security/policy).
 
 This repository does have a standard [Code of Conduct](https://github.com/emmasax4/git_helper/blob/main/.github/code_of_conduct.md).
+
+## Releasing
+
+To make a new release of this gem:
+
+1. Merge the pull request via the big green button
+2. Run `git tag vX.X.X` and `git push --tag`
+3. Make a new release [here](https://github.com/emmasax4/git_helper/releases/new)
+4. Run `gem build *.gemspec`
+5. Run `gem push *.gem` to push the new gem to RubyGems
+6. Run `rm *.gem` to clean up your local repository
+
+To set up your local machine to push to RubyGems via the API, see the [RubyGems documentation](https://guides.rubygems.org/publishing/#publishing-to-rubygemsorg).
