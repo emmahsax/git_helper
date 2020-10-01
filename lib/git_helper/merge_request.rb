@@ -45,6 +45,12 @@ module GitHelper
 
         puts "Merging merge request: #{mr_id}"
         merge = gitlab_client.accept_merge_request(local_project, mr_id, options)
+
+        if merge.merge_commit_sha.nil?
+          options[:squash] = true
+          merge = gitlab_client.accept_merge_request(local_project, mr_id, options)
+        end
+
         puts "Merge request successfully merged: #{merge.merge_commit_sha}"
       rescue Gitlab::Error::MethodNotAllowed => e
         puts 'Could not merge merge request:'
