@@ -12,6 +12,8 @@ module GitHelper
         options = {
           source_branch: local_branch,
           target_branch: base_branch,
+          squash_merge_request: true,
+          remove_source_branch: true,
           description: new_mr_body
         }
 
