@@ -42,18 +42,18 @@ module GitHelper
       remote.scan(/(https:\/\/)/).any?
     end
 
-    def remote_repo(remote, remote_type)
-      if remote_type == :https
+    def remote_repo(remote)
+      if https_remote?(remote)
         remote.scan(/https:\/\/[\S]+\/([\S]*).git/).first.first
-      elsif remote_type == :ssh
+      elsif ssh_remote?(remote)
         remote.scan(/\/([\S]*).git/).first.first
       end
     end
 
-    def remote_source(remote, remote_type)
-      if remote_type == :https
+    def remote_source(remote)
+      if https_remote?(remote)
         remote.scan(/https:\/\/([a-zA-z.]+)\//).first.first
-      elsif remote_type == :ssh
+      elsif ssh_remote?(remote)
         remote.scan(/git@([a-zA-z.]+):/).first.first
       end
     end
