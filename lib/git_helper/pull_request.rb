@@ -145,22 +145,6 @@ module GitHelper
       !!(answer =~ /^y/i)
     end
 
-    private def template_name_to_apply
-      return @template_name_to_apply if @template_name_to_apply
-      @template_name_to_apply = nil
-
-      unless pr_template_options.empty?
-        if pr_template_options.count == 1
-          @template_name_to_apply = pr_template_options.first if apply_template?(pr_template_options.first)
-        else
-          response = template_to_apply
-          @template_name_to_apply = response unless response == "None"
-        end
-      end
-
-      @template_name_to_apply
-    end
-
     ###################################
     ### INTERPRETING USER'S ANSWERS ###
     ###################################
@@ -183,6 +167,22 @@ module GitHelper
 
     private def new_pr_body
       @new_pr_body ||= template_name_to_apply ? local_code.read_template(template_name_to_apply) : ''
+    end
+
+    private def template_name_to_apply
+      return @template_name_to_apply if @template_name_to_apply
+      @template_name_to_apply = nil
+
+      unless pr_template_options.empty?
+        if pr_template_options.count == 1
+          @template_name_to_apply = pr_template_options.first if apply_template?(pr_template_options.first)
+        else
+          response = template_to_apply
+          @template_name_to_apply = response unless response == "None"
+        end
+      end
+
+      @template_name_to_apply
     end
 
     #############
