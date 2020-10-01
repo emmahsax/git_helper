@@ -24,7 +24,7 @@ command 'change-remote' do |c|
   c.action do |global_options, options, args|
     require_relative '../lib/git_helper/change_remote.rb'
     raise ArgumentError, 'You must specify an old owner and a new owner' unless args.count == 2
-    GitHelper::ChangeRemote.new.execute(args[0], args[1])
+    GitHelper::ChangeRemote.new(args[0], args[1]).execute
   end
 end
 
