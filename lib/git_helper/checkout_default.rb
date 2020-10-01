@@ -1,7 +1,9 @@
+require_relative './local_code.rb'
+
 module GitHelper
   class CheckoutDefault
     def execute
-      system("git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed \"s@^refs/remotes/origin/@@\")")
+      GitHelper::LocalCode.new.checkout_default
     end
   end
 end

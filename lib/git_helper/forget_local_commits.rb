@@ -1,9 +1,9 @@
 require_relative './local_code.rb'
 
 module GitHelper
-  class EmptyCommit
+  class ForgetLocalCommits
     def execute
-      GitHelper::LocalCode.new.empty_commit
+      GitHelper::LocalCode.new.forget_local_commits
     end
   end
 end

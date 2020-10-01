@@ -6,6 +6,11 @@ module GitHelper
       ask('New branch name?')
     end
 
+    def process_directory_remotes?(directory)
+      answer = ask("Found git directory: #{directory}. Do you wish to proceed in updating #{directory}'s remote URLs? (y/n)")
+      !!(answer =~ /^y/i)
+    end
+
     def title
       ask('Title?')
     end
