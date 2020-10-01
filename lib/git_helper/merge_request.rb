@@ -37,8 +37,8 @@ module GitHelper
         # Ask these questions right away
         mr_id
         options = {}
-        options[:should_remove_source_branch] = remove_source_branch?
-        options[:squash] = squash_merge_request?
+        options[:should_remove_source_branch] = remove_source_branch
+        options[:squash] = squash_merge_request
         options[:squash_commit_message] = existing_mr_title
 
         puts "Merging merge request: #{mr_id}"
@@ -69,7 +69,7 @@ module GitHelper
     end
 
     private def default_branch
-      @default_branch ||= local_code.default_branch(local_repo, gitlab_client, :gitlab)
+      @default_branch ||= local_code.default_branch(local_project, gitlab_client, :gitlab)
     end
 
     private def mr_template_options
