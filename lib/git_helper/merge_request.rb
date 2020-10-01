@@ -3,11 +3,6 @@ require_relative './highline_cli.rb'
 
 module GitHelper
   class GitLabMergeRequest
-
-    #######################
-    ### BASIC FUNCTIONS ###
-    #######################
-
     def create
       begin
         # Ask these questions right away
@@ -60,10 +55,6 @@ module GitHelper
       end
     end
 
-    #################################
-    ### ABOUT THE LOCAL CODE BASE ###
-    #################################
-
     private def local_project
       @local_project ||= local_code.name
     end
@@ -86,10 +77,6 @@ module GitHelper
                                  non_nested_file_name: "merge_request_template"
                                })
     end
-
-    ###################################
-    ### INTERPRETING USER'S ANSWERS ###
-    ###################################
 
     private def mr_id
       @mr_id ||= cli.merge_request_id
@@ -139,10 +126,6 @@ module GitHelper
 
       @template_name_to_apply
     end
-
-    #############
-    ### OTHER ###
-    #############
 
     private def existing_mr_title
       @existing_mr_title ||= gitlab_client.merge_request(local_project, mr_id).title

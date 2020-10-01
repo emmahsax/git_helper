@@ -3,10 +3,6 @@ require_relative './highline_cli.rb'
 
 module GitHelper
   class GitHubPullRequest
-    #######################
-    ### BASIC FUNCTIONS ###
-    #######################
-
     def create
       begin
         # Ask these questions right away
@@ -70,10 +66,6 @@ module GitHelper
       end
     end
 
-    #################################
-    ### ABOUT THE LOCAL CODE BASE ###
-    #################################
-
     private def local_repo
       @local_project ||= local_code.name
     end
@@ -96,10 +88,6 @@ module GitHelper
                                  non_nested_file_name: "pull_request_template"
                                })
     end
-
-    ###################################
-    ### INTERPRETING USER'S ANSWERS ###
-    ###################################
 
     private def pr_id
       @pr_id ||= cli.pull_request_id
@@ -145,10 +133,6 @@ module GitHelper
 
       @template_name_to_apply
     end
-
-    #############
-    ### OTHER ###
-    #############
 
     private def existing_pr_title
       @existing_pr_title ||= octokit_client.pull_request(local_repo, pr_id).title
