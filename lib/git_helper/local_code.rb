@@ -4,6 +4,11 @@ module GitHelper
       system("git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed \"s@^refs/remotes/origin/@@\")")
     end
 
+    def forget_local_commits
+      system("git pull")
+      system("git reset --hard origin/HEAD")
+    end
+
     def empty_commit
       system("git commit --allow-empty -m \"Empty commit\"")
     end

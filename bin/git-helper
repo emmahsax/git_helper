@@ -52,6 +52,14 @@ command 'empty-commit' do |c|
   end
 end
 
+desc "Reset your local git commits to origin/HEAD."
+command 'forget-local-commits' do |c|
+  c.action do |global_options, options, args|
+    require_relative '../lib/git_helper/forget_local_commits.rb'
+    GitHelper::ForgetLocalCommits.new.execute
+  end
+end
+
 desc 'Create a GitLab merge request from the current branch.'
 command 'merge-request' do |c|
   c.switch [:c, :create], desc: 'Create a new pull request'
