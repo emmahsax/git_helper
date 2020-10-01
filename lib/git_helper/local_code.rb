@@ -17,10 +17,10 @@ module GitHelper
       `git branch`.scan(/\*\s([\S]*)/).first.first
     end
 
-    def default_branch(project_name, external_client)
-      if external_client.instance_of?(GitHelper::OctokitClient) # GitHub repository
+    def default_branch(project_name, external_client, client_type)
+      if client_type == :octokit # GitHub repository
         external_client.repository(project_name).default_branch
-      elsif external_client.instance_of?(GitHelper::GitLabClient) # GitLab project
+      elsif client_type == :gitlab # GitLab project
         page_number = 1
         counter = 1
         branches = []
@@ -46,7 +46,7 @@ module GitHelper
         File.join("**", "#{template_identifiers[:non_nested_file_name]}.md"),
         File::FNM_DOTMATCH | File::FNM_CASEFOLD
       )
-      nested_templates.concat(non_nested_templates)
+      nested_templates.concat(non_nested_templates).uniq
     end
 
     def read_template(file_name)
@@ -60,21 +60,16 @@ module GitHelper
 
       if branch_arr.length == 1
         branch_arr.first.capitalize
-      end
-
-      if branch_arr[0].scan(/([\w]+)/).empty? || branch_arr[1].scan(/([\d]+)/).empty?
-        branch_arr[0..-1].join(' ').capitalize
-      else
-        issue = branch_arr[0].upcase
-
-        if issue.include?('-')
-          description = branch_arr[1..-1].join(' ')
-        else
-          issue = "#{issue}-#{branch_arr[1]}"
-          description = branch_arr[2..-1].join(' ')
-        end
-
+      elsif branch_arr[0].scan(/([\w]+)/).any? && branch_arr[1].scan(/([\d]+)/).any? # branch includes jira_123 at beginning
+        issue = "#{branch_arr[0].upcase}-#{branch_arr[1]}"
+        description = branch_arr[2..-1].join(' ')
         "#{issue} #{description.capitalize}"
+      elsif branch_arr[0].scan(/([\w]+-[\d]+)/).any? # branch includes string jira-123 at beginning
+        issue = branch_arr[0].upcase
+        description = branch_arr[1..-1].join(' ')
+        "#{issue} #{description.capitalize}"
+      else # plain words
+        branch_arr[0..-1].join(' ').capitalize
       end
     end
   end

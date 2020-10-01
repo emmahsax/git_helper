@@ -54,9 +54,9 @@ module GitHelper
       !!(answer =~ /^y/i)
     end
 
-    def template_to_apply(template_options, type)
+    def template_to_apply(template_options, request_type)
       complete_options = template_options << 'None'
-      index = ask_options("Which #{type} request template should be applied?", complete_options)
+      index = ask_options("Which #{request_type} request template should be applied?", complete_options)
       complete_options[index]
     end
 

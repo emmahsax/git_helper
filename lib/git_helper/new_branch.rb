@@ -1,4 +1,5 @@
 require_relative './highline_cli.rb'
+require_relative './local_code.rb'
 
 module GitHelper
   class NewBranch
