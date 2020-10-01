@@ -36,7 +36,7 @@ module GitHelper
         merge_method
 
         puts "Merging pull request: #{pr_id}"
-        merge = octokit_client.merge_pull_request(local_repo, pr_id, existing_pr_title, { merge_method: merge_method })
+        merge = octokit_client.merge_pull_request(local_repo, pr_id, existing_pr.title, { merge_method: merge_method })
         puts "Pull request successfully merged: #{merge.sha}"
       rescue Octokit::UnprocessableEntity => e
         puts 'Could not merge pull request:'
@@ -95,7 +95,16 @@ module GitHelper
     end
 
     private def merge_method
-      @merge_method ||= cli.merge_method
+      @merge_method ||= merge_options.length == 1 ? merge_options.first : cli.merge_method(merge_options)
+    end
+
+    private def merge_options
+      return @merge_options if @merge_options
+      merge_options = []
+      merge_options << 'merge' if existing_project.allow_merge_commit
+      merge_options << 'squash' if existing_project.allow_squash_merge
+      merge_options << 'rebase' if existing_project.allow_rebase_merge
+      @merge_options = merge_options
     end
 
     private def new_pr_title
@@ -135,8 +144,12 @@ module GitHelper
       @template_name_to_apply
     end
 
-    private def existing_pr_title
-      @existing_pr_title ||= octokit_client.pull_request(local_repo, pr_id).title
+    private def existing_pr
+      @existing_pr ||= octokit_client.pull_request(local_repo, pr_id)
+    end
+
+    private def existing_project
+      @existing_project ||= octokit_client.repository(local_repo)
     end
 
     private def octokit_client
