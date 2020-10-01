@@ -1,3 +1,6 @@
+require_relative './highline_cli.rb'
+require_relative './local_code.rb'
+
 module GitHelper
   class ChangeRemote
     attr_accessor :old_owner, :new_owner
@@ -8,38 +11,36 @@ module GitHelper
     end
 
     def execute
-      current_dir = Dir.pwd
-      nested_dirs = Dir.entries(current_dir).select do |entry|
-        entry_dir = File.join(current_dir, entry)
+      original_dir = Dir.pwd
+      nested_dirs = Dir.entries(original_dir).select do |entry|
+        entry_dir = File.join(original_dir, entry)
         File.directory?(entry_dir) && !(entry == '.' || entry == '..')
       end
 
-      nested_dirs.each do |dir|
-        process_dir(dir)
+      nested_dirs.each do |nested_dir|
+        process_dir(nested_dir, original_dir)
       end
     end
 
-    private def process_dir(dir)
-      Dir.chdir(dir)
+    private def process_dir(current_dir, original_dir)
+      Dir.chdir(current_dir)
 
       if File.exist?('.git')
-        puts "Found git directory: #{dir}."
-        process_git_repository
+        process_git_repository if cli.process_directory_remotes?(current_dir)
       end
 
-      Dir.chdir(current_dir)
+      Dir.chdir(original_dir)
     end
 
     private def process_git_repository
       local_code.remotes.each do |remote|
-        if resp.include?(old_owner)
-          puts "  Git directory's remote is pointing to: '#{old_owner}'."
+        if remote.include?(old_owner)
           process_remote(remote)
-          puts '  Done.'
         else
-          puts '  No need to update remote.'
+          puts "  Found remote is not pointing to #{old_owner}."
         end
       end
+      puts "\n"
     end
 
     private def process_remote(remote)
@@ -61,6 +62,10 @@ module GitHelper
 
     private def local_code
       @local_code ||= GitHelper::LocalCode.new
+    end
+
+    private def cli
+      @cli ||= GitHelper::HighlineCli.new
     end
   end
 end
