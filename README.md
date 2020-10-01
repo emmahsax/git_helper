@@ -71,7 +71,7 @@ If you're going to make using git workflows easier, might as well provide lots o
 
 This can be used when switching the owners of a GitHub repo. When you switch a username, GitHub only makes some changes for you. With this command, you no longer have to manually walk through local repo and switch the remotes from each one into a remote with the new username.
 
-This command will go through every directory in a directory, see if it is a git directory, and then will check to see if the old username is included in the remote URL of that git directory. If it is, then the command will change the remote URL to instead point to the new username's remote URL. To run the command, run:
+This command will go through every directory in a directory, and see if it is a git directory. It will then ask the user if they wish to process the git directory in question. The command does not yet know if there's any changes to be made. If the user says 'yes', then it will check to see if the old username is included in the remote URL of that git directory. If it is, then the command will change the remote URL to instead point to the new username's remote URL. To run the command, run:
 
 ```bash
 git-helper change-remote OLD-OWNER NEW-OWNER
@@ -93,7 +93,7 @@ git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/CORRECT-DEFAULT-BR
 
 ### `clean-branches`
 
-This command will bring you to the repository's default branch, `git pull`, `git fetch -p`, and will clean up your local branches on your machine by seeing which ones are existing on the remote, and updating yours accordingly. To run:
+This command will bring you to the repository's default branch, `git pull`, `git fetch -p`, and will clean up your local branches on your machine by seeing which ones are existing on the remote, and updating yours accordingly. To clean your local branches, run:
 
 ```bash
 git-helper clean-branches
@@ -105,6 +105,14 @@ For some reason, I'm always forgetting the commands to create an empty commit. S
 
 ```bash
 git-helper empty-commit
+```
+
+### `forget-local-commits`
+
+This command is handy if you locally have a bunch of commits you wish to completely get rid of. This command basically does a hard reset to `origin/HEAD`. Once you forget them, they're completely gone, so run carefully. To test it out, run:
+
+```bash
+git-helper forget-local-commits
 ```
 
 ### `merge-request`
