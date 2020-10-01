@@ -2,19 +2,17 @@ module GitHelper
   class LocalCode
     def name
       # Get the repo/project name by looking in the remote URLs for the full name
-      remotes = `git remote -v`
-      return remotes.scan(/\S[\s]*[\S]+.com[\S]{1}([\S]*).git/).first.first
+      `git remote -v`.scan(/\S[\s]*[\S]+.com[\S]{1}([\S]*).git/).first.first
     end
 
     def branch
       # Get the current branch by looking in the list of branches for the *
-      branches = `git branch`
-      return branches.scan(/\*\s([\S]*)/).first.first
+      `git branch`.scan(/\*\s([\S]*)/).first.first
     end
 
     def default_branch(project_name, external_client)
       if external_client.instance_of?(GitHelper::OctokitClient) # GitHub repository
-        return external_client.repository(local_repo).default_branch
+        external_client.repository(project_name).default_branch
       elsif external_client.instance_of?(GitHelper::GitLabClient) # GitLab project
         page_number = 1
         counter = 1
@@ -28,7 +26,7 @@ module GitHelper
           page_number += 1
         end
 
-        return default_branch.name
+        default_branch.name
       end
     end
 
@@ -41,7 +39,7 @@ module GitHelper
         File.join("**", "#{template_identifiers[:non_nested_file_name]}.md"),
         File::FNM_DOTMATCH | File::FNM_CASEFOLD
       )
-      return nested_templates.concat(non_nested_templates)
+      nested_templates.concat(non_nested_templates)
     end
 
     def read_template(file_name)
@@ -54,11 +52,11 @@ module GitHelper
       return if branch_arr.empty?
 
       if branch_arr.length == 1
-        return branch_arr.first.capitalize
+        branch_arr.first.capitalize
       end
 
       if branch_arr[0].scan(/([\w]+)/).empty? || branch_arr[1].scan(/([\d]+)/).empty?
-        return branch_arr[0..-1].join(' ').capitalize
+        branch_arr[0..-1].join(' ').capitalize
       else
         issue = branch_arr[0].upcase
 
@@ -69,7 +67,7 @@ module GitHelper
           description = branch_arr[2..-1].join(' ')
         end
 
-        return "#{issue} #{description.capitalize}"
+        "#{issue} #{description.capitalize}"
       end
     end
   end
