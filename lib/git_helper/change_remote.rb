@@ -1,55 +1,71 @@
+require_relative './highline_cli.rb'
+require_relative './local_code.rb'
+
 module GitHelper
   class ChangeRemote
-    def execute(old_owner, new_owner)
-      current_dir = Dir.pwd
-      nested_dirs = Dir.entries(current_dir).select do |entry|
-        entry_dir = File.join(current_dir, entry)
+    attr_accessor :old_owner, :new_owner
+
+    def initialize(old_owner, new_owner)
+      @old_owner = old_owner
+      @new_owner = new_owner
+    end
+
+    def execute
+      original_dir = Dir.pwd
+      nested_dirs = Dir.entries(original_dir).select do |entry|
+        entry_dir = File.join(original_dir, entry)
         File.directory?(entry_dir) && !(entry == '.' || entry == '..')
       end
 
-      nested_dirs.each do |dir|
-        Dir.chdir dir
-        if File.exist?('.git')
-          puts "Found git directory: #{dir}."
-          remotes = `git remote -v`.split("\n")
-          remotes.each do |remote|
-            if resp.include?(old_owner)
-              puts "  Git directory's remote is pointing to: '#{old_owner}'."
-              swap_ssh(old_owner, new_owner, remote) if remote.scan(/(git@)/).any?
-              swap_https(old_owner, new_owner, remote) if remote.scan(/(https:\/\/)/).any?
-            else
-              puts "  No need to update remote."
-            end
-          end
+      nested_dirs.each do |nested_dir|
+        process_dir(nested_dir, original_dir)
+      end
+    end
+
+    private def process_dir(current_dir, original_dir)
+      Dir.chdir(current_dir)
+
+      if File.exist?('.git')
+        process_git_repository if cli.process_directory_remotes?(current_dir)
+      end
+
+      Dir.chdir(original_dir)
+    end
+
+    private def process_git_repository
+      local_code.remotes.each do |remote|
+        if remote.include?(old_owner)
+          process_remote(remote)
+        else
+          puts "  Found remote is not pointing to #{old_owner}."
         end
-        Dir.chdir current_dir
       end
+      puts "\n"
     end
 
-    private def swap_https(old_owner, new_owner, remote)
-      repo = remote.scan(/https:\/\/[\S]+\/([\S]*).git/).first.first
-      remote_name = remote.scan(/([a-zA-z]+)/).first.first
-      source_name = scan(/https:\/\/([a-zA-z.]+)\//).first.first
-      puts "  Changing the remote URL #{remote_name} to be 'https://#{source_name}/#{new_owner}/#{repo}.git'."
-      begin
-        `git remote set-url #{remote_name} https://#{source_name}:#{new_owner}/#{repo}.git`
-        puts "  Done."
-      rescue Exception => e
-        puts "  Could not complete: #{e.message}"
+    private def process_remote(remote)
+      remote_name = local_code.remote_name(remote)
+
+      if local_code.ssh_remote?(remote)
+        repo = local_code.remote_repo(remote)
+        source_name = local_code.remote_source(remote)
+        remote_url = "git@#{source_name}:#{new_owner}/#{repo}.git"
+      elsif local_code.https_remote?(remote)
+        repo = local_code.remote_repo(remote)
+        source_name = local_code.remote_source(remote)
+        remote_url = "https://#{source_name}/#{new_owner}/#{repo}.git"
       end
+
+      puts "  Changing the remote URL #{remote_name} to be '#{remote_url}'."
+      local_code.change_remote(remote_name, remote_url)
     end
 
-    private def swap_ssh(old_owner, new_owner, remote)
-      repo = remote.scan(/\/([\S]*).git/).first.first
-      remote_name = remote.scan(/([a-zA-z]+)/).first.first
-      source_name = remote.scan(/git@([a-zA-z.]+):/).first.first
-      puts "  Changing the remote URL #{remote_name} to be 'git@#{source_name}:#{new_owner}/#{repo}.git'."
-      begin
-        `git remote set-url #{remote_name} git@#{source_name}:#{new_owner}/#{repo}.git`
-        puts "  Done."
-      rescue Exception => e
-        puts "  Could not complete: #{e.message}"
-      end
+    private def local_code
+      @local_code ||= GitHelper::LocalCode.new
+    end
+
+    private def cli
+      @cli ||= GitHelper::HighlineCli.new
     end
   end
 end

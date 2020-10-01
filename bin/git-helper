@@ -24,7 +24,7 @@ command 'change-remote' do |c|
   c.action do |global_options, options, args|
     require_relative '../lib/git_helper/change_remote.rb'
     raise ArgumentError, 'You must specify an old owner and a new owner' unless args.count == 2
-    GitHelper::ChangeRemote.new.execute(args[0], args[1])
+    GitHelper::ChangeRemote.new(args[0], args[1]).execute
   end
 end
 
@@ -49,6 +49,14 @@ command 'empty-commit' do |c|
   c.action do |global_options, options, args|
     require_relative '../lib/git_helper/empty_commit.rb'
     GitHelper::EmptyCommit.new.execute
+  end
+end
+
+desc "Reset your local git commits to origin/HEAD."
+command 'forget-local-commits' do |c|
+  c.action do |global_options, options, args|
+    require_relative '../lib/git_helper/forget_local_commits.rb'
+    GitHelper::ForgetLocalCommits.new.execute
   end
 end
 
