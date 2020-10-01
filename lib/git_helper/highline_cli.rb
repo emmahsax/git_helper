@@ -43,8 +43,7 @@ module GitHelper
       !!(answer =~ /^y/i)
     end
 
-    def merge_method
-      merge_options = [ 'merge', 'squash', 'rebase' ]
+    def merge_method(merge_options)
       index = ask_options("Merge method?", merge_options)
       merge_options[index]
     end
