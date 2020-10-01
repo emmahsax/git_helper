@@ -1,5 +1,12 @@
 module GitHelper
   class LocalCode
+    def new_branch(branch_name)
+      system("git pull")
+      system("git branch --no-track #{branch_name}")
+      system("git checkout #{branch_name}")
+      system("git push --set-upstream origin #{branch_name}")
+    end
+
     def name
       # Get the repo/project name by looking in the remote URLs for the full name
       `git remote -v`.scan(/\S[\s]*[\S]+.com[\S]{1}([\S]*).git/).first.first

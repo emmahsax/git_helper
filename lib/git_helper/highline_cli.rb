@@ -2,6 +2,10 @@ require 'highline'
 
 module GitHelper
   class HighlineCli
+    def new_branch_name
+      ask('New branch name?')
+    end
+
     def title
       ask('Title?')
     end
