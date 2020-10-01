@@ -12,6 +12,8 @@ module GitHelper
         options = {
           source_branch: local_branch,
           target_branch: base_branch,
+          squash: squash_merge_request,
+          remove_source_branch: remove_source_branch,
           description: new_mr_body
         }
 
@@ -37,12 +39,18 @@ module GitHelper
         # Ask these questions right away
         mr_id
         options = {}
-        options[:should_remove_source_branch] = remove_source_branch
-        options[:squash] = squash_merge_request
-        options[:squash_commit_message] = existing_mr_title
+        options[:should_remove_source_branch] = existing_mr.should_remove_source_branch || existing_mr.force_remove_source_branch
+        options[:squash] = existing_mr.squash
+        options[:squash_commit_message] = existing_mr.title
 
         puts "Merging merge request: #{mr_id}"
         merge = gitlab_client.accept_merge_request(local_project, mr_id, options)
+
+        if merge.merge_commit_sha.nil?
+          options[:squash] = true
+          merge = gitlab_client.accept_merge_request(local_project, mr_id, options)
+        end
+
         puts "Merge request successfully merged: #{merge.merge_commit_sha}"
       rescue Gitlab::Error::MethodNotAllowed => e
         puts 'Could not merge merge request:'
@@ -88,7 +96,7 @@ module GitHelper
     end
 
     private def remove_source_branch
-      @remove_source_branch ||= cli.remove_source_branch?
+      @remove_source_branch ||= existing_project.remove_source_branch_after_merge || cli.remove_source_branch?
     end
 
     private def new_mr_title
@@ -128,8 +136,12 @@ module GitHelper
       @template_name_to_apply
     end
 
-    private def existing_mr_title
-      @existing_mr_title ||= gitlab_client.merge_request(local_project, mr_id).title
+    private def existing_mr
+      @existing_mr ||= gitlab_client.merge_request(local_project, mr_id)
+    end
+
+    private def existing_project
+      @existing_project ||= gitlab_client.project(local_project)
     end
 
     private def gitlab_client
