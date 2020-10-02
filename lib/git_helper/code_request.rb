@@ -23,7 +23,8 @@ module GitHelper
       elsif local_code.gitlab_project? # Only GitLab remotes are found
         gitlab_merge_request
       else # Neither GitHub nor GitLab remotes are found
-        raise StandardError 'Could not locate GitHub or GitLab remote URLs.'
+        puts 'Could not locate GitHub or GitLab remote URLs.'
+        exit
       end
     end
 
@@ -34,7 +35,8 @@ module GitHelper
       elsif resp.include?('lab')
         gitlab_merge_request
       else
-        raise StandardError 'The answer we received was not parseable.'
+        puts 'The answer we received was not parseable.'
+        exit
       end
     end
 
