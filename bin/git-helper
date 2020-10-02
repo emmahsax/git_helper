@@ -60,25 +60,6 @@ command 'forget-local-commits' do |c|
   end
 end
 
-desc 'Create or merge a GitLab merge request from the current branch.'
-command 'merge-request' do |c|
-  c.switch [:c, :create], desc: 'Create a new pull request'
-  c.switch [:m, :merge], desc: 'Merge an existing pull request'
-
-  c.action do |global_options, options, args|
-    require_relative '../lib/git_helper/merge_request.rb'
-    raise ArgumentError, "You must specify an action (either '-m'/'--merge' or '-c'/'--create')" unless options[:create] || options[:merge]
-
-    options = global_options.merge(options)
-
-    if options[:create]
-      GitHelper::GitLabMergeRequest.new.create
-    elsif options[:merge]
-      GitHelper::GitLabMergeRequest.new.merge
-    end
-  end
-end
-
 arg :new_branch_name, optional: true
 desc 'Create a new branch for features, bug fixes, or experimentation.'
 command 'new-branch' do |c|
@@ -88,27 +69,8 @@ command 'new-branch' do |c|
   end
 end
 
-desc 'Create or merge a GitHub pull request from the current branch.'
-command 'pull-request' do |c|
-  c.switch [:c, :create], desc: 'Create a new pull request'
-  c.switch [:m, :merge], desc: 'Merge an existing pull request'
-
-  c.action do |global_options, options, args|
-    require_relative '../lib/git_helper/pull_request.rb'
-    raise ArgumentError, "You must specify an action (either '-m'/'--merge' or '-c'/'--create')" unless options[:create] || options[:merge]
-
-    options = global_options.merge(options)
-
-    if options[:create]
-      GitHelper::GitHubPullRequest.new.create
-    elsif options[:merge]
-      GitHelper::GitHubPullRequest.new.merge
-    end
-  end
-end
-
 desc 'Create or merge a GitHub or GitLab pull/merge request from the current branch. The command will figure out whether your code project belongs to GitHub or GitLab'
-command 'request' do |c|
+command 'code-request' do |c|
   c.switch [:c, :create], desc: 'Create a new pull/merge request'
   c.switch [:m, :merge], desc: 'Merge an existing pull/merge request'
 
