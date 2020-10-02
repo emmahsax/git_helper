@@ -1,7 +1,3 @@
-require_relative './octokit_client.rb'
-require_relative './highline_cli.rb'
-require_relative './local_code.rb'
-
 module GitHelper
   class GitHubPullRequest
     attr_accessor :local_repo, :local_branch, :local_code, :cli, :base_branch, :new_pr_title

@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/pull_request.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::GitHubPullRequest do
   let(:local_code) { double(:local_code, read_template: 'template') }

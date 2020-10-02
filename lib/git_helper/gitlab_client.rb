@@ -1,5 +1,4 @@
 require 'gitlab'
-require_relative './git_config_reader.rb'
 
 module GitHelper
   class GitLabClient

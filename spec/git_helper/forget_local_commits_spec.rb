@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/forget_local_commits.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::ForgetLocalCommits do
   let(:local_code) { double(:local_code, forget_local_commits: :commit) }

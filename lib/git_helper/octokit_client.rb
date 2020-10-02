@@ -1,5 +1,4 @@
 require 'octokit'
-require_relative './git_config_reader.rb'
 
 module GitHelper
   class OctokitClient
