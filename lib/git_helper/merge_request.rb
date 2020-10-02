@@ -92,7 +92,7 @@ module GitHelper
           @template_name_to_apply = mr_template_options.first if apply_single_template
         else
           response = cli.template_to_apply(mr_template_options, 'merge')
-          @template_name_to_apply = response unless response == "None"
+          @template_name_to_apply = response unless response == 'None'
         end
       end
 
@@ -101,8 +101,8 @@ module GitHelper
 
     private def mr_template_options
       @mr_template_options ||= local_code.template_options({
-                                 nested_directory_name: "merge_request_templates",
-                                 non_nested_file_name: "merge_request_template"
+                                 nested_directory_name: 'merge_request_templates',
+                                 non_nested_file_name: 'merge_request_template'
                                })
     end
 

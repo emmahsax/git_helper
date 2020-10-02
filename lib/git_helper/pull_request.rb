@@ -89,7 +89,7 @@ module GitHelper
           @template_name_to_apply = pr_template_options.first if apply_single_template
         else
           response = cli.template_to_apply(pr_template_options, 'pull')
-          @template_name_to_apply = response unless response == "None"
+          @template_name_to_apply = response unless response == 'None'
         end
       end
 
@@ -98,8 +98,8 @@ module GitHelper
 
     private def pr_template_options
       @pr_template_options ||= local_code.template_options({
-                                 nested_directory_name: "PULL_REQUEST_TEMPLATE",
-                                 non_nested_file_name: "pull_request_template"
+                                 nested_directory_name: 'PULL_REQUEST_TEMPLATE',
+                                 non_nested_file_name: 'pull_request_template'
                                })
     end
 
