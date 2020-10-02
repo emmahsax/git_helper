@@ -89,7 +89,8 @@ describe GitHelper::CodeRequest do
       it 'should raise error' do
         allow(local_code).to receive(:gitlab_project?).and_return(false)
         allow(local_code).to receive(:github_repo?).and_return(false)
-        expect { subject.send(:process_project) }.to raise_error(StandardError)
+        expect(subject).to receive(:exit)
+        subject.send(:process_project)
       end
     end
   end
@@ -131,7 +132,8 @@ describe GitHelper::CodeRequest do
     context 'when response is neither' do
       it 'should raise an error' do
         allow(highline_cli).to receive(:conflicting_remote_clarification).and_return('huh?')
-        expect { subject.send(:ask_for_clarification) }.to raise_error(StandardError)
+        expect(subject).to receive(:exit)
+        subject.send(:ask_for_clarification)
       end
     end
   end
