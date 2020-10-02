@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/highline_cli.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::HighlineCli do
   let(:response) { double(:response, readline: true, to_i: 5) }

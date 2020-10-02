@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/change_remote.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::ChangeRemote do
   let(:remote1) { 'git@github.com:github-username-old/project-1.git' }

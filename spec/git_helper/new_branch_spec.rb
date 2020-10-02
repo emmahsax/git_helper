@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/new_branch.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::NewBranch do
   let(:new_branch_name) { 'new-branch-name' }

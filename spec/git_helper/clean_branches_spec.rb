@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/clean_branches.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::CleanBranches do
   let(:local_code) { double(:local_code, clean_branches: :commit) }
