@@ -47,11 +47,11 @@ module GitHelper
       remote_name = local_code.remote_name(remote)
 
       if local_code.ssh_remote?(remote)
-        repo = local_code.remote_repo(remote)
+        repo = local_code.remote_project(remote)
         source_name = local_code.remote_source(remote)
         remote_url = "git@#{source_name}:#{new_owner}/#{repo}.git"
       elsif local_code.https_remote?(remote)
-        repo = local_code.remote_repo(remote)
+        repo = local_code.remote_project(remote)
         source_name = local_code.remote_source(remote)
         remote_url = "https://#{source_name}/#{new_owner}/#{repo}.git"
       end
