@@ -143,6 +143,7 @@ describe GitHelper::LocalCode do
     end
 
     it 'should equal this project name' do
+      allow_any_instance_of(String).to receive(:scan).and_return([['emmasax4/git_helper']])
       expect(subject.project_name).to eq('emmasax4/git_helper')
     end
   end
