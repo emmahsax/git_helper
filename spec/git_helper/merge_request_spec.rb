@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/merge_request.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::GitLabMergeRequest do
   let(:local_code) { double(:local_code, read_template: 'template') }

@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/octokit_client.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::OctokitClient do
   let(:git_config_reader) { double(:git_config_reader, github_token: :token) }

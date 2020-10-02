@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/local_code.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::LocalCode do
   let(:response) { double(:response, readline: true, to_i: 5) }

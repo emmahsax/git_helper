@@ -31,7 +31,6 @@ RSpec.configure do |config|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
 
-  config.use_transactional_fixtures = true
   config.filter_run :focus => true
   config.run_all_when_everything_filtered = true
 

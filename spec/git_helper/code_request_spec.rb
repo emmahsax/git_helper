@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/code_request.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::CodeRequest do
   let(:highline_cli) { double(:highline_cli) }

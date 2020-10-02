@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/empty_commit.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::EmptyCommit do
   let(:local_code) { double(:local_code, empty_commit: :commit) }

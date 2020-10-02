@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/checkout_default.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::CheckoutDefault do
   let(:local_code) { double(:local_code, checkout_default: :done) }
