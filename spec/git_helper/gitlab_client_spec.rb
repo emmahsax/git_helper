@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/gitlab_client.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::GitLabClient do
   let(:git_config_reader) { double(:git_config_reader, gitlab_token: :token) }
