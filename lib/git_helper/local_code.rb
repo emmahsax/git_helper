@@ -47,7 +47,7 @@ module GitHelper
       remote.scan(/(https:\/\/)/).any?
     end
 
-    def remote_repo(remote)
+    def remote_project(remote)
       if https_remote?(remote)
         remote.scan(/https:\/\/[\S]+\/([\S]*).git/).first.first
       elsif ssh_remote?(remote)
@@ -63,7 +63,15 @@ module GitHelper
       end
     end
 
-    def name
+    def github_repo?
+      remotes.select { |remote| remote.include?('github') }.any?
+    end
+
+    def gitlab_project?
+      remotes.select { |remote| remote.include?('gitlab') }.any?
+    end
+
+    def project_name
       # Get the repo/project name by looking in the remote URLs for the full name
       `git remote -v`.scan(/\S[\s]*[\S]+.com[\S]{1}([\S]*).git/).first.first
     end
@@ -73,24 +81,8 @@ module GitHelper
       `git branch`.scan(/\*\s([\S]*)/).first.first
     end
 
-    def default_branch(project_name, external_client, client_type)
-      if client_type == :octokit # GitHub repository
-        external_client.repository(project_name).default_branch
-      elsif client_type == :gitlab # GitLab project
-        page_number = 1
-        counter = 1
-        branches = []
-
-        while counter > 0
-          break if default_branch = branches.select { |branch| branch.default }.first
-          page_branches = external_client.branches(project_name, page: page_number, per_page: 100)
-          branches = page_branches
-          counter = page_branches.count
-          page_number += 1
-        end
-
-        default_branch.name
-      end
+    def default_branch
+      `git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@" | tr -d "\n"`
     end
 
     def template_options(template_identifiers)

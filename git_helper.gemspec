@@ -23,8 +23,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'octokit', '~> 4.18'
 
   gem.add_development_dependency 'bundler', '~> 2.1'
-  gem.add_development_dependency 'guard', '~> 2.6'
   gem.add_development_dependency 'guard-rspec', '~> 4.3'
-  gem.add_development_dependency 'rake', '~> 12.3.3'
-  gem.add_development_dependency 'rspec', '~> 2.99'
+  gem.add_development_dependency 'rake', '~> 13.0'
+  gem.add_development_dependency 'rspec', '~> 3.9'
 end
