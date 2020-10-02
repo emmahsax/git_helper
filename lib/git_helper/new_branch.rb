@@ -1,6 +1,3 @@
-require_relative './highline_cli.rb'
-require_relative './local_code.rb'
-
 module GitHelper
   class NewBranch
     def execute(new_branch_name = nil)

@@ -1,7 +1,3 @@
-require_relative './gitlab_client.rb'
-require_relative './highline_cli.rb'
-require_relative './local_code.rb'
-
 module GitHelper
   class GitLabMergeRequest
     attr_accessor :local_project, :local_branch, :local_code, :cli, :base_branch, :new_mr_title

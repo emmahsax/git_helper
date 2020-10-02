@@ -1,5 +1,3 @@
-require_relative './local_code.rb'
-
 module GitHelper
   class ForgetLocalCommits
     def execute

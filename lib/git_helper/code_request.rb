@@ -1,8 +1,3 @@
-require_relative './merge_request.rb'
-require_relative './pull_request.rb'
-require_relative './local_code.rb'
-require_relative './highline_cli.rb'
-
 module GitHelper
   class CodeRequest
     def create

@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'gli', '~> 2.13'
   gem.add_dependency 'highline', '~> 2.0'
   gem.add_dependency 'octokit', '~> 4.18'
+  gem.add_dependency 'require_all', '~> 3.0'
 
   gem.add_development_dependency 'bundler', '~> 2.1'
   gem.add_development_dependency 'guard-rspec', '~> 4.3'

@@ -1,6 +1,3 @@
-require_relative './highline_cli.rb'
-require_relative './local_code.rb'
-
 module GitHelper
   class ChangeRemote
     attr_accessor :old_owner, :new_owner
