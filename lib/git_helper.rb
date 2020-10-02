@@ -1,17 +1,5 @@
-require_relative 'git_helper/change_remote'
-require_relative 'git_helper/code_request'
-require_relative 'git_helper/git_config_reader'
-require_relative 'git_helper/local_code'
-require_relative 'git_helper/octokit_client'
-require_relative 'git_helper/checkout_default'
-require_relative 'git_helper/empty_commit'
-require_relative 'git_helper/gitlab_client'
-require_relative 'git_helper/merge_request'
-require_relative 'git_helper/pull_request'
-require_relative 'git_helper/clean_branches'
-require_relative 'git_helper/forget_local_commits'
-require_relative 'git_helper/highline_cli'
-require_relative 'git_helper/new_branch'
-require_relative 'git_helper/version'
+Dir[File.expand_path(File.join(File.dirname(File.absolute_path(__FILE__)), 'git_helper')) + "/**/*.rb"].each do |file|
+  require_relative file
+end
 
 module GitHelper; end
