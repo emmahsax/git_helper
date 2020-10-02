@@ -71,7 +71,7 @@ module GitHelper
       remotes.select { |remote| remote.include?('gitlab') }.any?
     end
 
-    def name
+    def project_name
       # Get the repo/project name by looking in the remote URLs for the full name
       `git remote -v`.scan(/\S[\s]*[\S]+.com[\S]{1}([\S]*).git/).first.first
     end

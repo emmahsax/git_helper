@@ -29,9 +29,9 @@ module GitHelper
 
     private def ask_for_clarification
       resp = cli.conflicting_remote_clarification
-      if resp.include?('github')
+      if resp.include?('hub')
         github_pull_request
-      elsif resp.include?('gitlab')
+      elsif resp.include?('lab')
         gitlab_merge_request
       else
         raise StandardError 'The answer we received was not parseable.'
@@ -56,7 +56,7 @@ module GitHelper
     end
 
     private def local_project
-      @local_project ||= local_code.name
+      @local_project ||= local_code.project_name
     end
 
     private def default_branch

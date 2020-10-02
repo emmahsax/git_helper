@@ -137,13 +137,13 @@ describe GitHelper::LocalCode do
     end
   end
 
-  describe '#name' do
+  describe '#project_name' do
     it 'should return a string' do
-      expect(subject.name).to be_a(String)
+      expect(subject.project_name).to be_a(String)
     end
 
     it 'should equal this project name' do
-      expect(subject.name).to eq('emmasax4/git_helper')
+      expect(subject.project_name).to eq('emmasax4/git_helper')
     end
   end
 
