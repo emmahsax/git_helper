@@ -1,4 +1,5 @@
-require_relative '../../lib/git_helper/git_config_reader.rb'
+require 'spec_helper'
+require 'git_helper'
 
 describe GitHelper::GitConfigReader do
   let(:github_token) { '1234ASDF1234ASDF' }
