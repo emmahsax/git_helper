@@ -4,11 +4,13 @@ require_relative './local_code.rb'
 
 module GitHelper
   class GitHubPullRequest
-    attr_reader :local_project, :local_branch, :base_branch, :new_pr_title
+    attr_accessor :local_repo, :local_branch, :local_code, :cli, :base_branch, :new_pr_title
 
     def initialize(options)
-      @local_repo = options[:local_repo]
+      @local_repo = options[:local_project]
       @local_branch = options[:local_branch]
+      @local_code = options[:local_code]
+      @cli = options[:cli]
     end
 
     def create(options)
@@ -38,7 +40,6 @@ module GitHelper
 
     def merge
       begin
-        # Ask these questions right away
         pr_id
         merge_method
 
@@ -74,8 +75,25 @@ module GitHelper
       end
     end
 
-    private def default_branch
-      @default_branch ||= local_code.default_branch(local_repo, octokit_client)
+    private def new_pr_body
+      @new_pr_body ||= template_name_to_apply ? local_code.read_template(template_name_to_apply) : ''
+    end
+
+    private def template_name_to_apply
+      return @template_name_to_apply if @template_name_to_apply
+      @template_name_to_apply = nil
+
+      unless pr_template_options.empty?
+        if pr_template_options.count == 1
+          apply_single_template = cli.apply_template?(pr_template_options.first, 'pull')
+          @template_name_to_apply = pr_template_options.first if apply_single_template
+        else
+          response = cli.template_to_apply(pr_template_options, 'pull')
+          @template_name_to_apply = response unless response == "None"
+        end
+      end
+
+      @template_name_to_apply
     end
 
     private def pr_template_options
@@ -86,7 +104,7 @@ module GitHelper
     end
 
     private def pr_id
-      @pr_id ||= cli.pull_request_id
+      @pr_id ||= cli.code_request_id('Pull')
     end
 
     private def merge_method
@@ -102,45 +120,16 @@ module GitHelper
       @merge_options = merge_options
     end
 
-    private def new_pr_body
-      @new_pr_body ||= template_name_to_apply ? local_code.read_template(template_name_to_apply) : ''
-    end
-
-    private def template_name_to_apply
-      return @template_name_to_apply if @template_name_to_apply
-      @template_name_to_apply = nil
-
-      unless pr_template_options.empty?
-        if pr_template_options.count == 1
-          apply_single_template = cli.apply_template?(pr_template_options.first)
-          @template_name_to_apply = pr_template_options.first if apply_single_template
-        else
-          response = cli.template_to_apply(pr_template_options, 'pull')
-          @template_name_to_apply = response unless response == "None"
-        end
-      end
-
-      @template_name_to_apply
+    private def existing_project
+      @existing_project ||= octokit_client.repository(local_repo)
     end
 
     private def existing_pr
       @existing_pr ||= octokit_client.pull_request(local_repo, pr_id)
     end
 
-    private def existing_project
-      @existing_project ||= octokit_client.repository(local_repo)
-    end
-
     private def octokit_client
       @octokit_client ||= GitHelper::OctokitClient.new.client
-    end
-
-    private def cli
-      @cli ||= GitHelper::HighlineCli.new
-    end
-
-    private def local_code
-      @local_code ||= GitHelper::LocalCode.new
     end
   end
 end

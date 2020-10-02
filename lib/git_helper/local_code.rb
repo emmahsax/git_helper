@@ -81,24 +81,8 @@ module GitHelper
       `git branch`.scan(/\*\s([\S]*)/).first.first
     end
 
-    def default_branch(project_name, external_client)
-      if github_repo?
-        external_client.repository(project_name).default_branch
-      elsif gitlab_project?
-        page_number = 1
-        counter = 1
-        branches = []
-
-        while counter > 0
-          break if default_branch = branches.select { |branch| branch.default }.first
-          page_branches = external_client.branches(project_name, page: page_number, per_page: 100)
-          branches = page_branches
-          counter = page_branches.count
-          page_number += 1
-        end
-
-        default_branch.name
-      end
+    def default_branch
+      `git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@" | tr -d "\n"`
     end
 
     def template_options(template_identifiers)
