@@ -8,7 +8,7 @@ describe GitHelper::ChangeRemote do
       remote_name: 'origin',
       ssh_remote?: true,
       https_remote?: false,
-      remote_repo: 'project-1',
+      remote_project: 'project-1',
       remote_source: 'github.com',
       change_remote: true
     )
@@ -117,7 +117,7 @@ describe GitHelper::ChangeRemote do
     end
 
     it 'should attempt to get the remote repo exactly once' do
-      expect(local_code).to receive(:remote_repo).exactly(:once)
+      expect(local_code).to receive(:remote_project).exactly(:once)
       subject.send(:process_remote, remote1)
     end
 
@@ -138,7 +138,7 @@ describe GitHelper::ChangeRemote do
           remote_name: 'origin',
           ssh_remote?: false,
           https_remote?: false,
-          remote_repo: 'project-1',
+          remote_project: 'project-1',
           remote_source: 'github.com',
           change_remote: true
         )

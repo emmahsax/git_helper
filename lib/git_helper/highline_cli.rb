@@ -11,6 +11,10 @@ module GitHelper
       !!(answer =~ /^y/i)
     end
 
+    def conflicting_remote_clarification
+      ask('Found git remotes for both GitHub and GitLab. Would you like to proceed with GitLab or GitHub? (github/gitlab)').downcase
+    end
+
     def title
       ask('Title?')
     end
