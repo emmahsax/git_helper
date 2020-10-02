@@ -106,16 +106,16 @@ module GitHelper
                                })
     end
 
+    private def mr_id
+      @mr_id ||= cli.code_request_id('Merge')
+    end
+
     private def squash_merge_request
       @squash_merge_request ||= cli.squash_merge_request?
     end
 
     private def remove_source_branch
       @remove_source_branch ||= existing_project.remove_source_branch_after_merge || cli.remove_source_branch?
-    end
-
-    private def mr_id
-      @mr_id ||= cli.code_request_id('Merge')
     end
 
     private def existing_project
