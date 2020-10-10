@@ -32,7 +32,7 @@ As an additional option, you can set each of the following commands to be a git 
 ```bash
 # As a Gem                              # As a Plugin
 git-helper clean-branches               git clean-branches
-git-helper pull-request --create        git pull-request --create
+git-helper code-request --create        git code-request --create
 ```
 
 To do this, clone this repository from GitHub, and add the following line to your `~/.bash_profile`:
