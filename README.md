@@ -45,7 +45,7 @@ unzip path/to/downloaded/plugins.zip -d ~/.git_helper
 Now, the plugins will live in `~/.git_helper/plugins/*`. Add the following line to your `~/.bash_profile`:
 
 ```
-export PATH=/path/to/computer/~/.git_helper/plugins:$PATH
+export PATH=/path/to/computer/home/.git_helper/plugins:$PATH
 ```
 
 And then run `source ~/.bash_profile`.
