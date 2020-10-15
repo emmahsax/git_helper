@@ -19,7 +19,7 @@ module GitHelper
     end
 
     private def git_config_file
-      '/.git_helper/git_config.yml'
+      '.git_helper/git_config.yml'
     end
   end
 end
