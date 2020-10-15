@@ -30,15 +30,22 @@ git-helper --version
 As an additional option, you can set each of the following commands to be a git plugin, meaning you can call them in a way that feels even more git-native:
 
 ```bash
-# As a Gem                              # As a Plugin
-git-helper clean-branches               git clean-branches
-git-helper code-request --create        git code-request --create
+# As a Gem                            # As a Plugin
+git-helper clean-branches             git clean-branches
+git-helper code-request --create      git code-request --create
 ```
 
-To do this, clone this repository from GitHub, and add the following line to your `~/.bash_profile`:
+To do this, download the `plugins.zip` file in the root of this directory. Unzip and place the contents in the appropriate location:
+
+```bash
+mkdir ~/.git_helper
+unzip plugins.zip -d ~/.git_helper
+```
+
+Now, the plugins will live in `~/.git_helper/plugins/*`. Add the following line to your `~/.bash_profile`:
 
 ```
-export PATH=/your/path/to/this/repository/git_helper/plugins:$PATH
+export PATH=/path/to/computer/~/.git_helper/plugins:$PATH
 ```
 
 And then run `source ~/.bash_profile`.
