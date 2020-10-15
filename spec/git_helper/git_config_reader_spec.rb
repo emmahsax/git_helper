@@ -54,7 +54,7 @@ describe GitHelper::GitConfigReader do
 
     it 'should return the base path with the git config file at the end' do
       allow(Dir).to receive(:pwd).and_return('/Users/firstnamelastname/path/to/git_helper')
-      expect(subject.send(:git_config_file_path)).to eq('/Users/firstnamelastname/.git_helper/git_config.yml')
+      expect(subject.send(:git_config_file_path)).to eq('/Users/firstnamelastname/.git_helper/config.yml')
     end
   end
 end
