@@ -6,7 +6,7 @@
 gem install git_helper
 ```
 
-Some of the commands in this gem can be used without any additional configuration. However, others utilize special GitHub or GitLab configuration. To provide access tokens for this, create a `~/.git_config.yml` file. The contents should look like this:
+Some of the commands in this gem can be used without any additional configuration. However, others utilize special GitHub or GitLab configuration. To provide access tokens for this, create a `~/.git_helper/git_config.yml` file. The contents should look like this:
 
 ```
 :github_user: GITHUB-USERNAME
@@ -39,7 +39,7 @@ To do this, download the `plugins.zip` file in the root of this directory. Unzip
 
 ```bash
 mkdir ~/.git_helper
-unzip plugins.zip -d ~/.git_helper
+unzip path/to/downloaded/plugins.zip -d ~/.git_helper
 ```
 
 Now, the plugins will live in `~/.git_helper/plugins/*`. Add the following line to your `~/.bash_profile`:
@@ -108,7 +108,7 @@ git-helper clean-branches
 
 ### `code-request`
 
-This command can be used to handily make new GitHub/GitLab pull/merge requests and to merge those requests from the command line. The command uses either the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) or [`Gitlab` client](https://github.com/NARKOZ/gitlab) to do this, so make sure you have a `.git_config.yml` file set up in the home directory of your computer. For instructions on how to do that, see [Gem Usage](#gem-usage).
+This command can be used to handily make new GitHub/GitLab pull/merge requests and to merge those requests from the command line. The command uses either the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) or [`Gitlab` client](https://github.com/NARKOZ/gitlab) to do this, so make sure you have a `~/.git_helper/git_config.yml` file set up in the home directory of your computer. For instructions on how to do that, see [Gem Usage](#gem-usage).
 
 After setup is complete, you can call the file, and send in a flag indicating whether to create a code request, `-c`, or to merge a code request, `-m`.
 
