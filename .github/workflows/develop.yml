@@ -15,7 +15,7 @@ jobs:
         fetch-depth: 0
 
     - name: Define Run Variables
-      run: echo "::set-env name=BRANCH::$(echo ${{ github.head_ref }} | sed -E 's|refs/[a-zA-Z]+/||')"
+      run: echo "BRANCH=$(echo ${{ github.head_ref }} | sed -E 's|refs/[a-zA-Z]+/||')" >> $GITHUB_ENV
 
     - name: Switch to Current Branch
       run: git checkout ${{ env.BRANCH }}
