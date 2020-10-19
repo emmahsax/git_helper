@@ -164,6 +164,7 @@ describe GitHelper::LocalCode do
   describe '#template_options' do
     let(:template_identifiers) do
       {
+        template_directory: '.github',
         nested_directory_name: 'PULL_REQUEST_TEMPLATE',
         non_nested_file_name: 'pull_request_template'
       }
