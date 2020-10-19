@@ -97,6 +97,7 @@ module GitHelper
 
     private def mr_template_options
       @mr_template_options ||= local_code.template_options({
+                                 template_directory: '.gitlab',
                                  nested_directory_name: 'merge_request_templates',
                                  non_nested_file_name: 'merge_request_template'
                                })
