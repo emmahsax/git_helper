@@ -85,16 +85,20 @@ module GitHelper
       `git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@" | tr -d "\n"`
     end
 
-    def template_options(template_identifiers)
+    def template_options(identifiers)
       nested_templates = Dir.glob(
-        File.join("**/#{template_identifiers[:nested_directory_name]}", "*.md"),
+        File.join("#{identifiers[:template_directory]}/#{identifiers[:nested_directory_name]}", '*.md'),
         File::FNM_DOTMATCH | File::FNM_CASEFOLD
       )
       non_nested_templates = Dir.glob(
-        File.join("**", "#{template_identifiers[:non_nested_file_name]}.md"),
+        File.join(identifiers[:template_directory], "#{identifiers[:non_nested_file_name]}.md"),
         File::FNM_DOTMATCH | File::FNM_CASEFOLD
       )
-      nested_templates.concat(non_nested_templates).uniq
+      root_templates = Dir.glob(
+        File.join('.', "#{identifiers[:non_nested_file_name]}.md"),
+        File::FNM_DOTMATCH | File::FNM_CASEFOLD
+      )
+      nested_templates.concat(non_nested_templates).concat(root_templates).uniq
     end
 
     def read_template(file_name)

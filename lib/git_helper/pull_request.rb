@@ -94,6 +94,7 @@ module GitHelper
 
     private def pr_template_options
       @pr_template_options ||= local_code.template_options({
+                                 template_directory: '.github',
                                  nested_directory_name: 'PULL_REQUEST_TEMPLATE',
                                  non_nested_file_name: 'pull_request_template'
                                })
