@@ -9,13 +9,15 @@ gem install git_helper
 Some of the commands in this gem can be used without any additional configuration. However, others utilize special GitHub or GitLab configuration. To provide access tokens for this, create a `~/.git_helper/config.yml` file. The contents should look like this:
 
 ```
-:github_user: GITHUB-USERNAME
+:github_user:  GITHUB-USERNAME
 :github_token: GITHUB-TOKEN
-:gitlab_user: GITLAB-USERNAME
+:gitlab_user:  GITLAB-USERNAME
 :gitlab_token: GITLAB-TOKEN
 ```
 
-To view the help screen, run:
+To create or see what access tokens you have, look [here for GitHub personal access tokens](https://github.com/settings/tokens) and [here for GitLab access tokens](https://gitlab.com/profile/personal_access_tokens). You could either have one set of tokens for each computer you use, or just have one set of tokens for all computers that you rotate periodically.
+
+Once the gem is installed, run this to view the help screen:
 ```bash
 git-helper --help
 ```
