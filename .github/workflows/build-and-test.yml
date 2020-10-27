@@ -1,4 +1,4 @@
-name: Develop
+name: Build and Test
 on:
   push:
     branches: [ main ]
@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  main:
     runs-on: ubuntu-latest
     steps:
     - name: Check Out Code
