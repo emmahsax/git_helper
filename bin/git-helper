@@ -27,7 +27,7 @@ command 'change-remote' do |c|
   end
 end
 
-desc "Checks out the default branch of a repo based on the local remote branches."
+desc 'Checks out the default branch of a repo based on the local remote branches.'
 command 'checkout-default' do |c|
   c.action do |global_options, options, args|
     GitHelper::CheckoutDefault.new.execute
@@ -41,14 +41,14 @@ command 'clean-branches' do |c|
   end
 end
 
-desc "Creates an empty commit with a basic commit message."
+desc 'Creates an empty commit with a basic commit message.'
 command 'empty-commit' do |c|
   c.action do |global_options, options, args|
     GitHelper::EmptyCommit.new.execute
   end
 end
 
-desc "Reset your local git commits to origin/HEAD."
+desc 'Reset your local git commits to origin/HEAD.'
 command 'forget-local-commits' do |c|
   c.action do |global_options, options, args|
     GitHelper::ForgetLocalCommits.new.execute

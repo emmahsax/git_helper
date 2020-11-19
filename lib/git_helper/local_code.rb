@@ -1,27 +1,27 @@
 module GitHelper
   class LocalCode
     def checkout_default
-      system("git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed \"s@^refs/remotes/origin/@@\")")
+      system('git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@")')
     end
 
     def forget_local_commits
-      system("git pull")
-      system("git reset --hard origin/HEAD")
+      system('git pull')
+      system('git reset --hard origin/HEAD')
     end
 
     def empty_commit
-      system("git commit --allow-empty -m \"Empty commit\"")
+      system('git commit --allow-empty -m \"Empty commit\"')
     end
 
     def clean_branches
-      system("git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed \"s@^refs/remotes/origin/@@\")")
-      system("git pull")
-      system("git fetch -p")
-      system("git branch -vv | grep \"origin/.*: gone]\" | awk '{print \$1}' | grep -v \"*\" | xargs git branch -D")
+      system('git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@")')
+      system('git pull')
+      system('git fetch -p')
+      system('git branch -vv | grep "origin/.*: gone]" | awk "{print \$1}" | grep -v "*" | xargs git branch -D')
     end
 
     def new_branch(branch_name)
-      system("git pull")
+      system('git pull')
       system("git branch --no-track #{branch_name}")
       system("git checkout #{branch_name}")
       system("git push --set-upstream origin #{branch_name}")
