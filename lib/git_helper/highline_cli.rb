@@ -1,5 +1,3 @@
-require 'highline'
-
 module GitHelper
   class HighlineCli
     def new_branch_name
