@@ -4,11 +4,24 @@ require 'git_helper'
 describe GitHelper::LocalCode do
   let(:response) { double(:response, readline: true, to_i: 5) }
   let(:local_codeent) { double(:local_code, ask: response) }
-  let(:ssh_remote) { 'origin\tgit@github.com:emmasax4/git_helper.git (fetch)' }
-  let(:https_remote) { 'origin\thttps://github.com/emmasax4/git_helper.git (fetch)' }
-  let(:github_remotes) { ['origin\tgit@github.com:emmasax4/git_helper.git (fetch)', 'origin\thttps://github.com/emmasax4/git_helper.git (fetch)' ] }
-  let(:gitlab_remotes) { ['origin\tgit@gitlab.com:emmasax4/git_helper.git (fetch)', 'origin\thttps://gitlab.com/emmasax4/git_helper.git (fetch)' ] }
+  let(:project_name) { Faker::Lorem.word }
+  let(:owner) { Faker::Name.first_name }
+  let(:ssh_remote) { "origin\tgit@github.com:#{owner}/#{project_name}.git (fetch)" }
+  let(:https_remote) { "origin\thttps://github.com/#{owner}/#{project_name}.git (fetch)" }
 
+  let(:github_remotes) do
+    [
+      "origin\tgit@github.com:#{owner}/#{project_name}.git (fetch)",
+      "origin\thttps://github.com/#{owner}/#{project_name}.git (fetch)"
+    ]
+  end
+
+  let(:gitlab_remotes) do
+    [
+      "origin\tgit@gitlab.com:#{owner}/#{project_name}.git (fetch)",
+      "origin\thttps://gitlab.com/#{owner}/#{project_name}.git (fetch)"
+    ]
+  end
 
   subject { GitHelper::LocalCode.new }
 
@@ -51,13 +64,13 @@ describe GitHelper::LocalCode do
   describe '#new_branch' do
     it 'should make a system call' do
       expect(subject).to receive(:system).exactly(4).times
-      subject.new_branch('branch_name')
+      subject.new_branch(Faker::Lorem.word)
     end
   end
 
   describe '#change_remote' do
     it 'should return a string' do
-      expect(subject.change_remote('name', 'url')).to be_a(String)
+      expect(subject.change_remote(Faker::Lorem.word, Faker::Internet.url)).to be_a(String)
     end
   end
 
@@ -96,11 +109,11 @@ describe GitHelper::LocalCode do
 
   describe '#remote_project' do
     it 'should return just the plain project if ssh' do
-      expect(subject.remote_project(ssh_remote)).to eq('git_helper')
+      expect(subject.remote_project(ssh_remote)).to eq(project_name)
     end
 
     it 'should return just the plain project if https' do
-      expect(subject.remote_project(https_remote)).to eq('git_helper')
+      expect(subject.remote_project(https_remote)).to eq(project_name)
     end
   end
 
@@ -144,8 +157,8 @@ describe GitHelper::LocalCode do
     end
 
     it 'should equal this project name' do
-      allow_any_instance_of(String).to receive(:scan).and_return([['emmasax4/git_helper']])
-      expect(subject.project_name).to eq('emmasax4/git_helper')
+      allow_any_instance_of(String).to receive(:scan).and_return([["#{owner}/#{project_name}"]])
+      expect(subject.project_name).to eq("#{owner}/#{project_name}")
     end
   end
 
@@ -190,43 +203,65 @@ describe GitHelper::LocalCode do
 
   describe '#generate_title' do
     it 'should return a title based on the branch' do
-      branch = 'jira-123-test-branch'
-      expect(subject.generate_title(branch)).to eq('JIRA-123 Test branch')
+      prefix = Faker::Lorem.word
+      word1 = Faker::Lorem.word
+      word2 = Faker::Lorem.word
+      description = [word1, word2].join('-')
+      branch = "#{prefix}-123-#{description}"
+      expect(subject.generate_title(branch)).to eq("#{prefix.upcase}-123 #{[word1.capitalize, word2].join(' ')}")
     end
 
     it 'should return a title based on the branch' do
-      branch = 'jira_123_test_branch'
-      expect(subject.generate_title(branch)).to eq('JIRA-123 Test branch')
+      prefix = Faker::Lorem.word
+      word1 = Faker::Lorem.word
+      word2 = Faker::Lorem.word
+      description = [word1, word2].join('_')
+      branch = "#{prefix}_123_#{description}"
+      expect(subject.generate_title(branch)).to eq("#{prefix.upcase}-123 #{[word1.capitalize, word2].join(' ')}")
     end
 
     it 'should return a title based on the branch' do
-      branch = 'jira-123_test_branch'
-      expect(subject.generate_title(branch)).to eq('JIRA-123 Test branch')
+      prefix = Faker::Lorem.word
+      word1 = Faker::Lorem.word
+      word2 = Faker::Lorem.word
+      description = [word1, word2].join('_')
+      branch = "#{prefix}-123_#{description}"
+      expect(subject.generate_title(branch)).to eq("#{prefix.upcase}-123 #{[word1.capitalize, word2].join(' ')}")
     end
 
     it 'should return a title based on the branch' do
-      branch = 'test_branch'
-      expect(subject.generate_title(branch)).to eq('Test branch')
+      word1 = Faker::Lorem.word
+      word2 = Faker::Lorem.word
+      branch = [word1, word2].join('_')
+      expect(subject.generate_title(branch)).to eq([word1.capitalize, word2].join(' '))
     end
 
     it 'should return a title based on the branch' do
-      branch = 'test-branch'
-      expect(subject.generate_title(branch)).to eq('Test branch')
+      word1 = Faker::Lorem.word
+      word2 = Faker::Lorem.word
+      branch = [word1, word2].join('-')
+      expect(subject.generate_title(branch)).to eq([word1.capitalize, word2].join(' '))
     end
 
     it 'should return a title based on the branch' do
-      branch = 'test'
-      expect(subject.generate_title(branch)).to eq('Test')
+      branch = Faker::Lorem.word
+      expect(subject.generate_title(branch)).to eq(branch.capitalize)
     end
 
     it 'should return a title based on the branch' do
-      branch = 'some_other_words_in_this_test_branch'
-      expect(subject.generate_title(branch)).to eq('Some other words in this test branch')
+      word1 = Faker::Lorem.word
+      word2 = Faker::Lorem.word
+      word3 = Faker::Lorem.word
+      branch = [word1, word2, word3].join('_')
+      expect(subject.generate_title(branch)).to eq([word1.capitalize, word2, word3].join(' '))
     end
 
     it 'should return a title based on the branch' do
-      branch = 'some-other-words-in-this-test-branch'
-      expect(subject.generate_title(branch)).to eq('Some other words in this test branch')
+      word1 = Faker::Lorem.word
+      word2 = Faker::Lorem.word
+      word3 = Faker::Lorem.word
+      branch = [word1, word2, word3].join('-')
+      expect(subject.generate_title(branch)).to eq([word1.capitalize, word2, word3].join(' '))
     end
   end
 end
