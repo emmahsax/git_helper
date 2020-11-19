@@ -1,5 +1,3 @@
-require 'octokit'
-
 module GitHelper
   class OctokitClient
     def client

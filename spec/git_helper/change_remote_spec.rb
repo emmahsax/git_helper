@@ -2,22 +2,24 @@ require 'spec_helper'
 require 'git_helper'
 
 describe GitHelper::ChangeRemote do
-  let(:remote1) { 'git@github.com:github-username-old/project-1.git' }
+  let(:remote1) { "git@github.com:#{old_owner}/#{project}.git" }
+  let(:project) { Faker::Lorem.word }
+  let(:cli) { double(:highline_cli, process_directory_remotes?: true) }
+  let(:old_owner) { Faker::Internet.username }
+  let(:new_owner) { Faker::Internet.username }
+  let(:directory_entries) { [ '.', '..', project, Faker::Lorem.word, Faker::Lorem.word ] }
+
   let(:local_code) do
     double(:local_code,
       remotes: [remote1],
-      remote_name: 'origin',
+      remote_name: Faker::Lorem.word,
       ssh_remote?: true,
       https_remote?: false,
-      remote_project: 'project-1',
+      remote_project: project,
       remote_source: 'github.com',
       change_remote: true
     )
   end
-  let(:cli) { double(:highline_cli, process_directory_remotes?: true) }
-  let(:old_owner) { 'github-username-old' }
-  let(:new_owner) { 'github-username-new' }
-  let(:directory_entries) { [ '.', '..', 'project-1', 'project-2', 'project-3' ] }
 
   subject { GitHelper::ChangeRemote.new(old_owner, new_owner) }
 
@@ -28,9 +30,9 @@ describe GitHelper::ChangeRemote do
 
   describe '#execute' do
     before do
-      allow(Dir).to receive(:pwd).and_return('/Users/firstname/lastname/path/to/project')
+      allow(Dir).to receive(:pwd).and_return("/Users/#{Faker::Name.first_name}/#{project}")
       allow(Dir).to receive(:entries).and_return(directory_entries)
-      allow(File).to receive(:join).and_return('/Users/firstname/lastname/path/to/project/project-1')
+      allow(File).to receive(:join).and_return("/Users/#{Faker::Name.first_name}/#{project}/#{Faker::Lorem.word}")
       allow(File).to receive(:directory?).and_return(true)
       allow(subject).to receive(:process_dir)
     end
@@ -59,13 +61,13 @@ describe GitHelper::ChangeRemote do
     it 'should definitely look in the file structure' do
       expect(Dir).to receive(:chdir)
       expect(File).to receive(:exist?)
-      subject.send(:process_dir, '/Users/firstname/lastname/path/to/project', '/Users/firstname/lastname/path/to/project/project-1')
+      subject.send(:process_dir, "/Users/#{Faker::Name.first_name}/#{project}", "/Users/#{Faker::Name.first_name}/#{project}/#{Faker::Lorem.word}")
     end
 
     context 'when the user says to process the directory' do
       it 'should call to process the git repository at least once' do
         expect(subject).to receive(:process_git_repository).at_least(:once)
-        subject.send(:process_dir, '/Users/firstname/lastname/path/to/project', '/Users/firstname/lastname/path/to/project/project-1')
+        subject.send(:process_dir, "/Users/#{Faker::Name.first_name}/#{project}", "/Users/#{Faker::Name.first_name}/#{project}/#{Faker::Lorem.word}")
       end
     end
 
@@ -74,7 +76,7 @@ describe GitHelper::ChangeRemote do
 
       it 'should not call to process the directory' do
         expect(subject).not_to receive(:process_git_repository)
-        subject.send(:process_dir, '/Users/firstname/lastname/path/to/project', '/Users/firstname/lastname/path/to/project/project-1')
+        subject.send(:process_dir, "/Users/#{Faker::Name.first_name}/#{project}", "/Users/#{Faker::Name.first_name}/#{project}/#{Faker::Lorem.word}")
       end
     end
   end
@@ -97,7 +99,7 @@ describe GitHelper::ChangeRemote do
     end
 
     context 'when the remote does not include the old owner' do
-      let(:remote1) { 'git@github.com:github-username-new/project-1.git' }
+      let(:remote1) { "git@github.com:#{new_owner}/#{project}.git" }
 
       it 'should not call to process the remote' do
         expect(subject).not_to receive(:process_remote)
@@ -136,10 +138,10 @@ describe GitHelper::ChangeRemote do
       let(:local_code) do
         double(:local_code,
           remotes: [remote1],
-          remote_name: 'origin',
+          remote_name: Faker::Lorem.word,
           ssh_remote?: false,
           https_remote?: false,
-          remote_project: 'project-1',
+          remote_project: project,
           remote_source: 'github.com',
           change_remote: true
         )
