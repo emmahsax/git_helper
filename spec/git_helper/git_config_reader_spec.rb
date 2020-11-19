@@ -2,13 +2,14 @@ require 'spec_helper'
 require 'git_helper'
 
 describe GitHelper::GitConfigReader do
-  let(:github_token) { '1234ASDF1234ASDF' }
-  let(:gitlab_token) { 'ASDF123ASDF1234' }
+  let(:github_token) { Faker::Internet.password(max_length: 10) }
+  let(:gitlab_token) { Faker::Internet.password(max_length: 10) }
+
   let(:config_file) {
     {
-      github_user: 'github-user-name',
+      github_user: Faker::Internet.username,
       github_token: github_token,
-      gitlab_user: 'gitlab-user-name',
+      gitlab_user: Faker::Internet.username,
       gitlab_token: gitlab_token
     }
   }
@@ -48,13 +49,14 @@ describe GitHelper::GitConfigReader do
 
   describe '#git_config_file_path' do
     it 'should look in the current directory' do
-      expect(Dir).to receive(:pwd).and_return('/Users/firstnamelastname/path/to/git_helper')
+      expect(Dir).to receive(:pwd).and_return("/Users/#{Faker::Name.first_name}/#{Faker::Lorem.word}")
       subject.send(:git_config_file_path)
     end
 
     it 'should return the base path with the git config file at the end' do
-      allow(Dir).to receive(:pwd).and_return('/Users/firstnamelastname/path/to/git_helper')
-      expect(subject.send(:git_config_file_path)).to eq('/Users/firstnamelastname/.git_helper/config.yml')
+      user = Faker::Name.first_name
+      allow(Dir).to receive(:pwd).and_return("/Users/#{user}/#{Faker::Lorem.word}")
+      expect(subject.send(:git_config_file_path)).to eq("/Users/#{user}/.git_helper/config.yml")
     end
   end
 end

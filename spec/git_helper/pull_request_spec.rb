@@ -2,14 +2,15 @@ require 'spec_helper'
 require 'git_helper'
 
 describe GitHelper::GitHubPullRequest do
-  let(:local_code) { double(:local_code, read_template: 'template') }
+  let(:local_code) { double(:local_code, read_template: Faker::Lorem.word) }
   let(:highline_cli) { double(:highline_cli) }
   let(:octokit_client_client) { double(:octokit_client_client, project: :project, merge_request: :merge_request, create_merge_request: :created) }
   let(:octokit_client) { double(:octokit_client, client: octokit_client_client) }
+
   let(:options) do
     {
-      local_project: 'emmasax4/git_helper',
-      local_branch: 'main',
+      local_project: Faker::Lorem.word,
+      local_branch: Faker::Lorem.word,
       local_code: local_code,
       cli: highline_cli
     }
@@ -25,43 +26,43 @@ describe GitHelper::GitHubPullRequest do
     it 'should call the octokit client to create' do
       allow(subject).to receive(:new_pr_body).and_return('')
       expect(octokit_client_client).to receive(:create_pull_request)
-      subject.create({base_branch: 'base', new_title: 'title'})
+      subject.create({base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word})
     end
 
     it 'should call various other methods' do
       expect(subject).to receive(:new_pr_body).and_return('').at_least(:once)
       allow(octokit_client_client).to receive(:create_pull_request)
-      subject.create({base_branch: 'base', new_title: 'title'})
+      subject.create({base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word})
     end
 
     it 'should catch the raised error if the creation does not work' do
       allow(subject).to receive(:new_pr_body).and_return('')
       allow(octokit_client_client).to receive(:create_pull_request).and_raise(StandardError)
-      expect(subject.create({base_branch: 'base', new_title: 'title'})).to eq(nil)
+      expect(subject.create({base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word})).to eq(nil)
     end
   end
 
   describe '#merge' do
     it 'should call the octokit client to merge' do
-      allow(subject).to receive(:existing_pr).and_return(double(title: 'title'))
+      allow(subject).to receive(:existing_pr).and_return(double(title: Faker::Lorem.word))
       allow(subject).to receive(:merge_method).and_return('rebase')
-      allow(subject).to receive(:pr_id).and_return(123)
+      allow(subject).to receive(:pr_id).and_return(Faker::Number.number)
       expect(octokit_client_client).to receive(:merge_pull_request)
       subject.merge
     end
 
     it 'should call various other methods' do
-      expect(subject).to receive(:existing_pr).and_return(double(title: 'title')).at_least(:once)
+      expect(subject).to receive(:existing_pr).and_return(double(title: Faker::Lorem.word)).at_least(:once)
       expect(subject).to receive(:merge_method).and_return('rebase').at_least(:once)
-      expect(subject).to receive(:pr_id).and_return(123).at_least(:once)
+      expect(subject).to receive(:pr_id).and_return(Faker::Number.number).at_least(:once)
       allow(octokit_client_client).to receive(:merge_pull_request)
       subject.merge
     end
 
     it 'should catch the raised error if the merge does not work' do
-      allow(subject).to receive(:existing_pr).and_return(double(title: 'title'))
+      allow(subject).to receive(:existing_pr).and_return(double(title: Faker::Lorem.word))
       allow(subject).to receive(:merge_method).and_return('rebase')
-      allow(subject).to receive(:pr_id).and_return(123)
+      allow(subject).to receive(:pr_id).and_return(Faker::Number.number)
       allow(octokit_client_client).to receive(:merge_pull_request).and_raise(StandardError)
       expect(subject.merge).to eq(nil)
     end
@@ -95,40 +96,45 @@ describe GitHelper::GitHubPullRequest do
     end
 
     context 'if there is one template option' do
+      let(:template) { Faker::Lorem.word }
+
       it 'should call the CLI to ask about a single template' do
-        allow(subject).to receive(:pr_template_options).and_return(['template1'])
+        allow(subject).to receive(:pr_template_options).and_return([template])
         expect(highline_cli).to receive(:apply_template?).and_return(true)
         subject.send(:template_name_to_apply)
       end
 
       it 'should return the single template if the user says yes' do
-        allow(subject).to receive(:pr_template_options).and_return(['template1'])
+        allow(subject).to receive(:pr_template_options).and_return([template])
         allow(highline_cli).to receive(:apply_template?).and_return(true)
-        expect(subject.send(:template_name_to_apply)).to eq('template1')
+        expect(subject.send(:template_name_to_apply)).to eq(template)
       end
 
       it 'should return nil if the user says no' do
-        allow(subject).to receive(:pr_template_options).and_return(['template1'])
+        allow(subject).to receive(:pr_template_options).and_return([template])
         allow(highline_cli).to receive(:apply_template?).and_return(false)
         expect(subject.send(:template_name_to_apply)).to eq(nil)
       end
     end
 
     context 'if there are multiple template options' do
+      let(:template1) { Faker::Lorem.word }
+      let(:template2) { Faker::Lorem.word }
+
       it 'should call the CLI to ask which of multiple templates to apply' do
-        allow(subject).to receive(:pr_template_options).and_return(['template1', 'template2'])
-        expect(highline_cli).to receive(:template_to_apply).and_return('template1')
+        allow(subject).to receive(:pr_template_options).and_return([template1, template2])
+        expect(highline_cli).to receive(:template_to_apply).and_return(template1)
         subject.send(:template_name_to_apply)
       end
 
       it 'should return the answer template if the user says yes' do
-        allow(subject).to receive(:pr_template_options).and_return(['template1', 'template2'])
-        allow(highline_cli).to receive(:template_to_apply).and_return('template1')
-        expect(subject.send(:template_name_to_apply)).to eq('template1')
+        allow(subject).to receive(:pr_template_options).and_return([template1, template2])
+        allow(highline_cli).to receive(:template_to_apply).and_return(template1)
+        expect(subject.send(:template_name_to_apply)).to eq(template1)
       end
 
       it 'should return nil if the user says no' do
-        allow(subject).to receive(:pr_template_options).and_return(['template1', 'template2'])
+        allow(subject).to receive(:pr_template_options).and_return([template1, template2])
         allow(highline_cli).to receive(:template_to_apply).and_return('None')
         expect(subject.send(:template_name_to_apply)).to eq(nil)
       end
@@ -144,13 +150,14 @@ describe GitHelper::GitHubPullRequest do
 
   describe '#pr_id' do
     it 'should ask the CLI for the code request ID' do
-      expect(highline_cli).to receive(:code_request_id).and_return(123)
+      expect(highline_cli).to receive(:code_request_id).and_return(Faker::Number.number)
       subject.send(:pr_id)
     end
 
     it 'should equal an integer' do
-      expect(highline_cli).to receive(:code_request_id).and_return(123)
-      expect(subject.send(:pr_id)).to eq(123)
+      pr_id = Faker::Number.number
+      expect(highline_cli).to receive(:code_request_id).and_return(pr_id)
+      expect(subject.send(:pr_id)).to eq(pr_id)
     end
   end
 
@@ -172,7 +179,7 @@ describe GitHelper::GitHubPullRequest do
       expect(subject.send(:merge_method)).to be_a(String)
     end
 
-    context "if there's only one item" do
+    context 'if theres only one item' do
       let(:project) { double(:project, allow_merge_commit: true, allow_squash_merge: false, allow_rebase_merge: false) }
 
       it 'should not ask the CLI anything' do
@@ -231,7 +238,7 @@ describe GitHelper::GitHubPullRequest do
 
   describe '#existing_pr' do
     it 'should call the octokit client' do
-      allow(highline_cli).to receive(:code_request_id).and_return(123)
+      allow(highline_cli).to receive(:code_request_id).and_return(Faker::Number.number)
       expect(octokit_client_client).to receive(:pull_request).and_return(:pull_request)
       subject.send(:existing_pr)
     end

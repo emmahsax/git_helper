@@ -1,5 +1,3 @@
-require 'yaml'
-
 module GitHelper
   class GitConfigReader
     def gitlab_token

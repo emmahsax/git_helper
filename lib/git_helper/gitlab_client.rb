@@ -1,5 +1,3 @@
-require 'gitlab'
-
 module GitHelper
   class GitLabClient
     def client
