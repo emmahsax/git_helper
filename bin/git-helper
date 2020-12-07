@@ -63,21 +63,17 @@ command 'new-branch' do |c|
   end
 end
 
-desc 'Create or merge a GitHub or GitLab pull/merge request from the current branch. The command will figure out whether your code project belongs to GitHub or GitLab'
-command 'code-request' do |c|
-  c.switch [:c, :create], desc: 'Create a new pull/merge request'
-  c.switch [:m, :merge], desc: 'Merge an existing pull/merge request'
-
+desc 'Merge a GitHub/GitLab pull/merge request. The command will figure out whether your code project belongs to GitHub or GitLab.'
+command 'merge-code-request' do |c|
   c.action do |global_options, options, args|
-    raise ArgumentError, "You must specify an action (either '-m'/'--merge' or '-c'/'--create')" unless options[:create] || options[:merge]
+    GitHelper::CodeRequest.new.merge
+  end
+end
 
-    options = global_options.merge(options)
-
-    if options[:create]
-      GitHelper::CodeRequest.new.create
-    elsif options[:merge]
-      GitHelper::CodeRequest.new.merge
-    end
+desc 'Create a GitHub/GitLab pull/merge request from the current branch. The command will figure out whether your code project belongs to GitHub or GitLab.'
+command 'code-request' do |c|
+  c.action do |global_options, options, args|
+    GitHelper::CodeRequest.new.create
   end
 end
 
