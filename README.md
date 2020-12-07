@@ -34,7 +34,7 @@ As an additional option, you can set each of the following commands to be a git 
 ```bash
 # As a Gem                            # As a Plugin
 git-helper clean-branches             git clean-branches
-git-helper code-request --create      git code-request --create
+git-helper code-request               git code-request
 ```
 
 To do this, download the `plugins.zip` file in the root of this directory. Unzip and place the contents in the appropriate location:
