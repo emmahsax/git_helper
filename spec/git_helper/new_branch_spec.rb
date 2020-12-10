@@ -11,6 +11,7 @@ describe GitHelper::NewBranch do
   before do
     allow(GitHelper::LocalCode).to receive(:new).and_return(local_code)
     allow(GitHelper::HighlineCli).to receive(:new).and_return(cli)
+    allow(subject).to receive(:puts)
   end
 
   it 'should call GitHelper::LocalCode' do
