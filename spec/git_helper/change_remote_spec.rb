@@ -26,6 +26,7 @@ describe GitHelper::ChangeRemote do
   before do
     allow(GitHelper::HighlineCli).to receive(:new).and_return(cli)
     allow(GitHelper::LocalCode).to receive(:new).and_return(local_code)
+    allow(subject).to receive(:puts)
   end
 
   describe '#execute' do
