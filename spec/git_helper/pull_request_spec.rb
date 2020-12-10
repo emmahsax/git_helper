@@ -20,18 +20,19 @@ describe GitHelper::GitHubPullRequest do
 
   before do
     allow(GitHelper::OctokitClient).to receive(:new).and_return(octokit_client)
+    allow(subject).to receive(:puts)
   end
 
   describe '#create' do
     it 'should call the octokit client to create' do
       allow(subject).to receive(:new_pr_body).and_return('')
-      expect(octokit_client_client).to receive(:create_pull_request)
+      expect(octokit_client_client).to receive(:create_pull_request).and_return(double(html_url: Faker::Internet.url))
       subject.create({base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word})
     end
 
     it 'should call various other methods' do
       expect(subject).to receive(:new_pr_body).and_return('').at_least(:once)
-      allow(octokit_client_client).to receive(:create_pull_request)
+      allow(octokit_client_client).to receive(:create_pull_request).and_return(double(html_url: Faker::Internet.url))
       subject.create({base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word})
     end
 
@@ -47,7 +48,7 @@ describe GitHelper::GitHubPullRequest do
       allow(subject).to receive(:existing_pr).and_return(double(title: Faker::Lorem.word))
       allow(subject).to receive(:merge_method).and_return('rebase')
       allow(subject).to receive(:pr_id).and_return(Faker::Number.number)
-      expect(octokit_client_client).to receive(:merge_pull_request)
+      expect(octokit_client_client).to receive(:merge_pull_request).and_return(double(sha: Faker::Internet.password))
       subject.merge
     end
 
@@ -55,7 +56,7 @@ describe GitHelper::GitHubPullRequest do
       expect(subject).to receive(:existing_pr).and_return(double(title: Faker::Lorem.word)).at_least(:once)
       expect(subject).to receive(:merge_method).and_return('rebase').at_least(:once)
       expect(subject).to receive(:pr_id).and_return(Faker::Number.number).at_least(:once)
-      allow(octokit_client_client).to receive(:merge_pull_request)
+      allow(octokit_client_client).to receive(:merge_pull_request).and_return(double(sha: Faker::Internet.password))
       subject.merge
     end
 

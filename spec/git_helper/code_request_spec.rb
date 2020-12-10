@@ -13,6 +13,7 @@ describe GitHelper::CodeRequest do
   before do
     allow(GitHelper::LocalCode).to receive(:new).and_return(local_code)
     allow(GitHelper::HighlineCli).to receive(:new).and_return(highline_cli)
+    allow(subject).to receive(:puts)
   end
 
   describe '#create' do
