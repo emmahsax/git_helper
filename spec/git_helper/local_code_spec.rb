@@ -70,6 +70,7 @@ describe GitHelper::LocalCode do
 
   describe '#change_remote' do
     it 'should return a string' do
+      allow(subject).to receive(:`).and_return(Faker::Lorem.word)
       expect(subject.change_remote(Faker::Lorem.word, Faker::Internet.url)).to be_a(String)
     end
   end
