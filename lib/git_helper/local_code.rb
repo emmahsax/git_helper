@@ -10,7 +10,7 @@ module GitHelper
     end
 
     def empty_commit
-      system('git commit --allow-empty -m \"Empty commit\"')
+      system('git commit --allow-empty -m "Empty commit"')
     end
 
     def clean_branches
