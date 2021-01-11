@@ -4,7 +4,6 @@ Gem::Specification.new do |gem|
   gem.name          = 'git_helper'
   gem.version       = GitHelper::VERSION
   gem.authors       = ['Emma Sax']
-  gem.email         = ['emma.sax4@gmail.com']
   gem.summary       = %q{A set of GitHub and GitLab workflow scripts.}
   gem.description   = %q{A set of GitHub and GitLab workflow scripts to provide a smoother development process for your git projects.}
   gem.homepage      = 'https://github.com/emmasax4/git_helper'
