@@ -4,7 +4,7 @@ require 'git_helper'
 describe GitHelper::ChangeRemote do
   let(:remote1) { "git@github.com:#{old_owner}/#{project}.git" }
   let(:project) { Faker::Lorem.word }
-  let(:cli) { double(:highline_cli, process_directory_remotes?: true) }
+  let(:cli) { double(:highline_cli, ask_yes_no: true) }
   let(:old_owner) { Faker::Internet.username }
   let(:new_owner) { Faker::Internet.username }
   let(:directory_entries) { [ '.', '..', project, Faker::Lorem.word, Faker::Lorem.word ] }
@@ -73,7 +73,7 @@ describe GitHelper::ChangeRemote do
     end
 
     context 'when the user says not to process the directory' do
-      let(:cli) { double(:highline_cli, process_directory_remotes?: false) }
+      let(:cli) { double(:highline_cli, ask_yes_no: false) }
 
       it 'should not call to process the directory' do
         expect(subject).not_to receive(:process_git_repository)
