@@ -4,7 +4,7 @@ require 'git_helper'
 describe GitHelper::NewBranch do
   let(:new_branch_name) { 'new-branch-name' }
   let(:local_code) { double(:local_code, new_branch: :commit) }
-  let(:cli) { double(:highline_cli, new_branch_name: new_branch_name) }
+  let(:cli) { double(:highline_cli, ask: new_branch_name) }
 
   subject { GitHelper::NewBranch.new }
 
@@ -31,7 +31,7 @@ describe GitHelper::NewBranch do
     end
 
     it 'should ask the highline cli what the new branch name should be' do
-      expect(cli).to receive(:new_branch_name)
+      expect(cli).to receive(:ask)
       subject.execute
     end
   end
