@@ -120,19 +120,19 @@ describe GitHelper::GitLabMergeRequest do
 
       it 'should call the CLI to ask about a single template' do
         allow(subject).to receive(:mr_template_options).and_return([template])
-        expect(highline_cli).to receive(:apply_template?).and_return(true)
+        expect(highline_cli).to receive(:ask_yes_no).and_return(true)
         subject.send(:template_name_to_apply)
       end
 
       it 'should return the single template if the user says yes' do
         allow(subject).to receive(:mr_template_options).and_return([template])
-        allow(highline_cli).to receive(:apply_template?).and_return(true)
+        allow(highline_cli).to receive(:ask_yes_no).and_return(true)
         expect(subject.send(:template_name_to_apply)).to eq(template)
       end
 
       it 'should return nil if the user says no' do
         allow(subject).to receive(:mr_template_options).and_return([template])
-        allow(highline_cli).to receive(:apply_template?).and_return(false)
+        allow(highline_cli).to receive(:ask_yes_no).and_return(false)
         expect(subject.send(:template_name_to_apply)).to eq(nil)
       end
     end
@@ -143,19 +143,19 @@ describe GitHelper::GitLabMergeRequest do
 
       it 'should call the CLI to ask which of multiple templates to apply' do
         allow(subject).to receive(:mr_template_options).and_return([template1, template2])
-        expect(highline_cli).to receive(:template_to_apply).and_return(template1)
+        expect(highline_cli).to receive(:ask_options).and_return(template1)
         subject.send(:template_name_to_apply)
       end
 
       it 'should return the answer template if the user says yes' do
         allow(subject).to receive(:mr_template_options).and_return([template1, template2])
-        allow(highline_cli).to receive(:template_to_apply).and_return(template1)
+        allow(highline_cli).to receive(:ask_options).and_return(template1)
         expect(subject.send(:template_name_to_apply)).to eq(template1)
       end
 
       it 'should return nil if the user says no' do
         allow(subject).to receive(:mr_template_options).and_return([template1, template2])
-        allow(highline_cli).to receive(:template_to_apply).and_return('None')
+        allow(highline_cli).to receive(:ask_options).and_return('None')
         expect(subject.send(:template_name_to_apply)).to eq(nil)
       end
     end
@@ -170,25 +170,25 @@ describe GitHelper::GitLabMergeRequest do
 
   describe '#mr_id' do
     it 'should ask the CLI for the code request ID' do
-      expect(highline_cli).to receive(:code_request_id).and_return(Faker::Number.number)
+      expect(highline_cli).to receive(:ask).and_return(Faker::Number.number)
       subject.send(:mr_id)
     end
 
     it 'should equal an integer' do
       pr_id = Faker::Number.number
-      expect(highline_cli).to receive(:code_request_id).and_return(pr_id)
+      expect(highline_cli).to receive(:ask).and_return(pr_id)
       expect(subject.send(:mr_id)).to eq(pr_id)
     end
   end
 
   describe '#squash_merge_request' do
     it 'should ask the CLI for the code request ID' do
-      expect(highline_cli).to receive(:squash_merge_request?).and_return(true)
+      expect(highline_cli).to receive(:ask_yes_no).and_return(true)
       subject.send(:squash_merge_request)
     end
 
     it 'should be a boolean' do
-      expect(highline_cli).to receive(:squash_merge_request?).and_return(false)
+      expect(highline_cli).to receive(:ask_yes_no).and_return(false)
       expect([true, false]).to include(subject.send(:squash_merge_request))
     end
   end
@@ -200,12 +200,12 @@ describe GitHelper::GitLabMergeRequest do
 
     context 'when the existing project has no setting' do
       it 'should ask the CLI for the code request ID' do
-        expect(highline_cli).to receive(:remove_source_branch?).and_return(true)
+        expect(highline_cli).to receive(:ask_yes_no).and_return(true)
         subject.send(:remove_source_branch)
       end
 
       it 'should be a boolean' do
-        allow(highline_cli).to receive(:remove_source_branch?).and_return(false)
+        allow(highline_cli).to receive(:ask_yes_no).and_return(false)
         expect([true, false]).to include(subject.send(:remove_source_branch))
       end
     end
@@ -222,7 +222,7 @@ describe GitHelper::GitLabMergeRequest do
 
     it 'should return the existing projects setting if it exists' do
       allow(subject).to receive(:existing_project).and_return(double(remove_source_branch_after_merge: false))
-      allow(highline_cli).to receive(:remove_source_branch?).and_return(true)
+      allow(highline_cli).to receive(:ask_yes_no).and_return(true)
       expect(subject.send(:remove_source_branch)).to eq(true)
     end
   end
@@ -236,7 +236,7 @@ describe GitHelper::GitLabMergeRequest do
 
   describe '#existing_mr' do
     it 'should call the gitlab client' do
-      allow(highline_cli).to receive(:code_request_id).and_return(Faker::Number.number)
+      allow(highline_cli).to receive(:ask).and_return(Faker::Number.number)
       expect(gitlab_client_client).to receive(:merge_request).and_return(:merge_request)
       subject.send(:existing_mr)
     end

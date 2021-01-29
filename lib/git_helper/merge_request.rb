@@ -84,10 +84,10 @@ module GitHelper
 
       unless mr_template_options.empty?
         if mr_template_options.count == 1
-          apply_single_template = cli.apply_template?(mr_template_options.first, 'merge')
+          apply_single_template = cli.ask_yes_no("Apply the merge request template from #{mr_template_options.first}? (y/n)")
           @template_name_to_apply = mr_template_options.first if apply_single_template
         else
-          response = cli.template_to_apply(mr_template_options, 'merge')
+          response = cli.ask_options("Which merge request template should be applied?", mr_template_options << 'None')
           @template_name_to_apply = response unless response == 'None'
         end
       end
@@ -104,15 +104,15 @@ module GitHelper
     end
 
     private def mr_id
-      @mr_id ||= cli.code_request_id('Merge')
+      @mr_id ||= cli.ask('Merge Request ID?')
     end
 
     private def squash_merge_request
-      @squash_merge_request ||= cli.squash_merge_request?
+      @squash_merge_request ||= cli.ask_yes_no('Squash merge request? (y/n)')
     end
 
     private def remove_source_branch
-      @remove_source_branch ||= existing_project.remove_source_branch_after_merge || cli.remove_source_branch?
+      @remove_source_branch ||= existing_project.remove_source_branch_after_merge || cli.ask_yes_no('Remove source branch after merging? (y/n)')
     end
 
     private def existing_project

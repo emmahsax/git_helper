@@ -81,10 +81,10 @@ module GitHelper
 
       unless pr_template_options.empty?
         if pr_template_options.count == 1
-          apply_single_template = cli.apply_template?(pr_template_options.first, 'pull')
+          apply_single_template = cli.ask_yes_no("Apply the pull request template from #{pr_template_options.first}? (y/n)")
           @template_name_to_apply = pr_template_options.first if apply_single_template
         else
-          response = cli.template_to_apply(pr_template_options, 'pull')
+          response = cli.ask_options("Which pull request template should be applied?", pr_template_options << 'None')
           @template_name_to_apply = response unless response == 'None'
         end
       end
@@ -101,11 +101,11 @@ module GitHelper
     end
 
     private def pr_id
-      @pr_id ||= cli.code_request_id('Pull')
+      @pr_id ||= cli.ask('Pull Request ID?')
     end
 
     private def merge_method
-      @merge_method ||= merge_options.length == 1 ? merge_options.first : cli.merge_method(merge_options)
+      @merge_method ||= merge_options.length == 1 ? merge_options.first : cli.ask_options('Merge method?', merge_options)
     end
 
     private def merge_options
