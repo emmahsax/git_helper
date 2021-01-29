@@ -23,7 +23,7 @@ module GitHelper
       Dir.chdir(current_dir)
 
       if File.exist?('.git')
-        process_git_repository if cli.process_directory_remotes?(current_dir)
+        process_git_repository if cli.ask_yes_no("Found git directory: #{current_dir}. Do you wish to proceed in updating #{current_dir}'s remote URLs? (y/n)")
       end
 
       Dir.chdir(original_dir)
