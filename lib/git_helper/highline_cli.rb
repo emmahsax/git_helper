@@ -10,6 +10,7 @@ module GitHelper
       answer = highline_client.ask(prompt) do |conf|
         conf.readline = true
       end.to_s
+
       answer.empty? ? true : !!(answer =~ /^y/i)
     end
 
