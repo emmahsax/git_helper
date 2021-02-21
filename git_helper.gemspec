@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ['Emma Sax']
   gem.summary       = %q{A set of GitHub and GitLab workflow scripts.}
   gem.description   = %q{A set of GitHub and GitLab workflow scripts to provide a smoother development process for your git projects.}
-  gem.homepage      = 'https://github.com/emmasax4/git_helper'
+  gem.homepage      = 'https://github.com/emmahsax/git_helper'
   gem.license       = 'MIT'
 
   gem.executables   = Dir['bin/*'].map{ |f| File.basename(f) }

@@ -1,4 +1,4 @@
-# git_helper [![Maintainability](https://api.codeclimate.com/v1/badges/d53da11f17c38cc81b5b/maintainability)](https://codeclimate.com/github/emmasax4/git_helper/maintainability) ![Default](https://github.com/emmasax4/git_helper/workflows/Default/badge.svg)
+# git_helper [![Maintainability](https://api.codeclimate.com/v1/badges/bf27d608257c202930c4/maintainability)](https://codeclimate.com/github/emmahsax/git_helper/maintainability) [![Main](https://github.com/emmahsax/git_helper/actions/workflows/main.yml/badge.svg)](https://github.com/emmahsax/git_helper/actions/workflows/main.yml)
 
 ## Gem Usage
 
@@ -70,7 +70,7 @@ alias gnb="git new-branch"
 
 And then, running `gnb` maps to `git new-branch`, which again routes to `git-helper new-branch`.
 
-For a full list of the git aliases I prefer to use, check out my [Git Aliases gist](https://gist.github.com/emmasax4/e8744fe253fba1f00a621c01a2bf68f5).
+For a full list of the git aliases I prefer to use, check out my [Git Aliases gist](https://gist.github.com/emmahsax/e8744fe253fba1f00a621c01a2bf68f5).
 
 If you're going to make using git workflows easier, might as well provide lots of options 😃.
 
@@ -173,9 +173,9 @@ The command either accepts a branch name right away or it will ask you for the n
 
 ## Contributing
 
-To submit a feature request, bug ticket, etc, please submit an official [GitHub Issue](https://github.com/emmasax4/git_helper/issues/new).
+To submit a feature request, bug ticket, etc, please submit an official [GitHub Issue](https://github.com/emmahsax/git_helper/issues/new).
 
-To report any security vulnerabilities, please view this project's [Security Policy](https://github.com/emmasax4/git_helper/security/policy).
+To report any security vulnerabilities, please view this project's [Security Policy](https://github.com/emmahsax/git_helper/security/policy).
 
 When interacting with this repository, please follow [Contributor Covenant's Code of Conduct](https://contributor-covenant.org).
 
@@ -185,7 +185,7 @@ To make a new release of this gem:
 
 1. Merge the pull request via the big green button
 2. Run `git tag vX.X.X` and `git push --tag`
-3. Make a new release [here](https://github.com/emmasax4/git_helper/releases/new)
+3. Make a new release [here](https://github.com/emmahsax/git_helper/releases/new)
 4. Run `gem build *.gemspec`
 5. Run `gem push *.gem` to push the new gem to RubyGems
 6. Run `rm *.gem` to clean up your local repository
