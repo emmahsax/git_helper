@@ -14,7 +14,7 @@ wrap_help_text :verbatim
 program_long_desc """
 DOCUMENTATION
     For documentation and help in setting up your Git configuration files,
-    see Git Helper's GitHub repo: https://github.com/emmasax4/git_helper
+    see Git Helper's GitHub repo: https://github.com/emmahsax/git_helper
 """
 
 arg :old_owner
