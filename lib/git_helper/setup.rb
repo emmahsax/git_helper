@@ -64,14 +64,6 @@ module GitHelper
       end
     end
 
-    private def highline
-      @highline ||= GitHelper::HighlineCli.new
-    end
-
-    private def config_file
-      git_config_reader.git_config_file_path
-    end
-
     private def create_or_update_plugin_files
       plugins_dir = "#{Dir.pwd.scan(/\A\/[\w]*\/[\w]*\//).first}/.git_helper/plugins"
       plugins_url = 'https://api.github.com/repos/emmahsax/git_helper/contents/plugins'
@@ -89,8 +81,16 @@ module GitHelper
       end
     end
 
+    private def config_file
+      git_config_reader.git_config_file_path
+    end
+
     private def git_config_reader
       @git_config_reader ||= GitHelper::GitConfigReader.new
+    end
+
+    private def highline
+      @highline ||= GitHelper::HighlineCli.new
     end
   end
 end
