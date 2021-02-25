@@ -8,9 +8,7 @@ module GitHelper
         answer = true
       end
 
-      if answer
-        create_or_update_config_file
-      end
+      create_or_update_config_file if answer
 
       answer = highline.ask_yes_no("Do you wish to set up the Git Helper plugins? (y/n)")
 
