@@ -133,6 +133,11 @@ describe GitHelper::Setup do
       ]"
     end
 
+    before do
+      allow_any_instance_of(GitHelper::GitConfigReader).to receive(:github_token).and_return(Faker::Internet.password)
+      allow_any_instance_of(GitHelper::GitConfigReader).to receive(:github_user).and_return(Faker::Internet.username)
+    end
+
     it 'should create the directory if it does not exist' do
       allow(File).to receive(:exists?).and_return(false)
       allow(File).to receive(:open).and_return(nil)
