@@ -19,6 +19,7 @@ describe GitHelper::Setup do
       allow(File).to receive(:exists?).and_return(true)
       expect(highline_cli).to receive(:ask_yes_no).and_return(true)
       allow(subject).to receive(:create_or_update_config_file).and_return(true)
+      allow(subject).to receive(:create_or_update_plugin_files)
       subject.execute
     end
 
@@ -26,14 +27,16 @@ describe GitHelper::Setup do
       allow(File).to receive(:exists?).and_return(true)
       allow(highline_cli).to receive(:ask_yes_no).and_return(true)
       expect(subject).to receive(:create_or_update_config_file).and_return(true)
+      allow(subject).to receive(:create_or_update_plugin_files)
       subject.execute
     end
 
-    it 'should exit if the user opts not to continue' do
+    it 'should skip if the user opts not to continue' do
       allow(File).to receive(:exists?).and_return(true)
       allow(highline_cli).to receive(:ask_yes_no).and_return(false)
       expect(subject).not_to receive(:create_or_update_config_file)
-      expect{ subject.execute }.to raise_error(SystemExit)
+      expect(subject).not_to receive(:create_or_update_plugin_files)
+      subject.execute
     end
   end
 
@@ -104,6 +107,64 @@ describe GitHelper::Setup do
       allow(highline_cli).to receive(:ask_yes_no).exactly(2).times.and_return(true)
       allow(subject).to receive(:ask_question).exactly(4).times.and_return(Faker::Lorem.word)
       expect(subject.send(:generate_file_contents)).to be_a(String)
+    end
+  end
+
+  describe '#create_or_update_plugin_files' do
+    let(:plugins) do
+      [
+        {
+          'name': 'plugin-file-one'
+        },
+        {
+          'name': 'plugin-file-two'
+        }
+      ]
+    end
+
+    let(:plugins_json) do
+      "[
+        {
+          \"name\": \"plugin-file-one\"
+        },
+        {
+          \"name\": \"plugin-file-two\"
+        }
+      ]"
+    end
+
+    it 'should create the directory if it does not exist' do
+      allow(File).to receive(:exists?).and_return(false)
+      allow(File).to receive(:open).and_return(nil)
+      expect(Dir).to receive(:mkdir)
+      allow(subject).to receive(:`).and_return(plugins_json)
+      allow(JSON).to receive(:parse).and_return(plugins)
+      subject.send(:create_or_update_plugin_files)
+    end
+
+    it 'should not create the directory if it already exists' do
+      allow(File).to receive(:exists?).and_return(true)
+      allow(File).to receive(:open).and_return(nil)
+      expect(Dir).not_to receive(:mkdir)
+      allow(subject).to receive(:`).and_return(plugins_json)
+      allow(JSON).to receive(:parse).and_return(plugins)
+      subject.send(:create_or_update_plugin_files)
+    end
+
+    it 'should curl the GitHub API' do
+      allow(File).to receive(:exists?).and_return(true)
+      allow(File).to receive(:open).and_return(nil)
+      allow(subject).to receive(:`).and_return(plugins_json)
+      expect(JSON).to receive(:parse).with(plugins_json).and_return(plugins)
+      subject.send(:create_or_update_plugin_files)
+    end
+
+    it 'should go through the loop for each plugin' do
+      allow(File).to receive(:exists?).and_return(true)
+      allow(File).to receive(:open).and_return(nil)
+      expect(subject).to receive(:`).exactly(3).times
+      allow(JSON).to receive(:parse).and_return(plugins)
+      subject.send(:create_or_update_plugin_files)
     end
   end
 end
