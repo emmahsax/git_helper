@@ -27,6 +27,11 @@ To see what version of git_helper you're running, run:
 git-helper --version
 ```
 
+To help you create the `~/.git_helper/config.yml` file, run this command and allow the command to walk you through the prompts:
+```bash
+git-helper setup
+```
+
 ## Plugin Usage
 
 As an additional option, you can set each of the following commands to be a git plugin, meaning you can call them in a way that feels even more git-native:
