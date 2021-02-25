@@ -27,6 +27,11 @@ To see what version of git_helper you're running, run:
 git-helper --version
 ```
 
+To help you create the `~/.git_helper/config.yml` file and set up the plugins (see below), run this command and allow the command to walk you through the prompts:
+```bash
+git-helper setup
+```
+
 ## Plugin Usage
 
 As an additional option, you can set each of the following commands to be a git plugin, meaning you can call them in a way that feels even more git-native:
@@ -46,7 +51,7 @@ unzip path/to/downloaded/plugins.zip -d ~/.git_helper
 
 Now, the plugins will live in `~/.git_helper/plugins/*`. Add the following line to your `~/.bash_profile`:
 
-```
+```bash
 export PATH=/path/to/computer/home/.git_helper/plugins:$PATH
 ```
 
