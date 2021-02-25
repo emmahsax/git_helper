@@ -2,14 +2,16 @@ require 'spec_helper'
 require 'git_helper'
 
 describe GitHelper::GitConfigReader do
+  let(:github_user) { Faker::Internet.username }
   let(:github_token) { Faker::Internet.password(max_length: 10) }
+  let(:gitlab_user) { Faker::Internet.username }
   let(:gitlab_token) { Faker::Internet.password(max_length: 10) }
 
   let(:config_file) {
     {
-      github_user: Faker::Internet.username,
+      github_user: github_user,
       github_token: github_token,
-      gitlab_user: Faker::Internet.username,
+      gitlab_user: gitlab_user,
       gitlab_token: gitlab_token
     }
   }
@@ -37,6 +39,30 @@ describe GitHelper::GitConfigReader do
     it 'should call the config file' do
       expect(subject).to receive(:config_file).and_return(config_file)
       subject.github_token
+    end
+  end
+
+  describe '#github_user' do
+    it 'should locate the github_user' do
+      expect(subject).to receive(:config_file).and_return(config_file)
+      expect(subject.github_user).to eq(github_user)
+    end
+
+    it 'should call the config file' do
+      expect(subject).to receive(:config_file).and_return(config_file)
+      subject.github_user
+    end
+  end
+
+  describe '#gitlab_user' do
+    it 'should locate the gitlab_user' do
+      expect(subject).to receive(:config_file).and_return(config_file)
+      expect(subject.gitlab_user).to eq(gitlab_user)
+    end
+
+    it 'should call the config file' do
+      expect(subject).to receive(:config_file).and_return(config_file)
+      subject.gitlab_user
     end
   end
 
