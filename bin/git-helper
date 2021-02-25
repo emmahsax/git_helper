@@ -17,6 +17,13 @@ DOCUMENTATION
     see Git Helper's GitHub repo: https://github.com/emmahsax/git_helper
 """
 
+desc 'Sets up Git Helper configs at ~/.git_helper/*'
+command 'setup' do |c|
+  c.action do ||
+    GitHelper::Setup.new.execute
+  end
+end
+
 arg :old_owner
 arg :new_owner
 desc "Update a repository's remote URLs from an old GitHub owner to a new owner."

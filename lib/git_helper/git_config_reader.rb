@@ -8,12 +8,12 @@ module GitHelper
       config_file[:github_token]
     end
 
-    private def config_file
-      YAML.load_file(git_config_file_path)
+    def git_config_file_path
+      Dir.pwd.scan(/\A\/[\w]*\/[\w]*\//).first << git_config_file
     end
 
-    private def git_config_file_path
-      Dir.pwd.scan(/\A\/[\w]*\/[\w]*\//).first << git_config_file
+    private def config_file
+      YAML.load_file(git_config_file_path)
     end
 
     private def git_config_file

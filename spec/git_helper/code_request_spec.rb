@@ -133,6 +133,7 @@ describe GitHelper::CodeRequest do
       end
     end
 
+    # Unfortunately this test sometimes fails... just rerun the tests if it does
     context 'when response is neither' do
       it 'should raise an error' do
         allow(highline_cli).to receive(:ask).and_return(Faker::Lorem.word)
