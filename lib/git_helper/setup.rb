@@ -72,7 +72,7 @@ module GitHelper
     end
 
     private def create_or_update_plugin_files
-      plugins_dir = "#{Dir.pwd.scan(%r{\A/\w*/\w*/}).first}/.git_helper/plugins"
+      plugins_dir = "#{Dir.pwd.scan(%r{\A/\w*/\w*/}).first}.git_helper/plugins"
       plugins_url = 'https://api.github.com/repos/emmahsax/git_helper/contents/plugins'
       header = 'Accept: application/vnd.github.v3.raw'
       token = git_config_reader.github_token

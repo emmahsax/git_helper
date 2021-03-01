@@ -35,6 +35,7 @@ describe GitHelper::Setup do
 
     it 'should skip if the user opts not to continue' do
       allow(File).to receive(:exists?).and_return(true)
+      allow(subject).to receive(:config_file_exists?).and_return(true)
       allow(highline_cli).to receive(:ask_yes_no).and_return(false)
       expect(subject).not_to receive(:create_or_update_config_file)
       expect(subject).not_to receive(:create_or_update_plugin_files)
