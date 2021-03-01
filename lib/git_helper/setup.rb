@@ -39,7 +39,7 @@ module GitHelper
     end
 
     private def generate_file_contents
-      file_contents = ''
+      file_contents = ''.dup
 
       if highline.ask_yes_no('Do you wish to set up GitHub credentials? (y/n)')
         file_contents << ":github_user:  #{ask_question('GitHub username?')}\n"
