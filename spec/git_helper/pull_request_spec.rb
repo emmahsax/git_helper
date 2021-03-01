@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'git_helper'
 
@@ -27,19 +29,19 @@ describe GitHelper::GitHubPullRequest do
     it 'should call the octokit client to create' do
       allow(subject).to receive(:new_pr_body).and_return('')
       expect(octokit_client_client).to receive(:create_pull_request).and_return(double(html_url: Faker::Internet.url))
-      subject.create({base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word})
+      subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })
     end
 
     it 'should call various other methods' do
       expect(subject).to receive(:new_pr_body).and_return('').at_least(:once)
       allow(octokit_client_client).to receive(:create_pull_request).and_return(double(html_url: Faker::Internet.url))
-      subject.create({base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word})
+      subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })
     end
 
     it 'should catch the raised error if the creation does not work' do
       allow(subject).to receive(:new_pr_body).and_return('')
       allow(octokit_client_client).to receive(:create_pull_request).and_raise(StandardError)
-      expect(subject.create({base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word})).to eq(nil)
+      expect(subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })).to eq(nil)
     end
   end
 

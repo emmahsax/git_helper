@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'git_helper'
 
@@ -11,7 +13,7 @@ describe GitHelper::Setup do
   end
 
   after do
-    GitHelper::Setup.instance_variable_set("@highline", nil)
+    GitHelper::Setup.instance_variable_set('@highline', nil)
   end
 
   describe '#execute' do
@@ -33,6 +35,7 @@ describe GitHelper::Setup do
 
     it 'should skip if the user opts not to continue' do
       allow(File).to receive(:exists?).and_return(true)
+      allow(subject).to receive(:config_file_exists?).and_return(true)
       allow(highline_cli).to receive(:ask_yes_no).and_return(false)
       expect(subject).not_to receive(:create_or_update_config_file)
       expect(subject).not_to receive(:create_or_update_plugin_files)
@@ -56,12 +59,12 @@ describe GitHelper::Setup do
 
   describe '#config_file_exists?' do
     it 'should return true if the file exists' do
-      allow(File).to receive(:exists?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect(subject.send(:config_file_exists?)).to eq(true)
     end
 
     it 'should return false if the file does not exist' do
-      allow(File).to receive(:exists?).and_return(false)
+      allow(File).to receive(:exist?).and_return(false)
       expect(subject.send(:config_file_exists?)).to eq(false)
     end
   end
@@ -114,10 +117,10 @@ describe GitHelper::Setup do
     let(:plugins) do
       [
         {
-          'name': 'plugin-file-one'
+          name: 'plugin-file-one'
         },
         {
-          'name': 'plugin-file-two'
+          name: 'plugin-file-two'
         }
       ]
     end
@@ -139,7 +142,7 @@ describe GitHelper::Setup do
     end
 
     it 'should create the directory if it does not exist' do
-      allow(File).to receive(:exists?).and_return(false)
+      allow(File).to receive(:exist?).and_return(false)
       allow(File).to receive(:open).and_return(nil)
       expect(Dir).to receive(:mkdir)
       allow(subject).to receive(:`).and_return(plugins_json)
@@ -148,7 +151,7 @@ describe GitHelper::Setup do
     end
 
     it 'should not create the directory if it already exists' do
-      allow(File).to receive(:exists?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       allow(File).to receive(:open).and_return(nil)
       expect(Dir).not_to receive(:mkdir)
       allow(subject).to receive(:`).and_return(plugins_json)
@@ -157,6 +160,7 @@ describe GitHelper::Setup do
     end
 
     it 'should curl the GitHub API' do
+      allow(Dir).to receive(:mkdir).and_return(true)
       allow(File).to receive(:exists?).and_return(true)
       allow(File).to receive(:open).and_return(nil)
       allow(subject).to receive(:`).and_return(plugins_json)
@@ -165,6 +169,7 @@ describe GitHelper::Setup do
     end
 
     it 'should go through the loop for each plugin' do
+      allow(Dir).to receive(:mkdir).and_return(true)
       allow(File).to receive(:exists?).and_return(true)
       allow(File).to receive(:open).and_return(nil)
       expect(subject).to receive(:`).exactly(3).times

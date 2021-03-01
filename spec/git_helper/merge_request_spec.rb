@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'git_helper'
 
@@ -10,10 +12,9 @@ describe GitHelper::GitLabMergeRequest do
 
   let(:merge_request) do
     double(:merge_request,
-      diff_refs: diff_refs,
-      web_url: Faker::Internet.url,
-      merge_commit_sha: Faker::Internet.password
-    )
+           diff_refs: diff_refs,
+           web_url: Faker::Internet.url,
+           merge_commit_sha: Faker::Internet.password)
   end
 
   let(:options) do
@@ -38,7 +39,7 @@ describe GitHelper::GitLabMergeRequest do
       allow(subject).to receive(:remove_source_branch).and_return(false)
       allow(subject).to receive(:new_mr_body).and_return('')
       expect(gitlab_client_client).to receive(:create_merge_request).and_return(merge_request)
-      subject.create({base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word})
+      subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })
     end
 
     it 'should call various other methods' do
@@ -46,7 +47,7 @@ describe GitHelper::GitLabMergeRequest do
       expect(subject).to receive(:remove_source_branch).and_return(false)
       expect(subject).to receive(:new_mr_body).and_return('')
       allow(gitlab_client_client).to receive(:create_merge_request).and_return(merge_request)
-      subject.create({base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word})
+      subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })
     end
 
     it 'should catch the raised error if the creation does not work' do
@@ -54,7 +55,7 @@ describe GitHelper::GitLabMergeRequest do
       allow(subject).to receive(:remove_source_branch).and_return(false)
       allow(subject).to receive(:new_mr_body).and_return('')
       allow(gitlab_client_client).to receive(:create_merge_request).and_raise(StandardError)
-      expect(subject.create({base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word})).to eq(nil)
+      expect(subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })).to eq(nil)
     end
   end
 

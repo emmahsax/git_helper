@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GitHelper
   class NewBranch
     def execute(new_branch_name = nil)

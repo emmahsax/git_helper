@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 require 'rubygems'
 require 'gli'
 require_relative '../lib/git_helper'
@@ -11,15 +13,15 @@ version GitHelper::VERSION
 autocomplete_commands false
 wrap_help_text :verbatim
 
-program_long_desc """
+program_long_desc "
 DOCUMENTATION
     For documentation and help in setting up your Git configuration files,
     see Git Helper's GitHub repo: https://github.com/emmahsax/git_helper
-"""
+"
 
 desc 'Sets up Git Helper configs at ~/.git_helper/*'
 command 'setup' do |c|
-  c.action do ||
+  c.action do
     GitHelper::Setup.new.execute
   end
 end
@@ -28,36 +30,37 @@ arg :old_owner
 arg :new_owner
 desc "Update a repository's remote URLs from an old GitHub owner to a new owner."
 command 'change-remote' do |c|
-  c.action do |global_options, options, args|
+  c.action do |_global_options, _options, args|
     raise ArgumentError, 'You must specify an old owner and a new owner' unless args.count == 2
+
     GitHelper::ChangeRemote.new(args[0], args[1]).execute
   end
 end
 
 desc 'Checks out the default branch of a repo based on the local remote branches.'
 command 'checkout-default' do |c|
-  c.action do |global_options, options, args|
+  c.action do |_global_options, _options, _args|
     GitHelper::CheckoutDefault.new.execute
   end
 end
 
 desc "Clean a repository's git branches."
 command 'clean-branches' do |c|
-  c.action do |global_options, options, args|
+  c.action do |_global_options, _options, _args|
     GitHelper::CleanBranches.new.execute
   end
 end
 
 desc 'Creates an empty commit with a basic commit message.'
 command 'empty-commit' do |c|
-  c.action do |global_options, options, args|
+  c.action do |_global_options, _options, _args|
     GitHelper::EmptyCommit.new.execute
   end
 end
 
 desc 'Reset your local git commits to origin/HEAD.'
 command 'forget-local-commits' do |c|
-  c.action do |global_options, options, args|
+  c.action do |_global_options, _options, _args|
     GitHelper::ForgetLocalCommits.new.execute
   end
 end
@@ -65,21 +68,23 @@ end
 arg :new_branch_name, optional: true
 desc 'Create a new branch for features, bug fixes, or experimentation.'
 command 'new-branch' do |c|
-  c.action do |global_options, options, args|
+  c.action do |_global_options, _options, args|
     GitHelper::NewBranch.new.execute(args[0])
   end
 end
 
-desc 'Merge a GitHub/GitLab pull/merge request. The command will figure out whether your code project belongs to GitHub or GitLab.'
+desc 'Merge a GitHub/GitLab pull/merge request. The command will figure out whether your ' \
+     'code project belongs to GitHub or GitLab.'
 command 'merge-code-request' do |c|
-  c.action do |global_options, options, args|
+  c.action do |_global_options, _options, _args|
     GitHelper::CodeRequest.new.merge
   end
 end
 
-desc 'Create a GitHub/GitLab pull/merge request from the current branch. The command will figure out whether your code project belongs to GitHub or GitLab.'
+desc 'Create a GitHub/GitLab pull/merge request from the current branch. The command will figure ' \
+     'out whether your code project belongs to GitHub or GitLab.'
 command 'code-request' do |c|
-  c.action do |global_options, options, args|
+  c.action do |_global_options, _options, _args|
     GitHelper::CodeRequest.new.create
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GitHelper
   class GitConfigReader
     def gitlab_token
@@ -17,15 +19,11 @@ module GitHelper
     end
 
     def git_config_file_path
-      Dir.pwd.scan(/\A\/[\w]*\/[\w]*\//).first << git_config_file
+      "#{Dir.pwd.scan(%r{\A/\w*/\w*/}).first}.git_helper/config.yml"
     end
 
     private def config_file
       YAML.load_file(git_config_file_path)
-    end
-
-    private def git_config_file
-      '.git_helper/config.yml'
     end
   end
 end
