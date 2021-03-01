@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GitHelper
   class HighlineCli
     def ask(prompt)
@@ -15,7 +17,7 @@ module GitHelper
     end
 
     def ask_options(prompt, choices)
-      choices_as_string_options = ''
+      choices_as_string_options = ''.dup
       choices.each { |choice| choices_as_string_options << "#{choices.index(choice) + 1}. #{choice}\n" }
       compiled_prompt = "#{prompt}\n#{choices_as_string_options.strip}"
 

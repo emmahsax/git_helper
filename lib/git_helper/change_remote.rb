@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GitHelper
   class ChangeRemote
     attr_accessor :old_owner, :new_owner
@@ -11,7 +13,7 @@ module GitHelper
       original_dir = Dir.pwd
       nested_dirs = Dir.entries(original_dir).select do |entry|
         entry_dir = File.join(original_dir, entry)
-        File.directory?(entry_dir) && !(entry == '.' || entry == '..')
+        File.directory?(entry_dir) && !['.', '..'].include?(entry)
       end
 
       nested_dirs.each do |nested_dir|
@@ -22,8 +24,10 @@ module GitHelper
     private def process_dir(current_dir, original_dir)
       Dir.chdir(current_dir)
 
-      if File.exist?('.git')
-        process_git_repository if cli.ask_yes_no("Found git directory: #{current_dir}. Do you wish to proceed in updating #{current_dir}'s remote URLs? (y/n)")
+      if File.exist?('.git') && cli.ask_yes_no(
+        "Found git directory: #{current_dir}. Do you wish to proceed in updating #{current_dir}'s remote URLs? (y/n)"
+      )
+        process_git_repository
       end
 
       Dir.chdir(original_dir)
@@ -40,6 +44,8 @@ module GitHelper
       puts "\n"
     end
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     private def process_remote(remote)
       remote_name = local_code.remote_name(remote)
 
@@ -56,6 +62,8 @@ module GitHelper
       puts "  Changing the remote URL #{remote_name} to be '#{remote_url}'."
       local_code.change_remote(remote_name, remote_url)
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     private def local_code
       @local_code ||= GitHelper::LocalCode.new
