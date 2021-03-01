@@ -17,9 +17,18 @@ describe GitHelper::Setup do
   end
 
   describe '#execute' do
-    it 'should ask a question if the config file exists' do
+    it 'only asks the user one question if the config file does not exist' do
+      allow(subject).to receive(:config_file_exists?).and_return(false)
       allow(File).to receive(:exists?).and_return(true)
-      expect(highline_cli).to receive(:ask_yes_no).and_return(true)
+      expect(highline_cli).to receive(:ask_yes_no).and_return(true).exactly(:once)
+      allow(subject).to receive(:create_or_update_config_file).and_return(true)
+      allow(subject).to receive(:create_or_update_plugin_files)
+      subject.execute
+    end
+
+    it 'should ask two questions if the config file exists' do
+      allow(File).to receive(:exists?).and_return(true)
+      expect(highline_cli).to receive(:ask_yes_no).and_return(true).at_least(:twice)
       allow(subject).to receive(:create_or_update_config_file).and_return(true)
       allow(subject).to receive(:create_or_update_plugin_files)
       subject.execute
