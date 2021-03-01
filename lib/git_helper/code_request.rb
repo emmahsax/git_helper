@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module GitHelper
   class CodeRequest
     def create
       process_project.create({
-        base_branch: base_branch,
-        new_title: new_code_request_title
-      })
+                               base_branch: base_branch,
+                               new_title: new_code_request_title
+                             })
     end
 
     def merge

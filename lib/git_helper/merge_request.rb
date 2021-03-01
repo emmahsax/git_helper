@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GitHelper
   class GitLabMergeRequest
     attr_accessor :local_project, :local_branch, :local_code, :cli, :base_branch, :new_mr_title
@@ -40,38 +42,36 @@ module GitHelper
     end
 
     def merge
-      begin
-        mr_id
-        options = {
-          should_remove_source_branch: existing_mr.should_remove_source_branch || existing_mr.force_remove_source_branch,
-          squash: existing_mr.squash,
-          squash_commit_message: existing_mr.title
-        }
+      mr_id
+      options = {
+        should_remove_source_branch: existing_mr.should_remove_source_branch || existing_mr.force_remove_source_branch,
+        squash: existing_mr.squash,
+        squash_commit_message: existing_mr.title
+      }
 
-        puts "Merging merge request: #{mr_id}"
+      puts "Merging merge request: #{mr_id}"
+      merge = gitlab_client.accept_merge_request(local_project, mr_id, options)
+
+      if merge.merge_commit_sha.nil?
+        options[:squash] = true
         merge = gitlab_client.accept_merge_request(local_project, mr_id, options)
-
-        if merge.merge_commit_sha.nil?
-          options[:squash] = true
-          merge = gitlab_client.accept_merge_request(local_project, mr_id, options)
-        end
-
-        if merge.merge_commit_sha.nil?
-          puts 'Could not merge merge request:'
-          puts "  #{merge.merge_error}"
-        else
-          puts "Merge request successfully merged: #{merge.merge_commit_sha}"
-        end
-      rescue Gitlab::Error::MethodNotAllowed => e
-        puts 'Could not merge merge request:'
-        puts '  The merge request is not mergeable'
-      rescue Gitlab::Error::NotFound => e
-        puts 'Could not merge merge request:'
-        puts "  Could not a locate a merge request to merge with ID #{mr_id}"
-      rescue Exception => e
-        puts 'Could not merge merge request:'
-        puts e.message
       end
+
+      if merge.merge_commit_sha.nil?
+        puts 'Could not merge merge request:'
+        puts "  #{merge.merge_error}"
+      else
+        puts "Merge request successfully merged: #{merge.merge_commit_sha}"
+      end
+    rescue Gitlab::Error::MethodNotAllowed => e
+      puts 'Could not merge merge request:'
+      puts '  The merge request is not mergeable'
+    rescue Gitlab::Error::NotFound => e
+      puts 'Could not merge merge request:'
+      puts "  Could not a locate a merge request to merge with ID #{mr_id}"
+    rescue Exception => e
+      puts 'Could not merge merge request:'
+      puts e.message
     end
 
     private def new_mr_body
@@ -80,14 +80,19 @@ module GitHelper
 
     private def template_name_to_apply
       return @template_name_to_apply if @template_name_to_apply
+
       @template_name_to_apply = nil
 
       unless mr_template_options.empty?
         if mr_template_options.count == 1
-          apply_single_template = cli.ask_yes_no("Apply the merge request template from #{mr_template_options.first}? (y/n)")
+          apply_single_template = cli.ask_yes_no(
+            "Apply the merge request template from #{mr_template_options.first}? (y/n)"
+          )
           @template_name_to_apply = mr_template_options.first if apply_single_template
         else
-          response = cli.ask_options("Which merge request template should be applied?", mr_template_options << 'None')
+          response = cli.ask_options(
+            'Which merge request template should be applied?', mr_template_options << 'None'
+          )
           @template_name_to_apply = response unless response == 'None'
         end
       end
@@ -97,10 +102,10 @@ module GitHelper
 
     private def mr_template_options
       @mr_template_options ||= local_code.template_options({
-                                 template_directory: '.gitlab',
-                                 nested_directory_name: 'merge_request_templates',
-                                 non_nested_file_name: 'merge_request_template'
-                               })
+                                                             template_directory: '.gitlab',
+                                                             nested_directory_name: 'merge_request_templates',
+                                                             non_nested_file_name: 'merge_request_template'
+                                                           })
     end
 
     private def mr_id
@@ -112,7 +117,8 @@ module GitHelper
     end
 
     private def remove_source_branch
-      @remove_source_branch ||= existing_project.remove_source_branch_after_merge || cli.ask_yes_no('Remove source branch after merging? (y/n)')
+      @remove_source_branch ||= existing_project.remove_source_branch_after_merge ||
+                                cli.ask_yes_no('Remove source branch after merging? (y/n)')
     end
 
     private def existing_project

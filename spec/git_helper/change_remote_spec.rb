@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'git_helper'
 
@@ -7,18 +9,17 @@ describe GitHelper::ChangeRemote do
   let(:cli) { double(:highline_cli, ask_yes_no: true) }
   let(:old_owner) { Faker::Internet.username }
   let(:new_owner) { Faker::Internet.username }
-  let(:directory_entries) { [ '.', '..', project, Faker::Lorem.word, Faker::Lorem.word ] }
+  let(:directory_entries) { ['.', '..', project, Faker::Lorem.word, Faker::Lorem.word] }
 
   let(:local_code) do
     double(:local_code,
-      remotes: [remote1],
-      remote_name: Faker::Lorem.word,
-      ssh_remote?: true,
-      https_remote?: false,
-      remote_project: project,
-      remote_source: 'github.com',
-      change_remote: true
-    )
+           remotes: [remote1],
+           remote_name: Faker::Lorem.word,
+           ssh_remote?: true,
+           https_remote?: false,
+           remote_project: project,
+           remote_source: 'github.com',
+           change_remote: true)
   end
 
   subject { GitHelper::ChangeRemote.new(old_owner, new_owner) }
@@ -138,14 +139,13 @@ describe GitHelper::ChangeRemote do
     context 'https remote' do
       let(:local_code) do
         double(:local_code,
-          remotes: [remote1],
-          remote_name: Faker::Lorem.word,
-          ssh_remote?: false,
-          https_remote?: false,
-          remote_project: project,
-          remote_source: 'github.com',
-          change_remote: true
-        )
+               remotes: [remote1],
+               remote_name: Faker::Lorem.word,
+               ssh_remote?: false,
+               https_remote?: false,
+               remote_project: project,
+               remote_source: 'github.com',
+               change_remote: true)
       end
 
       it 'should ask if the remote is SSH' do

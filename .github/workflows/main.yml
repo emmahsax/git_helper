@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 jobs:
-  default:
+  test:
     runs-on: ubuntu-latest
     steps:
     - name: Check Out Code
@@ -30,5 +30,8 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Run Rspec Tests
+    - name: Rspec
       run: bundle exec rspec
+
+    - name: Rubocop
+      run: bundle exec rubocop

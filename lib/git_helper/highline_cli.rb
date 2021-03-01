@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GitHelper
   class HighlineCli
     def ask(prompt)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'git_helper'
 
@@ -7,14 +9,14 @@ describe GitHelper::GitConfigReader do
   let(:gitlab_user) { Faker::Internet.username }
   let(:gitlab_token) { Faker::Internet.password(max_length: 10) }
 
-  let(:config_file) {
+  let(:config_file) do
     {
       github_user: github_user,
       github_token: github_token,
       gitlab_user: gitlab_user,
       gitlab_token: gitlab_token
     }
-  }
+  end
 
   subject { GitHelper::GitConfigReader.new }
 

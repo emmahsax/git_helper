@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'git_helper'
 
@@ -11,7 +13,7 @@ describe GitHelper::Setup do
   end
 
   after do
-    GitHelper::Setup.instance_variable_set("@highline", nil)
+    GitHelper::Setup.instance_variable_set('@highline', nil)
   end
 
   describe '#execute' do
@@ -114,10 +116,10 @@ describe GitHelper::Setup do
     let(:plugins) do
       [
         {
-          'name': 'plugin-file-one'
+          name: 'plugin-file-one'
         },
         {
-          'name': 'plugin-file-two'
+          name: 'plugin-file-two'
         }
       ]
     end
