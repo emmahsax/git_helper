@@ -24,7 +24,9 @@ module GitHelper
     private def process_dir(current_dir, original_dir)
       Dir.chdir(current_dir)
 
-      if File.exist?('.git') && cli.ask_yes_no("Found git directory: #{current_dir}. Do you wish to proceed in updating #{current_dir}'s remote URLs? (y/n)")
+      if File.exist?('.git') && cli.ask_yes_no(
+        "Found git directory: #{current_dir}. Do you wish to proceed in updating #{current_dir}'s remote URLs? (y/n)"
+      )
         process_git_repository
       end
 
@@ -42,6 +44,8 @@ module GitHelper
       puts "\n"
     end
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     private def process_remote(remote)
       remote_name = local_code.remote_name(remote)
 
@@ -58,6 +62,8 @@ module GitHelper
       puts "  Changing the remote URL #{remote_name} to be '#{remote_url}'."
       local_code.change_remote(remote_name, remote_url)
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     private def local_code
       @local_code ||= GitHelper::LocalCode.new

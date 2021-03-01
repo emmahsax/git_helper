@@ -3,6 +3,11 @@
 module GitHelper
   class Setup
     def execute
+      execute_config_file
+      execute_plugins
+    end
+
+    private def execute_config_file
       if config_file_exists?
         answer = highline.ask_yes_no(
           "It looks like the #{config_file} file already exists. Do you wish to replace it? (y/n)"
@@ -13,18 +18,20 @@ module GitHelper
       end
 
       create_or_update_config_file if answer
+    end
 
+    private def execute_plugins
       answer = highline.ask_yes_no(
         'Do you wish to set up the Git Helper plugins? (y/n) (This process will ' \
         'attempt to use your GitHub personal access token to authenticate)'
       )
 
-      if answer
-        create_or_update_plugin_files
-        puts "\nNow add this line to your ~/.bash_profile:\n" \
-             '  export PATH=/path/to/computer/home/.git_helper/plugins:$PATH'
-        puts "\nDone!"
-      end
+      return unless answer
+
+      create_or_update_plugin_files
+      puts "\nNow add this line to your ~/.bash_profile:\n" \
+            '  export PATH=/path/to/computer/home/.git_helper/plugins:$PATH'
+      puts "\nDone!"
     end
 
     private def create_or_update_config_file
@@ -38,6 +45,7 @@ module GitHelper
       File.exist?(config_file)
     end
 
+    # rubocop:disable Metrics/MethodLength
     private def generate_file_contents
       file_contents = ''.dup
 
@@ -59,6 +67,7 @@ module GitHelper
 
       file_contents.strip
     end
+    # rubocop:enable Metrics/MethodLength
 
     private def ask_question(prompt)
       answer = highline.ask("\n#{prompt}")
@@ -71,6 +80,8 @@ module GitHelper
       end
     end
 
+    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize
     private def create_or_update_plugin_files
       plugins_dir = "#{Dir.pwd.scan(%r{\A/\w*/\w*/}).first}.git_helper/plugins"
       plugins_url = 'https://api.github.com/repos/emmahsax/git_helper/contents/plugins'
@@ -87,6 +98,8 @@ module GitHelper
         File.open("#{plugins_dir}/#{plugin['name']}", 'w') { |file| file.puts plugin_content }
       end
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     private def config_file
       git_config_reader.git_config_file_path

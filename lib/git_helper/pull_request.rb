@@ -130,12 +130,12 @@ module GitHelper
     end
 
     private def merge_method
-      @merge_method ||= if merge_options.length == 1
-                          merge_options.first
-                        else
-                          cli.ask_options('Merge method?',
-                                          merge_options)
-                        end
+      @merge_method ||=
+        if merge_options.length == 1
+          merge_options.first
+        else
+          cli.ask_options('Merge method?', merge_options)
+        end
     end
 
     private def merge_options

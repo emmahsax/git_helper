@@ -87,6 +87,8 @@ module GitHelper
       `git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@" | tr -d "\n"`
     end
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def template_options(identifiers)
       nested_templates = Dir.glob(
         File.join("#{identifiers[:template_directory]}/#{identifiers[:nested_directory_name]}", '*.md'),
@@ -102,11 +104,15 @@ module GitHelper
       )
       nested_templates.concat(non_nested_templates).concat(root_templates).uniq
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     def read_template(file_name)
       File.open(file_name).read
     end
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def generate_title(local_branch)
       branch_arr = local_branch.split(local_branch.include?('_') ? '_' : '-')
 
@@ -126,5 +132,7 @@ module GitHelper
         branch_arr[0..-1].join(' ').capitalize
       end
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
   end
 end
