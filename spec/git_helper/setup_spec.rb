@@ -160,6 +160,7 @@ describe GitHelper::Setup do
     end
 
     it 'should curl the GitHub API' do
+      allow(Dir).to receive(:mkdir).and_return(true)
       allow(File).to receive(:exists?).and_return(true)
       allow(File).to receive(:open).and_return(nil)
       allow(subject).to receive(:`).and_return(plugins_json)
@@ -168,6 +169,7 @@ describe GitHelper::Setup do
     end
 
     it 'should go through the loop for each plugin' do
+      allow(Dir).to receive(:mkdir).and_return(true)
       allow(File).to receive(:exists?).and_return(true)
       allow(File).to receive(:open).and_return(nil)
       expect(subject).to receive(:`).exactly(3).times
