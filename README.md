@@ -1,4 +1,4 @@
-# git_helper [![Maintainability](https://api.codeclimate.com/v1/badges/bf27d608257c202930c4/maintainability)](https://codeclimate.com/github/emmahsax/git_helper/maintainability) [![Main](https://github.com/emmahsax/git_helper/actions/workflows/main.yml/badge.svg)](https://github.com/emmahsax/git_helper/actions/workflows/main.yml)
+# git_helper [![Main](https://github.com/emmahsax/git_helper/actions/workflows/main.yml/badge.svg)](https://github.com/emmahsax/git_helper/actions/workflows/main.yml)
 
 ## Gem Usage
 
