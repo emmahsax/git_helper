@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module GitHelper
   class LocalCode
     def checkout_default
@@ -44,20 +46,20 @@ module GitHelper
     end
 
     def https_remote?(remote)
-      remote.scan(/(https:\/\/)/).any?
+      remote.scan(%r{(https://)}).any?
     end
 
     def remote_project(remote)
       if https_remote?(remote)
-        remote.scan(/https:\/\/[\S]+\/([\S]*).git/).first.first
+        remote.scan(%r{https://\S+/(\S*).git}).first.first
       elsif ssh_remote?(remote)
-        remote.scan(/\/([\S]*).git/).first.first
+        remote.scan(%r{/(\S*).git}).first.first
       end
     end
 
     def remote_source(remote)
       if https_remote?(remote)
-        remote.scan(/https:\/\/([a-zA-z.]+)\//).first.first
+        remote.scan(%r{https://([a-zA-z.]+)/}).first.first
       elsif ssh_remote?(remote)
         remote.scan(/git@([a-zA-z.]+):/).first.first
       end
@@ -73,18 +75,20 @@ module GitHelper
 
     def project_name
       # Get the repo/project name by looking in the remote URLs for the full name
-      `git remote -v`.scan(/\S[\s]*[\S]+.com[\S]{1}([\S]*).git/).first.first
+      `git remote -v`.scan(/\S\s*\S+.com\S{1}(\S*).git/).first.first
     end
 
     def branch
       # Get the current branch by looking in the list of branches for the *
-      `git branch`.scan(/\*\s([\S]*)/).first.first
+      `git branch`.scan(/\*\s(\S*)/).first.first
     end
 
     def default_branch
       `git symbolic-ref refs/remotes/origin/HEAD | sed "s@^refs/remotes/origin/@@" | tr -d "\n"`
     end
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def template_options(identifiers)
       nested_templates = Dir.glob(
         File.join("#{identifiers[:template_directory]}/#{identifiers[:nested_directory_name]}", '*.md'),
@@ -100,11 +104,15 @@ module GitHelper
       )
       nested_templates.concat(non_nested_templates).concat(root_templates).uniq
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     def read_template(file_name)
       File.open(file_name).read
     end
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def generate_title(local_branch)
       branch_arr = local_branch.split(local_branch.include?('_') ? '_' : '-')
 
@@ -112,11 +120,11 @@ module GitHelper
 
       if branch_arr.length == 1
         branch_arr.first.capitalize
-      elsif branch_arr[0].scan(/([\w]+)/).any? && branch_arr[1].scan(/([\d]+)/).any? # branch includes jira_123 at beginning
+      elsif branch_arr[0].scan(/(\w+)/).any? && branch_arr[1].scan(/(\d+)/).any? # branch includes jira_123 at beginning
         issue = "#{branch_arr[0].upcase}-#{branch_arr[1]}"
         description = branch_arr[2..-1].join(' ')
         "#{issue} #{description.capitalize}"
-      elsif branch_arr[0].scan(/([\w]+-[\d]+)/).any? # branch includes string jira-123 at beginning
+      elsif branch_arr[0].scan(/(\w+-\d+)/).any? # branch includes string jira-123 at beginning
         issue = branch_arr[0].upcase
         description = branch_arr[1..-1].join(' ')
         "#{issue} #{description.capitalize}"
@@ -124,5 +132,7 @@ module GitHelper
         branch_arr[0..-1].join(' ').capitalize
       end
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
   end
 end
