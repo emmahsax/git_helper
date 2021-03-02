@@ -4,11 +4,10 @@ require 'spec_helper'
 require 'git_helper'
 
 describe GitHelper::Setup do
-  let(:response) { double(:response, readline: true, to_s: Faker::Lorem.sentence) }
-  let(:highline_cli) { double(:highline_cli, ask: response, ask_yes_no: true) }
+  let(:highline_wrapper) { double(:highline_wrapper, ask: Faker::Lorem.word, ask_yes_no: true) }
 
   before do
-    allow(GitHelper::HighlineCli).to receive(:new).and_return(highline_cli)
+    allow(HighlineWrapper).to receive(:new).and_return(highline_wrapper)
     allow(subject).to receive(:puts)
   end
 
@@ -20,7 +19,7 @@ describe GitHelper::Setup do
     it 'only asks the user one question if the config file does not exist' do
       allow(subject).to receive(:config_file_exists?).and_return(false)
       allow(File).to receive(:exists?).and_return(true)
-      expect(highline_cli).to receive(:ask_yes_no).and_return(true).exactly(:once)
+      expect(highline_wrapper).to receive(:ask_yes_no).and_return(true).exactly(:once)
       allow(subject).to receive(:create_or_update_config_file).and_return(true)
       allow(subject).to receive(:create_or_update_plugin_files)
       subject.execute
@@ -29,7 +28,7 @@ describe GitHelper::Setup do
     it 'should ask two questions if the config file exists' do
       allow(subject).to receive(:config_file_exists?).and_return(true)
       allow(File).to receive(:exists?).and_return(true)
-      expect(highline_cli).to receive(:ask_yes_no).and_return(true).at_least(:twice)
+      expect(highline_wrapper).to receive(:ask_yes_no).and_return(true).at_least(:twice)
       allow(subject).to receive(:create_or_update_config_file).and_return(true)
       allow(subject).to receive(:create_or_update_plugin_files)
       subject.execute
@@ -37,7 +36,7 @@ describe GitHelper::Setup do
 
     it 'should call to create or update the config file' do
       allow(File).to receive(:exists?).and_return(true)
-      allow(highline_cli).to receive(:ask_yes_no).and_return(true)
+      allow(highline_wrapper).to receive(:ask_yes_no).and_return(true)
       expect(subject).to receive(:create_or_update_config_file).and_return(true)
       allow(subject).to receive(:create_or_update_plugin_files)
       subject.execute
@@ -46,7 +45,7 @@ describe GitHelper::Setup do
     it 'should skip if the user opts not to continue' do
       allow(File).to receive(:exists?).and_return(true)
       allow(subject).to receive(:config_file_exists?).and_return(true)
-      allow(highline_cli).to receive(:ask_yes_no).and_return(false)
+      allow(highline_wrapper).to receive(:ask_yes_no).and_return(false)
       expect(subject).not_to receive(:create_or_update_config_file)
       expect(subject).not_to receive(:create_or_update_plugin_files)
       subject.execute
@@ -81,43 +80,43 @@ describe GitHelper::Setup do
 
   describe '#ask_question' do
     it 'should use highline to ask a question' do
-      expect(highline_cli).to receive(:ask).and_return(Faker::Lorem.word)
+      expect(highline_wrapper).to receive(:ask).and_return(Faker::Lorem.word)
       subject.send(:ask_question, Faker::Lorem.sentence)
     end
 
     it 'should recurse if the highline client gets an empty string' do
-      allow(highline_cli).to receive(:ask).and_return('', Faker::Lorem.word)
+      allow(highline_wrapper).to receive(:ask).and_return('', Faker::Lorem.word)
       expect(subject).to receive(:ask_question).at_least(:twice).and_call_original
       subject.send(:ask_question, Faker::Lorem.sentence)
     end
 
     it 'should return the answer if it is given' do
       answer = Faker::Lorem.sentence
-      allow(highline_cli).to receive(:ask).and_return(answer)
+      allow(highline_wrapper).to receive(:ask).and_return(answer)
       expect(subject.send(:ask_question, Faker::Lorem.sentence)).to be(answer)
     end
   end
 
   describe '#generate_file_contents' do
     it 'should ask two yes/no questions' do
-      expect(highline_cli).to receive(:ask_yes_no).exactly(2).times.and_return(false)
+      expect(highline_wrapper).to receive(:ask_yes_no).exactly(2).times.and_return(false)
       subject.send(:generate_file_contents)
     end
 
     it 'should ask two additional questions for each time the user says yes' do
-      allow(highline_cli).to receive(:ask_yes_no).exactly(2).times.and_return(true, false)
+      allow(highline_wrapper).to receive(:ask_yes_no).exactly(2).times.and_return(true, false)
       expect(subject).to receive(:ask_question).exactly(2).times.and_return(Faker::Lorem.word)
       subject.send(:generate_file_contents)
     end
 
     it 'should ask four additional questions for each time the user says yes' do
-      allow(highline_cli).to receive(:ask_yes_no).exactly(2).times.and_return(true)
+      allow(highline_wrapper).to receive(:ask_yes_no).exactly(2).times.and_return(true)
       expect(subject).to receive(:ask_question).exactly(4).times.and_return(Faker::Lorem.word)
       subject.send(:generate_file_contents)
     end
 
     it 'should return a string no matter what' do
-      allow(highline_cli).to receive(:ask_yes_no).exactly(2).times.and_return(true)
+      allow(highline_wrapper).to receive(:ask_yes_no).exactly(2).times.and_return(true)
       allow(subject).to receive(:ask_question).exactly(4).times.and_return(Faker::Lorem.word)
       expect(subject.send(:generate_file_contents)).to be_a(String)
     end

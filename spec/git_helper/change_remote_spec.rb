@@ -6,7 +6,7 @@ require 'git_helper'
 describe GitHelper::ChangeRemote do
   let(:remote1) { "git@github.com:#{old_owner}/#{project}.git" }
   let(:project) { Faker::Lorem.word }
-  let(:cli) { double(:highline_cli, ask_yes_no: true) }
+  let(:highline_wrapper) { double(:highline_wrapper, ask_yes_no: true) }
   let(:old_owner) { Faker::Internet.username }
   let(:new_owner) { Faker::Internet.username }
   let(:directory_entries) { ['.', '..', project, Faker::Lorem.word, Faker::Lorem.word] }
@@ -25,7 +25,7 @@ describe GitHelper::ChangeRemote do
   subject { GitHelper::ChangeRemote.new(old_owner, new_owner) }
 
   before do
-    allow(GitHelper::HighlineCli).to receive(:new).and_return(cli)
+    allow(HighlineWrapper).to receive(:new).and_return(highline_wrapper)
     allow(GitHelper::LocalCode).to receive(:new).and_return(local_code)
     allow(subject).to receive(:puts)
   end
@@ -74,7 +74,7 @@ describe GitHelper::ChangeRemote do
     end
 
     context 'when the user says not to process the directory' do
-      let(:cli) { double(:highline_cli, ask_yes_no: false) }
+      let(:highline_wrapper) { double(:highline_wrapper, ask_yes_no: false) }
 
       it 'should not call to process the directory' do
         expect(subject).not_to receive(:process_git_repository)
@@ -167,10 +167,10 @@ describe GitHelper::ChangeRemote do
     end
   end
 
-  describe '#cli' do
-    it 'should create a new highline CLI instance' do
-      expect(GitHelper::HighlineCli).to receive(:new)
-      subject.send(:cli)
+  describe '#highline' do
+    it 'should create a new highline_wrapper instance' do
+      expect(HighlineWrapper).to receive(:new)
+      subject.send(:highline)
     end
   end
 end
