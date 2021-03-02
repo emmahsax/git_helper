@@ -110,7 +110,7 @@ module GitHelper
     end
 
     private def highline
-      @highline ||= GitHelper::HighlineCli.new
+      @highline ||= HighlineWrapper.new
     end
   end
 end

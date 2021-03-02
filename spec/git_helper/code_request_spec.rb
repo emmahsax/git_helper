@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'git_helper'
 
 describe GitHelper::CodeRequest do
-  let(:highline_cli) { double(:highline_cli) }
+  let(:highline_wrapper) { double(:highline_wrapper) }
   let(:local_code) { double(:local_code, project_name: Faker::Lorem.word, branch: Faker::Lorem.word) }
   let(:process_project) { double(:process_project, create: :created, merge: :merged) }
   let(:base_branch) { Faker::Lorem.word }
@@ -14,7 +14,7 @@ describe GitHelper::CodeRequest do
 
   before do
     allow(GitHelper::LocalCode).to receive(:new).and_return(local_code)
-    allow(GitHelper::HighlineCli).to receive(:new).and_return(highline_cli)
+    allow(HighlineWrapper).to receive(:new).and_return(highline_wrapper)
     allow(subject).to receive(:puts)
   end
 
@@ -103,19 +103,19 @@ describe GitHelper::CodeRequest do
 
   describe '#ask_for_clarification' do
     it 'should ask the CLI' do
-      expect(highline_cli).to receive(:ask).and_return('github')
+      expect(highline_wrapper).to receive(:ask).and_return('github')
       subject.send(:ask_for_clarification)
     end
 
     context 'when response is github' do
       it 'should return github_pull_request' do
-        allow(highline_cli).to receive(:ask).and_return('github')
+        allow(highline_wrapper).to receive(:ask).and_return('github')
         expect(subject).to receive(:github_pull_request)
         subject.send(:ask_for_clarification)
       end
 
       it 'should return github_pull_request' do
-        allow(highline_cli).to receive(:ask).and_return('Github')
+        allow(highline_wrapper).to receive(:ask).and_return('Github')
         expect(subject).to receive(:github_pull_request)
         subject.send(:ask_for_clarification)
       end
@@ -123,13 +123,13 @@ describe GitHelper::CodeRequest do
 
     context 'when response is gitlab' do
       it 'should return gitlab_merge_request' do
-        allow(highline_cli).to receive(:ask).and_return('gitlab')
+        allow(highline_wrapper).to receive(:ask).and_return('gitlab')
         expect(subject).to receive(:gitlab_merge_request)
         subject.send(:ask_for_clarification)
       end
 
       it 'should return gitlab_merge_request' do
-        allow(highline_cli).to receive(:ask).and_return('Gitlab')
+        allow(highline_wrapper).to receive(:ask).and_return('Gitlab')
         expect(subject).to receive(:gitlab_merge_request)
         subject.send(:ask_for_clarification)
       end
@@ -138,7 +138,7 @@ describe GitHelper::CodeRequest do
     # Unfortunately this test sometimes fails... just rerun the tests if it does
     context 'when response is neither' do
       it 'should raise an error' do
-        allow(highline_cli).to receive(:ask).and_return(Faker::Lorem.word)
+        allow(highline_wrapper).to receive(:ask).and_return(Faker::Lorem.word)
         expect(subject).to receive(:exit)
         subject.send(:ask_for_clarification)
       end
@@ -176,23 +176,23 @@ describe GitHelper::CodeRequest do
   describe '#base_branch' do
     it 'should call the default branch' do
       expect(subject).to receive(:default_branch)
-      allow(highline_cli).to receive(:ask_yes_no).at_least(:once)
-      allow(highline_cli).to receive(:ask).at_least(:once).and_return(base_branch)
+      allow(highline_wrapper).to receive(:ask_yes_no).at_least(:once)
+      allow(highline_wrapper).to receive(:ask).at_least(:once).and_return(base_branch)
       subject.send(:base_branch)
     end
 
     it 'should ask the CLI to ask the user' do
       allow(subject).to receive(:default_branch)
-      expect(highline_cli).to receive(:ask_yes_no).at_least(:once)
-      allow(highline_cli).to receive(:ask).at_least(:once).and_return(base_branch)
+      expect(highline_wrapper).to receive(:ask_yes_no).at_least(:once)
+      allow(highline_wrapper).to receive(:ask).at_least(:once).and_return(base_branch)
       subject.send(:base_branch)
     end
 
     context 'if the user says no' do
       it 'definitely asks for the users base branch' do
         allow(subject).to receive(:default_branch)
-        expect(highline_cli).to receive(:ask_yes_no).at_least(:once).and_return(false)
-        expect(highline_cli).to receive(:ask).at_least(:once).and_return(base_branch)
+        expect(highline_wrapper).to receive(:ask_yes_no).at_least(:once).and_return(false)
+        expect(highline_wrapper).to receive(:ask).at_least(:once).and_return(base_branch)
         subject.send(:base_branch)
       end
     end
@@ -200,8 +200,8 @@ describe GitHelper::CodeRequest do
     context 'if the user says yes' do
       it 'does not ask for the users base branch' do
         allow(subject).to receive(:default_branch)
-        expect(highline_cli).to receive(:ask_yes_no).at_least(:once).and_return(true)
-        expect(highline_cli).not_to receive(:base_branch)
+        expect(highline_wrapper).to receive(:ask_yes_no).at_least(:once).and_return(true)
+        expect(highline_wrapper).not_to receive(:base_branch)
         subject.send(:base_branch)
       end
     end
@@ -218,23 +218,23 @@ describe GitHelper::CodeRequest do
   describe '#new_code_request_title' do
     it 'should call autogenerated title method' do
       expect(subject).to receive(:autogenerated_title)
-      allow(highline_cli).to receive(:ask_yes_no).at_least(:once)
-      allow(highline_cli).to receive(:ask).at_least(:once).and_return(title)
+      allow(highline_wrapper).to receive(:ask_yes_no).at_least(:once)
+      allow(highline_wrapper).to receive(:ask).at_least(:once).and_return(title)
       subject.send(:new_code_request_title)
     end
 
     it 'should ask the CLI to ask the user' do
       allow(subject).to receive(:autogenerated_title).and_return(Faker::Lorem.sentence)
-      expect(highline_cli).to receive(:ask_yes_no).at_least(:once)
-      allow(highline_cli).to receive(:ask).at_least(:once).and_return(title)
+      expect(highline_wrapper).to receive(:ask_yes_no).at_least(:once)
+      allow(highline_wrapper).to receive(:ask).at_least(:once).and_return(title)
       subject.send(:new_code_request_title)
     end
 
     context 'if the user says no' do
       it 'definitely asks for the users title' do
         allow(subject).to receive(:autogenerated_title).and_return(Faker::Lorem.sentence)
-        expect(highline_cli).to receive(:ask_yes_no).at_least(:once).and_return(false)
-        expect(highline_cli).to receive(:ask).at_least(:once).and_return(title)
+        expect(highline_wrapper).to receive(:ask_yes_no).at_least(:once).and_return(false)
+        expect(highline_wrapper).to receive(:ask).at_least(:once).and_return(title)
         subject.send(:new_code_request_title)
       end
     end
@@ -242,8 +242,8 @@ describe GitHelper::CodeRequest do
     context 'if the user says yes to original title' do
       it 'does not ask for the users chosen title' do
         allow(subject).to receive(:autogenerated_title).and_return(Faker::Lorem.sentence)
-        expect(highline_cli).to receive(:ask_yes_no).at_least(:once).and_return(true)
-        expect(highline_cli).not_to receive(:ask)
+        expect(highline_wrapper).to receive(:ask_yes_no).at_least(:once).and_return(true)
+        expect(highline_wrapper).not_to receive(:ask)
         subject.send(:new_code_request_title)
       end
     end
@@ -256,10 +256,10 @@ describe GitHelper::CodeRequest do
     end
   end
 
-  describe '#cli' do
-    it 'should call the octokit client' do
-      expect(GitHelper::HighlineCli).to receive(:new).and_return(highline_cli)
-      subject.send(:cli)
+  describe '#highline' do
+    it 'should create a highline_wrapper client' do
+      expect(HighlineWrapper).to receive(:new).and_return(highline_wrapper)
+      subject.send(:highline)
     end
   end
 end
