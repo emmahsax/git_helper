@@ -2,13 +2,13 @@
 
 module GitHelper
   class GitLabMergeRequest
-    attr_accessor :local_project, :local_branch, :local_code, :cli, :base_branch, :new_mr_title
+    attr_accessor :local_project, :local_branch, :local_code, :highline, :base_branch, :new_mr_title
 
     def initialize(options)
       @local_project = options[:local_project]
       @local_branch = options[:local_branch]
       @local_code = options[:local_code]
-      @cli = options[:cli]
+      @highline = options[:highline]
     end
 
     # rubocop:disable Metrics/MethodLength
@@ -97,12 +97,12 @@ module GitHelper
     # rubocop:disable Metrics/MethodLength
     private def determine_template
       if mr_template_options.count == 1
-        apply_single_template = cli.ask_yes_no(
+        apply_single_template = highline.ask_yes_no(
           "Apply the merge request template from #{mr_template_options.first}? (y/n)"
         )
         @template_name_to_apply = mr_template_options.first if apply_single_template
       else
-        response = cli.ask_options(
+        response = highline.ask_options(
           'Which merge request template should be applied?', mr_template_options << 'None'
         )
         @template_name_to_apply = response unless response == 'None'
@@ -121,16 +121,16 @@ module GitHelper
     end
 
     private def mr_id
-      @mr_id ||= cli.ask('Merge Request ID?')
+      @mr_id ||= highline.ask('Merge Request ID?')
     end
 
     private def squash_merge_request
-      @squash_merge_request ||= cli.ask_yes_no('Squash merge request? (y/n)')
+      @squash_merge_request ||= highline.ask_yes_no('Squash merge request? (y/n)')
     end
 
     private def remove_source_branch
       @remove_source_branch ||=
-        existing_project.remove_source_branch_after_merge || cli.ask_yes_no(
+        existing_project.remove_source_branch_after_merge || highline.ask_yes_no(
           'Remove source branch after merging? (y/n)'
         )
     end

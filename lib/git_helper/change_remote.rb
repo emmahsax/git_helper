@@ -24,7 +24,7 @@ module GitHelper
     private def process_dir(current_dir, original_dir)
       Dir.chdir(current_dir)
 
-      if File.exist?('.git') && cli.ask_yes_no(
+      if File.exist?('.git') && highline.ask_yes_no(
         "Found git directory: #{current_dir}. Do you wish to proceed in updating #{current_dir}'s remote URLs? (y/n)"
       )
         process_git_repository
@@ -69,8 +69,8 @@ module GitHelper
       @local_code ||= GitHelper::LocalCode.new
     end
 
-    private def cli
-      @cli ||= GitHelper::HighlineCli.new
+    private def highline
+      @highline ||= HighlineWrapper.new
     end
   end
 end
