@@ -7,6 +7,7 @@ module GitHelper
       execute_plugins
     end
 
+    # rubocop:disable Style/ConditionalAssignment
     private def execute_config_file
       if config_file_exists?
         answer = highline.ask_yes_no(
@@ -19,6 +20,7 @@ module GitHelper
 
       create_or_update_config_file if answer
     end
+    # rubocop:enable Style/ConditionalAssignment
 
     private def execute_plugins
       answer = highline.ask_yes_no(
@@ -50,7 +52,7 @@ module GitHelper
     private def generate_file_contents
       file_contents = ''.dup
 
-      if highline.ask_yes_no('Do you wish to set up GitHub credentials? (y/n)', {required: true})
+      if highline.ask_yes_no('Do you wish to set up GitHub credentials? (y/n)', { required: true })
         file_contents << ":github_user:  #{ask_question('GitHub username?')}\n"
         file_contents << ':github_token: ' \
           "#{ask_question(
@@ -60,7 +62,7 @@ module GitHelper
           )}\n"
       end
 
-      if highline.ask_yes_no('Do you wish to set up GitLab credentials? (y/n)', {required: true})
+      if highline.ask_yes_no('Do you wish to set up GitLab credentials? (y/n)', { required: true })
         file_contents << ":gitlab_user:  #{ask_question('GitLab username?')}\n"
         file_contents << ':gitlab_token: ' \
           "#{ask_question(
@@ -75,7 +77,7 @@ module GitHelper
     # rubocop:enable Metrics/MethodLength
 
     private def ask_question(prompt, secret: false)
-      highline.ask("#{prompt}", { required: true, secret: secret })
+      highline.ask(prompt, { required: true, secret: secret })
     end
 
     # rubocop:disable Metrics/MethodLength
