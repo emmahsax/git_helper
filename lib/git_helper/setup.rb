@@ -10,7 +10,8 @@ module GitHelper
     private def execute_config_file
       if config_file_exists?
         answer = highline.ask_yes_no(
-          "It looks like the #{config_file} file already exists. Do you wish to replace it? (y/n)"
+          "It looks like the #{config_file} file already exists. Do you wish to replace it? (y/n)",
+          { required: true }
         )
         puts
       else
@@ -23,7 +24,8 @@ module GitHelper
     private def execute_plugins
       answer = highline.ask_yes_no(
         'Do you wish to set up the Git Helper plugins? (y/n) (This process will ' \
-        'attempt to use your GitHub personal access token to authenticate)'
+        'attempt to use your GitHub personal access token to authenticate)',
+        { required: true }
       )
 
       return unless answer
@@ -70,14 +72,7 @@ module GitHelper
     # rubocop:enable Metrics/MethodLength
 
     private def ask_question(prompt)
-      answer = highline.ask("\n#{prompt}")
-
-      if answer.empty?
-        puts "\nThis question is required."
-        ask_question(prompt)
-      else
-        answer
-      end
+      highline.ask("\n#{prompt}", { required: true })
     end
 
     # rubocop:disable Metrics/MethodLength
