@@ -13,7 +13,6 @@ module GitHelper
           "It looks like the #{config_file} file already exists. Do you wish to replace it? (y/n)",
           { required: true }
         )
-        puts
       else
         answer = true
       end
@@ -38,7 +37,7 @@ module GitHelper
 
     private def create_or_update_config_file
       contents = generate_file_contents
-      puts "\nCreating or updating your #{config_file} file..."
+      puts "Creating or updating your #{config_file} file..."
       File.open(config_file, 'w') { |file| file.puts contents }
       puts "\nDone!\n\n"
     end
@@ -51,19 +50,23 @@ module GitHelper
     private def generate_file_contents
       file_contents = ''.dup
 
-      if highline.ask_yes_no('Do you wish to set up GitHub credentials? (y/n)')
+      if highline.ask_yes_no('Do you wish to set up GitHub credentials? (y/n)', {required: true})
         file_contents << ":github_user:  #{ask_question('GitHub username?')}\n"
         file_contents << ':github_token: ' \
-          "#{ask_question('GitHub personal access token? (Navigate to https://github.com/settings/tokens ' \
-          'to create a new personal access token)')}\n"
+          "#{ask_question(
+            'GitHub personal access token? (Navigate to https://github.com/settings/tokens ' \
+            'to create a new personal access token)',
+            secret: true
+          )}\n"
       end
 
-      if highline.ask_yes_no("\nDo you wish to set up GitLab credentials? (y/n)")
+      if highline.ask_yes_no('Do you wish to set up GitLab credentials? (y/n)', {required: true})
         file_contents << ":gitlab_user:  #{ask_question('GitLab username?')}\n"
         file_contents << ':gitlab_token: ' \
           "#{ask_question(
             'GitLab personal access token? (Navigate to https://gitlab.com/-/profile/personal_access_tokens' \
-            ' to create a new personal access token)'
+            ' to create a new personal access token)',
+            secret: true
           )}\n"
       end
 
@@ -71,8 +74,8 @@ module GitHelper
     end
     # rubocop:enable Metrics/MethodLength
 
-    private def ask_question(prompt)
-      highline.ask("\n#{prompt}", { required: true })
+    private def ask_question(prompt, secret: false)
+      highline.ask("#{prompt}", { required: true, secret: secret })
     end
 
     # rubocop:disable Metrics/MethodLength
