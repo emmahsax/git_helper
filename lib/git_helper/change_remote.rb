@@ -42,7 +42,7 @@ module GitHelper
           puts "  Found remote is not pointing to #{old_owner}."
         end
       end
-      puts "\n"
+      puts
     end
 
     # rubocop:disable Metrics/AbcSize
