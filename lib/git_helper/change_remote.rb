@@ -25,7 +25,8 @@ module GitHelper
       Dir.chdir(current_dir)
 
       if File.exist?('.git') && highline.ask_yes_no(
-        "Found git directory: #{current_dir}. Do you wish to proceed in updating #{current_dir}'s remote URLs? (y/n)"
+        "Found git directory: #{current_dir}. Do you wish to proceed in updating #{current_dir}'s remote URLs? (y/n)",
+        { required: true }
       )
         process_git_repository
       end
@@ -41,7 +42,7 @@ module GitHelper
           puts "  Found remote is not pointing to #{old_owner}."
         end
       end
-      puts "\n"
+      puts
     end
 
     # rubocop:disable Metrics/AbcSize
