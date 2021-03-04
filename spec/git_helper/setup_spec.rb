@@ -84,12 +84,6 @@ describe GitHelper::Setup do
       subject.send(:ask_question, Faker::Lorem.sentence)
     end
 
-    it 'should recurse if the highline client gets an empty string' do
-      allow(highline_wrapper).to receive(:ask).and_return('', Faker::Lorem.word)
-      expect(subject).to receive(:ask_question).at_least(:twice).and_call_original
-      subject.send(:ask_question, Faker::Lorem.sentence)
-    end
-
     it 'should return the answer if it is given' do
       answer = Faker::Lorem.sentence
       allow(highline_wrapper).to receive(:ask).and_return(answer)

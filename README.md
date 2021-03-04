@@ -115,7 +115,7 @@ git-helper clean-branches
 
 ### `code-request`
 
-This command can be used to handily make new GitHub/GitLab pull/merge requests from the command line. The command uses either the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) or [`Gitlab` client](https://github.com/NARKOZ/gitlab) to do this, so make sure you have a `~/.git_helper/config.yml` file set up in the home directory of your computer. For instructions on how to do that, see [Gem Usage](#gem-usage).
+This command can be used to handily make new GitHub/GitLab pull/merge requests from the command-line. The command uses either the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) or [`Gitlab` client](https://github.com/NARKOZ/gitlab) to do this, so make sure you have a `~/.git_helper/config.yml` file set up in the home directory of your computer. For instructions on how to do that, see [Gem Usage](#gem-usage).
 
 After setup is complete, you can call the command like this:
 
@@ -149,7 +149,7 @@ git-helper forget-local-commits
 
 ### `merge-code-request`
 
-This command can be used to merge pull/merge requests from the command line. The command uses either the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) or [`Gitlab` client](https://github.com/NARKOZ/gitlab) to do this, so make sure you have a `~/.git_helper/config.yml` file set up in the home directory of your computer. For instructions on how to do that, see [Gem Usage](#gem-usage).
+This command can be used to merge pull/merge requests from the command-line. The command uses either the [`Octokit::Client`](https://octokit.github.io/octokit.rb/Octokit/Client.html) or [`Gitlab` client](https://github.com/NARKOZ/gitlab) to do this, so make sure you have a `~/.git_helper/config.yml` file set up in the home directory of your computer. For instructions on how to do that, see [Gem Usage](#gem-usage).
 
 After setup is complete, you can call the proper command like this:
 
@@ -166,7 +166,7 @@ For GitLab, the command will use whatever squash/source branch deletion/etc sett
 
 ### `new-branch`
 
-This command is useful for making new branches in a repository on the command line. To run the command, run:
+This command is useful for making new branches in a repository on the command-line. To run the command, run:
 
 ```bash
 git-helper new-branch

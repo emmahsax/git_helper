@@ -7,23 +7,26 @@ module GitHelper
       execute_plugins
     end
 
+    # rubocop:disable Style/ConditionalAssignment
     private def execute_config_file
       if config_file_exists?
         answer = highline.ask_yes_no(
-          "It looks like the #{config_file} file already exists. Do you wish to replace it? (y/n)"
+          "It looks like the #{config_file} file already exists. Do you wish to replace it? (y/n)",
+          { required: true }
         )
-        puts
       else
         answer = true
       end
 
       create_or_update_config_file if answer
     end
+    # rubocop:enable Style/ConditionalAssignment
 
     private def execute_plugins
       answer = highline.ask_yes_no(
         'Do you wish to set up the Git Helper plugins? (y/n) (This process will ' \
-        'attempt to use your GitHub personal access token to authenticate)'
+        'attempt to use your GitHub personal access token to authenticate)',
+        { required: true }
       )
 
       return unless answer
@@ -36,7 +39,7 @@ module GitHelper
 
     private def create_or_update_config_file
       contents = generate_file_contents
-      puts "\nCreating or updating your #{config_file} file..."
+      puts "Creating or updating your #{config_file} file..."
       File.open(config_file, 'w') { |file| file.puts contents }
       puts "\nDone!\n\n"
     end
@@ -49,19 +52,23 @@ module GitHelper
     private def generate_file_contents
       file_contents = ''.dup
 
-      if highline.ask_yes_no('Do you wish to set up GitHub credentials? (y/n)')
+      if highline.ask_yes_no('Do you wish to set up GitHub credentials? (y/n)', { required: true })
         file_contents << ":github_user:  #{ask_question('GitHub username?')}\n"
         file_contents << ':github_token: ' \
-          "#{ask_question('GitHub personal access token? (Navigate to https://github.com/settings/tokens ' \
-          'to create a new personal access token)')}\n"
+          "#{ask_question(
+            'GitHub personal access token? (Navigate to https://github.com/settings/tokens ' \
+            'to create a new personal access token)',
+            secret: true
+          )}\n"
       end
 
-      if highline.ask_yes_no("\nDo you wish to set up GitLab credentials? (y/n)")
+      if highline.ask_yes_no('Do you wish to set up GitLab credentials? (y/n)', { required: true })
         file_contents << ":gitlab_user:  #{ask_question('GitLab username?')}\n"
         file_contents << ':gitlab_token: ' \
           "#{ask_question(
             'GitLab personal access token? (Navigate to https://gitlab.com/-/profile/personal_access_tokens' \
-            ' to create a new personal access token)'
+            ' to create a new personal access token)',
+            secret: true
           )}\n"
       end
 
@@ -69,15 +76,8 @@ module GitHelper
     end
     # rubocop:enable Metrics/MethodLength
 
-    private def ask_question(prompt)
-      answer = highline.ask("\n#{prompt}")
-
-      if answer.empty?
-        puts "\nThis question is required."
-        ask_question(prompt)
-      else
-        answer
-      end
+    private def ask_question(prompt, secret: false)
+      highline.ask(prompt, { required: true, secret: secret })
     end
 
     # rubocop:disable Metrics/MethodLength
