@@ -22,7 +22,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'gitlab', '~> 4.16'
   gem.add_dependency 'gli', '~> 2.13'
-  gem.add_dependency 'highline_wrapper', '~> 1.0'
+  gem.add_dependency 'highline_wrapper', '~> 1.1'
   gem.add_dependency 'octokit', '~> 4.18'
 
   gem.add_development_dependency 'bundler', '~> 2.2'
