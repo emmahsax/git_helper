@@ -183,12 +183,39 @@ describe GitHelper::GitLabMergeRequest do
   end
 
   describe '#squash_merge_request' do
-    it 'should ask the CLI for the code request ID' do
+    let(:existing_project) { double(squash_option: 'default_off') }
+
+    it 'should return true if the squash is set to always on the project' do
+      allow(subject).to receive(:existing_project).and_return(existing_project)
+      allow(existing_project).to receive(:squash_option).and_return('always')
+      expect(highline_wrapper).not_to receive(:ask_yes_no)
+      expect(subject.send(:squash_merge_request)).to eq(true)
+    end
+
+    it 'should return true if the squash is set to default_on on the project' do
+      allow(subject).to receive(:existing_project).and_return(existing_project)
+      allow(existing_project).to receive(:squash_option).and_return('default_on')
+      expect(highline_wrapper).not_to receive(:ask_yes_no)
+      expect(subject.send(:squash_merge_request)).to eq(true)
+    end
+
+    it 'should return false if the squash is set to never on the project' do
+      allow(subject).to receive(:existing_project).and_return(existing_project)
+      allow(existing_project).to receive(:squash_option).and_return('never')
+      expect(highline_wrapper).not_to receive(:ask_yes_no)
+      expect(subject.send(:squash_merge_request)).to eq(false)
+    end
+
+    it 'should ask the user for their response to the squash question' do
+      allow(subject).to receive(:existing_project).and_return(existing_project)
+      allow(existing_project).to receive(:squash_option).and_return(nil)
       expect(highline_wrapper).to receive(:ask_yes_no).and_return(true)
       subject.send(:squash_merge_request)
     end
 
     it 'should be a boolean' do
+      allow(subject).to receive(:existing_project).and_return(existing_project)
+      allow(existing_project).to receive(:squash_option).and_return(nil)
       expect(highline_wrapper).to receive(:ask_yes_no).and_return(false)
       expect([true, false]).to include(subject.send(:squash_merge_request))
     end
