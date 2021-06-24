@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.description           = 'A set of GitHub and GitLab workflow scripts to provide a smoother development ' \
                               'process for your git projects.'
   gem.homepage              = 'https://github.com/emmahsax/git_helper'
-  gem.license               = 'MIT'
+  gem.license               = 'BSD-3-Clause'
   gem.required_ruby_version = '>= 2.5'
 
   gem.executables   = Dir['bin/*'].map { |f| File.basename(f) }

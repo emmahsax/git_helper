@@ -176,15 +176,25 @@ git-helper new-branch NEW_BRANCH_NAME
 
 The command either accepts a branch name right away or it will ask you for the name of your new branch. Make sure your input does not contain any spaces or special characters.
 
-## Contributing
+---
+
+### Contributing
 
 To submit a feature request, bug ticket, etc, please submit an official [GitHub Issue](https://github.com/emmahsax/git_helper/issues/new).
 
-To report any security vulnerabilities, please view this project's [Security Policy](https://github.com/emmahsax/git_helper/security/policy).
+### Security Policy
+
+To report any security vulnerabilities, please view this repository's [Security Policy](https://github.com/emmahsax/git_helper/security/policy).
+
+### Licensing
+
+For information on licensing, please see [LICENSE.md](https://github.com/emmahsax/git_helper/blob/main/LICENSE.md).
+
+### Code of Conduct
 
 When interacting with this repository, please follow [Contributor Covenant's Code of Conduct](https://contributor-covenant.org).
 
-## Releasing
+### Releasing
 
 To make a new release of this gem:
 
