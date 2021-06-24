@@ -184,7 +184,7 @@ To submit a feature request, bug ticket, etc, please submit an official [GitHub 
 
 ### Security Policy
 
-To report any security vulnerabilities, please view this project's [Security Policy](https://github.com/emmahsax/git_helper/security/policy).
+To report any security vulnerabilities, please view this repository's [Security Policy](https://github.com/emmahsax/git_helper/security/policy).
 
 ### Licensing
 
