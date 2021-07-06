@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.name                  = 'git_helper'
   gem.version               = GitHelper::VERSION
   gem.authors               = ['Emma Sax']
-  gem.summary               = 'A set of GitHub and GitLab workflow scripts.'
+  gem.summary               = 'A set of GitHub and GitLab workflow scripts'
   gem.description           = 'A set of GitHub and GitLab workflow scripts to provide a smoother development ' \
                               'process for your git projects.'
   gem.homepage              = 'https://github.com/emmahsax/git_helper'
@@ -30,7 +30,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'faker', '~> 2.15'
   gem.add_development_dependency 'guard-rspec', '~> 4.3'
   gem.add_development_dependency 'pry', '~> 0.13'
-  gem.add_development_dependency 'rake', '~> 13.0'
   gem.add_development_dependency 'rspec', '~> 3.9'
   gem.add_development_dependency 'rubocop', '~> 1.10'
 end

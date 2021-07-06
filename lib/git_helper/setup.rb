@@ -33,7 +33,7 @@ module GitHelper
 
       create_or_update_plugin_files
       puts "\nNow add this line to your ~/.bash_profile:\n" \
-            '  export PATH=/path/to/computer/home/.git_helper/plugins:$PATH'
+           '  export PATH=/path/to/computer/home/.git_helper/plugins:$PATH'
       puts "\nDone!"
     end
 
@@ -49,6 +49,7 @@ module GitHelper
     end
 
     # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Layout/LineEndStringConcatenationIndentation
     private def generate_file_contents
       file_contents = ''.dup
 
@@ -75,6 +76,7 @@ module GitHelper
       file_contents.strip
     end
     # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Layout/LineEndStringConcatenationIndentation
 
     private def ask_question(prompt, secret: false)
       highline.ask(prompt, { required: true, secret: secret })
