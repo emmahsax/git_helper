@@ -49,7 +49,6 @@ module GitHelper
     end
 
     # rubocop:disable Metrics/MethodLength
-    # rubocop:disable Layout/LineEndStringConcatenationIndentation
     private def generate_file_contents
       file_contents = ''.dup
 
@@ -76,7 +75,6 @@ module GitHelper
       file_contents.strip
     end
     # rubocop:enable Metrics/MethodLength
-    # rubocop:enable Layout/LineEndStringConcatenationIndentation
 
     private def ask_question(prompt, secret: false)
       highline.ask(prompt, { required: true, secret: secret })
