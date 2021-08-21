@@ -127,14 +127,15 @@ module GitHelper
     private def squash_merge_request
       return @squash_merge_request if @squash_merge_request
 
-      case existing_project.squash_option
-      when 'always', 'default_on'
-        @squash_merge_request = true
-      when 'never'
-        @squash_merge_request = false
-      else # 'default_off' or anything else
-        @squash_merge_request = highline.ask_yes_no('Squash merge request? (y/n)')
-      end
+      @squash_merge_request =
+        case existing_project.squash_option
+        when 'always', 'default_on'
+          true
+        when 'never'
+          false
+        else # 'default_off' or anything else
+          highline.ask_yes_no('Squash merge request? (y/n)')
+        end
     end
 
     private def remove_source_branch
