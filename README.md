@@ -1,4 +1,4 @@
-# Git Helper [![Main](https://github.com/emmahsax/git_helper/actions/workflows/main.yml/badge.svg)](https://github.com/emmahsax/git_helper/actions/workflows/main.yml)
+# Git Helper
 
 ## Gem Usage
 
