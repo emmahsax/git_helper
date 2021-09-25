@@ -115,7 +115,7 @@ git-helper clean-branches
 
 ### `code-request`
 
-This command can be used to handily make new GitHub/GitLab pull/merge requests from the command-line. The command uses either the [GitHub REST API](https://docs.github.com/en/rest) or [GitLab](https://docs.gitlab.com/ee/api/) to do this, so make sure you have a `~/.git_helper/config.yml` file set up in the home directory of your computer. For instructions on how to do that, see [Gem Usage](#gem-usage).
+This command can be used to handily make new GitHub/GitLab pull/merge requests from the command-line. The command uses either the [GitHub REST API](https://docs.github.com/en/rest) or [GitLab API](https://docs.gitlab.com/ee/api/) to do this, so make sure you have a `~/.git_helper/config.yml` file set up in the home directory of your computer. For instructions on how to do that, see [Gem Usage](#gem-usage). Furthermore, this project will use [JSON](https://www.npmjs.com/package/json), [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started), and [cURL](https://developer.zendesk.com/documentation/developer-tools/getting-started/installing-and-using-curl/).
 
 After setup is complete, you can call the command like this:
 
@@ -149,7 +149,7 @@ git-helper forget-local-commits
 
 ### `merge-code-request`
 
-This command can be used to merge pull/merge requests from the command-line. The command uses either the [GitHub REST API](https://docs.github.com/en/rest) or [GitLab API](https://docs.gitlab.com/ee/api/) to do this, so make sure you have a `~/.git_helper/config.yml` file set up in the home directory of your computer. For instructions on how to do that, see [Gem Usage](#gem-usage).
+This command can be used to merge pull/merge requests from the command-line. The command uses either the [GitHub REST API](https://docs.github.com/en/rest) or [GitLab API](https://docs.gitlab.com/ee/api/) to do this, so make sure you have a `~/.git_helper/config.yml` file set up in the home directory of your computer. For instructions on how to do that, see [Gem Usage](#gem-usage). Furthermore, this project will use [JSON](https://www.npmjs.com/package/json), [YAML](https://www.cloudbees.com/blog/yaml-tutorial-everything-you-need-get-started), and [cURL](https://developer.zendesk.com/documentation/developer-tools/getting-started/installing-and-using-curl/).
 
 After setup is complete, you can call the proper command like this:
 
