@@ -113,7 +113,7 @@ module GitHelper
     end
 
     private def pr_id
-      @pr_id ||= highline.ask('Pull Request ID?')
+      @pr_id ||= highline.ask('Pull Request ID?', { required: true })
     end
 
     private def merge_method

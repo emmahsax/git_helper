@@ -124,7 +124,7 @@ module GitHelper
     end
 
     private def mr_id
-      @mr_id ||= highline.ask('Merge Request ID?')
+      @mr_id ||= highline.ask('Merge Request ID?', { required: true })
     end
 
     private def squash_merge_request
