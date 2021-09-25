@@ -6,13 +6,17 @@ require 'git_helper'
 describe GitHelper::GitLabMergeRequest do
   let(:local_code) { double(:local_code, read_template: Faker::Lorem.word) }
   let(:highline_wrapper) { double(:highline_wrapper) }
-  let(:gitlab_client_client) { double(:gitlab_client_client, project: :project, merge_request: :merge_request, create_merge_request: :created) }
-  let(:gitlab_client) { double(:gitlab_client, client: gitlab_client_client) }
-  let(:diff_refs) { double(:diff_refs, base_sha: :base, head_sha: :head) }
+
+  let(:gitlab_client) do
+    double(:gitlab_client,
+           create_merge_request: merge_request,
+           accept_merge_request: merge_request)
+  end
 
   let(:merge_request) do
     double(:merge_request,
-           diff_refs: diff_refs,
+           message: Faker::Lorem.sentence,
+           diff_refs: { base_sha: Faker::Lorem.word, head_sha: Faker::Lorem.word },
            web_url: Faker::Internet.url,
            merge_commit_sha: Faker::Internet.password)
   end
@@ -38,7 +42,7 @@ describe GitHelper::GitLabMergeRequest do
       allow(subject).to receive(:squash_merge_request).and_return(true)
       allow(subject).to receive(:remove_source_branch).and_return(false)
       allow(subject).to receive(:new_mr_body).and_return('')
-      expect(gitlab_client_client).to receive(:create_merge_request).and_return(merge_request)
+      expect(gitlab_client).to receive(:create_merge_request).and_return(merge_request)
       subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })
     end
 
@@ -46,7 +50,7 @@ describe GitHelper::GitLabMergeRequest do
       expect(subject).to receive(:squash_merge_request).and_return(true)
       expect(subject).to receive(:remove_source_branch).and_return(false)
       expect(subject).to receive(:new_mr_body).and_return('')
-      allow(gitlab_client_client).to receive(:create_merge_request).and_return(merge_request)
+      allow(gitlab_client).to receive(:create_merge_request).and_return(merge_request)
       subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })
     end
 
@@ -54,7 +58,7 @@ describe GitHelper::GitLabMergeRequest do
       allow(subject).to receive(:squash_merge_request).and_return(true)
       allow(subject).to receive(:remove_source_branch).and_return(false)
       allow(subject).to receive(:new_mr_body).and_return('')
-      allow(gitlab_client_client).to receive(:create_merge_request).and_raise(StandardError)
+      allow(gitlab_client).to receive(:create_merge_request).and_raise(StandardError)
       expect(subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })).to eq(nil)
     end
   end
@@ -63,28 +67,28 @@ describe GitHelper::GitLabMergeRequest do
     it 'should call the gitlab client to merge' do
       allow(subject).to receive(:existing_mr).and_return(double(should_remove_source_branch: true, squash: false, title: 'title'))
       allow(subject).to receive(:mr_id).and_return(Faker::Number.number)
-      expect(gitlab_client_client).to receive(:accept_merge_request).and_return(merge_request)
+      expect(gitlab_client).to receive(:accept_merge_request).and_return(merge_request)
       subject.merge
     end
 
     it 'should call various other methods' do
       expect(subject).to receive(:existing_mr).and_return(double(should_remove_source_branch: true, squash: false, title: 'title')).at_least(:once)
       expect(subject).to receive(:mr_id).and_return(Faker::Number.number).at_least(:once)
-      allow(gitlab_client_client).to receive(:accept_merge_request).and_return(merge_request)
+      allow(gitlab_client).to receive(:accept_merge_request).and_return(merge_request)
       subject.merge
     end
 
     it 'should catch the raised error if the merge does not work' do
       allow(subject).to receive(:existing_mr).and_return(double(should_remove_source_branch: true, squash: false, title: 'title'))
       allow(subject).to receive(:mr_id).and_return(Faker::Number.number)
-      allow(gitlab_client_client).to receive(:accept_merge_request).and_raise(StandardError)
+      allow(gitlab_client).to receive(:accept_merge_request).and_raise(StandardError)
       expect(subject.merge).to eq(nil)
     end
 
     it 'should try to merge multiple times if the first merge errors' do
       allow(subject).to receive(:existing_mr).and_return(double(should_remove_source_branch: true, squash: false, title: 'title'))
       allow(subject).to receive(:mr_id).and_return(Faker::Number.number)
-      expect(gitlab_client_client).to receive(:accept_merge_request).and_return(double(merge_commit_sha: nil, merge_error: Faker::Lorem.word)).exactly(2).times
+      expect(gitlab_client).to receive(:accept_merge_request).and_return(double(merge_commit_sha: nil, merge_error: Faker::Lorem.word, message: Faker::Lorem.sentence)).exactly(2).times
       expect(subject.merge).to eq(nil)
     end
   end
@@ -257,7 +261,7 @@ describe GitHelper::GitLabMergeRequest do
 
   describe '#existing_project' do
     it 'should call the gitlab client' do
-      expect(gitlab_client_client).to receive(:project).and_return(:project)
+      expect(gitlab_client).to receive(:project).and_return(:project)
       subject.send(:existing_project)
     end
   end
@@ -265,7 +269,7 @@ describe GitHelper::GitLabMergeRequest do
   describe '#existing_mr' do
     it 'should call the gitlab client' do
       allow(highline_wrapper).to receive(:ask).and_return(Faker::Number.number)
-      expect(gitlab_client_client).to receive(:merge_request).and_return(:merge_request)
+      expect(gitlab_client).to receive(:merge_request).and_return(:merge_request)
       subject.send(:existing_mr)
     end
   end

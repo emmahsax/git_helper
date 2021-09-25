@@ -20,7 +20,6 @@ Gem::Specification.new do |gem|
   gem.test_files    = Dir['spec/spec_helper.rb'] + Dir['spec/git_helper/*.rb']
   gem.require_paths = ['lib']
 
-  gem.add_dependency 'gitlab', '~> 4.16'
   gem.add_dependency 'gli', '~> 2.13'
   gem.add_dependency 'highline_wrapper', '~> 1.1'
   gem.add_dependency 'octokit', '~> 4.18'
