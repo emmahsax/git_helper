@@ -29,7 +29,7 @@ module GitHelper
       puts "Creating merge request: #{new_mr_title}"
       mr = gitlab_client.create_merge_request(local_project, options)
 
-      raise StandardError(mr.message) if mr.diff_refs.nil? || mr.web_url.nil?
+      raise StandardError, mr.message if mr.diff_refs.nil? || mr.web_url.nil?
 
       if mr.diff_refs['base_sha'] == mr.diff_refs['head_sha']
         puts "Merge request was created, but no commits have been pushed to GitLab: #{mr.web_url}"
@@ -42,7 +42,7 @@ module GitHelper
       if e.message.include?('Another open merge request already exists')
         puts '  A merge request already exists for this branch'
       else
-        puts e.message
+        puts "  #{e.message}"
       end
     end
     # rubocop:enable Metrics/AbcSize
@@ -66,7 +66,7 @@ module GitHelper
         merge = gitlab_client.accept_merge_request(local_project, mr_id, options)
       end
 
-      raise StandardError(merge.message) if merge.merge_commit_sha.nil?
+      raise StandardError, merge.message if merge.merge_commit_sha.nil?
 
       puts "Merge request successfully merged: #{merge.merge_commit_sha}"
     rescue StandardError => e
@@ -77,7 +77,7 @@ module GitHelper
       elsif e.message.include?('405 Method Not Allowed')
         puts '  The merge request is not mergeable'
       else
-        puts e.message
+        puts "  #{e.message}"
       end
     end
     # rubocop:enable Metrics/AbcSize

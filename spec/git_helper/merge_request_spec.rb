@@ -6,12 +6,7 @@ require 'git_helper'
 describe GitHelper::GitLabMergeRequest do
   let(:local_code) { double(:local_code, read_template: Faker::Lorem.word) }
   let(:highline_wrapper) { double(:highline_wrapper) }
-
-  let(:gitlab_client) do
-    double(:gitlab_client,
-           create_merge_request: merge_request,
-           accept_merge_request: merge_request)
-  end
+  let(:gitlab_client) { double(:gitlab_client) }
 
   let(:merge_request) do
     double(:merge_request,

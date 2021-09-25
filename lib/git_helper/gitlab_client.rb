@@ -28,7 +28,7 @@ module GitHelper
       options.each do |key, value|
         next if value == ''
 
-        opts_as_string << "#{key}=#{value}&"
+        opts_as_string << "#{key}=#{url_encode(value.to_s)}&"
       end
       opts_as_string = opts_as_string.reverse.sub('&', '').reverse
       opts_as_string.empty? ? '' : "?#{opts_as_string}"
