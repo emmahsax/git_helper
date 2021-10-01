@@ -35,7 +35,7 @@ module GitHelper
       options.each do |key, value|
         next if value == ''
 
-        opts_as_string << "#{key.to_json}:#{value.to_json},"
+        opts_as_string << "#{key.to_json}:#{value.to_json.gsub("'", "'\\\\''")},"
       end
       opts_as_string = opts_as_string.reverse.sub(',', '').reverse
       opts_as_string.empty? ? '' : "{#{opts_as_string}}"
