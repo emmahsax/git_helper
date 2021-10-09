@@ -22,23 +22,28 @@ module GitHelper
         target_branch: base_branch,
         squash: squash_merge_request,
         remove_source_branch: remove_source_branch,
-        description: new_mr_body
+        description: new_mr_body,
+        title: new_mr_title
       }
 
       puts "Creating merge request: #{new_mr_title}"
-      mr = gitlab_client.create_merge_request(local_project, new_mr_title, options)
+      mr = gitlab_client.create_merge_request(local_project, options)
 
-      if mr.diff_refs.base_sha == mr.diff_refs.head_sha
+      raise StandardError, mr.message if mr.diff_refs.nil? || mr.web_url.nil?
+
+      if mr.diff_refs['base_sha'] == mr.diff_refs['head_sha']
         puts "Merge request was created, but no commits have been pushed to GitLab: #{mr.web_url}"
       else
         puts "Merge request successfully created: #{mr.web_url}"
       end
-    rescue Gitlab::Error::Conflict
-      puts 'Could not create merge request:'
-      puts '  A merge request already exists for this branch'
     rescue StandardError => e
       puts 'Could not create merge request:'
-      puts e.message
+
+      if e.message.include?('Another open merge request already exists')
+        puts '  A merge request already exists for this branch'
+      else
+        puts "  #{e.message}"
+      end
     end
     # rubocop:enable Metrics/AbcSize
     # rubocop:enable Metrics/MethodLength
@@ -61,21 +66,19 @@ module GitHelper
         merge = gitlab_client.accept_merge_request(local_project, mr_id, options)
       end
 
-      if merge.merge_commit_sha.nil?
-        puts 'Could not merge merge request:'
-        puts "  #{merge.merge_error}"
-      else
-        puts "Merge request successfully merged: #{merge.merge_commit_sha}"
-      end
-    rescue Gitlab::Error::MethodNotAllowed
-      puts 'Could not merge merge request:'
-      puts '  The merge request is not mergeable'
-    rescue Gitlab::Error::NotFound
-      puts 'Could not merge merge request:'
-      puts "  Could not a locate a merge request to merge with ID #{mr_id}"
+      raise StandardError, merge.message if merge.merge_commit_sha.nil?
+
+      puts "Merge request successfully merged: #{merge.merge_commit_sha}"
     rescue StandardError => e
       puts 'Could not merge merge request:'
-      puts e.message
+
+      if e.message.include?('404 Not found')
+        puts '  Could not a locate a merge request to merge with given ID'
+      elsif e.message.include?('405 Method Not Allowed')
+        puts '  The merge request is not mergeable'
+      else
+        puts "  #{e.message}"
+      end
     end
     # rubocop:enable Metrics/AbcSize
     # rubocop:enable Metrics/MethodLength
@@ -121,7 +124,7 @@ module GitHelper
     end
 
     private def mr_id
-      @mr_id ||= highline.ask('Merge Request ID?')
+      @mr_id ||= highline.ask('Merge Request ID?', { required: true })
     end
 
     private def squash_merge_request
@@ -154,7 +157,7 @@ module GitHelper
     end
 
     private def gitlab_client
-      @gitlab_client ||= GitHelper::GitLabClient.new.client
+      @gitlab_client ||= GitHelper::GitLabClient.new
     end
   end
 end

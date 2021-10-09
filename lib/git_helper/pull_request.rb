@@ -17,29 +17,29 @@ module GitHelper
       @base_branch = options[:base_branch]
       @new_pr_title = options[:new_title]
 
-      new_pr_body
+      options = {
+        head: local_branch,
+        base: base_branch,
+        body: new_pr_body,
+        title: new_pr_title
+      }
 
       puts "Creating pull request: #{new_pr_title}"
-      pr = octokit_client.create_pull_request(
-        local_repo,
-        base_branch,
-        local_branch,
-        new_pr_title,
-        new_pr_body
-      )
+      pr = github_client.create_pull_request(local_repo, options)
+
+      raise StandardError, pr.errors.first['message'] if pr.html_url.nil?
+
       puts "Pull request successfully created: #{pr.html_url}"
-    rescue Octokit::UnprocessableEntity => e
+    rescue StandardError => e
       puts 'Could not create pull request:'
-      if e.message.include?('pull request already exists')
+
+      if e.message.include?('A pull request already exists')
         puts '  A pull request already exists for this branch'
       elsif e.message.include?('No commits between')
         puts '  No commits have been pushed to GitHub'
       else
-        puts e.message
+        puts "  #{e.message}"
       end
-    rescue StandardError => e
-      puts 'Could not create pull request:'
-      puts e.message
     end
     # rubocop:enable Metrics/AbcSize
     # rubocop:enable Metrics/MethodLength
@@ -48,39 +48,26 @@ module GitHelper
     # rubocop:disable Metrics/AbcSize
     def merge
       pr_id
-      merge_method
+
+      options = {
+        merge_method: merge_method,
+        commit_title: existing_pr.title
+      }
 
       puts "Merging pull request: #{pr_id}"
-      merge = octokit_client.merge_pull_request(
-        local_repo,
-        pr_id,
-        existing_pr.title,
-        { merge_method: merge_method }
-      )
+      merge = github_client.merge_pull_request(local_repo, pr_id, options)
+
+      raise StandardError, merge.message if merge.sha.nil?
+
       puts "Pull request successfully merged: #{merge.sha}"
-    rescue Octokit::NotFound
-      puts 'Could not merge pull request:'
-      puts "  Could not a locate a pull request to merge with ID #{pr_id}"
-    rescue Octokit::MethodNotAllowed => e
-      puts 'Could not merge pull request:'
-      if e.message.include?('405 - Required status check')
-        puts '  A required status check has not passed'
-      elsif e.message.include?('405 - Base branch was modified')
-        puts '  The base branch has been modified'
-      elsif e.message.include?('405 - Pull Request is not mergeable')
-        puts '  The pull request is not mergeable'
-      elsif e.message.include?('405 - Rebase merges are not allowed on this repository')
-        puts '  Rebase merges are not allowed on this repository'
-      elsif e.message.include?('405 - Merge commits are not allowed on this repository')
-        puts '  Merge commits are not allowed on this repository'
-      elsif e.message.include?('405 - Squash commits are not allowed on this repository')
-        puts '  Squash merges are not allowed on this repository'
-      else
-        puts e.message
-      end
     rescue StandardError => e
       puts 'Could not merge pull request:'
-      puts e.message
+
+      if e.message.include?('Not found')
+        puts '  Could not a locate a pull request to merge with given ID'
+      else
+        puts "  #{e.message}"
+      end
     end
     # rubocop:enable Metrics/AbcSize
     # rubocop:enable Metrics/MethodLength
@@ -126,7 +113,7 @@ module GitHelper
     end
 
     private def pr_id
-      @pr_id ||= highline.ask('Pull Request ID?')
+      @pr_id ||= highline.ask('Pull Request ID?', { required: true })
     end
 
     private def merge_method
@@ -149,15 +136,15 @@ module GitHelper
     end
 
     private def existing_project
-      @existing_project ||= octokit_client.repository(local_repo)
+      @existing_project ||= github_client.repository(local_repo)
     end
 
     private def existing_pr
-      @existing_pr ||= octokit_client.pull_request(local_repo, pr_id)
+      @existing_pr ||= github_client.pull_request(local_repo, pr_id)
     end
 
-    private def octokit_client
-      @octokit_client ||= GitHelper::OctokitClient.new.client
+    private def github_client
+      @github_client ||= GitHelper::GitHubClient.new
     end
   end
 end
