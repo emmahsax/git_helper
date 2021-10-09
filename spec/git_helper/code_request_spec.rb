@@ -250,7 +250,7 @@ describe GitHelper::CodeRequest do
   end
 
   describe '#local_code' do
-    it 'should call the octokit client' do
+    it 'should call the GitHub client' do
       expect(GitHelper::LocalCode).to receive(:new).and_return(local_code)
       subject.send(:local_code)
     end
