@@ -6,8 +6,7 @@ require 'git_helper'
 describe GitHelper::GitHubPullRequest do
   let(:local_code) { double(:local_code, read_template: Faker::Lorem.word) }
   let(:highline_wrapper) { double(:highline_wrapper) }
-  let(:octokit_client_client) { double(:octokit_client_client, project: :project, merge_request: :merge_request, create_merge_request: :created) }
-  let(:octokit_client) { double(:octokit_client, client: octokit_client_client) }
+  let(:github_client) { double(:github_client) }
 
   let(:options) do
     {
@@ -21,36 +20,36 @@ describe GitHelper::GitHubPullRequest do
   subject { GitHelper::GitHubPullRequest.new(options) }
 
   before do
-    allow(GitHelper::OctokitClient).to receive(:new).and_return(octokit_client)
+    allow(GitHelper::GitHubClient).to receive(:new).and_return(github_client)
     allow(subject).to receive(:puts)
   end
 
   describe '#create' do
-    it 'should call the octokit client to create' do
+    it 'should call the GitHub client to create' do
       allow(subject).to receive(:new_pr_body).and_return('')
-      expect(octokit_client_client).to receive(:create_pull_request).and_return(double(html_url: Faker::Internet.url))
+      expect(github_client).to receive(:create_pull_request).and_return(double(html_url: Faker::Internet.url))
       subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })
     end
 
     it 'should call various other methods' do
       expect(subject).to receive(:new_pr_body).and_return('').at_least(:once)
-      allow(octokit_client_client).to receive(:create_pull_request).and_return(double(html_url: Faker::Internet.url))
+      allow(github_client).to receive(:create_pull_request).and_return(double(html_url: Faker::Internet.url))
       subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })
     end
 
     it 'should catch the raised error if the creation does not work' do
       allow(subject).to receive(:new_pr_body).and_return('')
-      allow(octokit_client_client).to receive(:create_pull_request).and_raise(StandardError)
+      allow(github_client).to receive(:create_pull_request).and_raise(StandardError)
       expect(subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })).to eq(nil)
     end
   end
 
   describe '#merge' do
-    it 'should call the octokit client to merge' do
+    it 'should call the GitHub client to merge' do
       allow(subject).to receive(:existing_pr).and_return(double(title: Faker::Lorem.word))
       allow(subject).to receive(:merge_method).and_return('rebase')
       allow(subject).to receive(:pr_id).and_return(Faker::Number.number)
-      expect(octokit_client_client).to receive(:merge_pull_request).and_return(double(sha: Faker::Internet.password))
+      expect(github_client).to receive(:merge_pull_request).and_return(double(sha: Faker::Internet.password))
       subject.merge
     end
 
@@ -58,7 +57,7 @@ describe GitHelper::GitHubPullRequest do
       expect(subject).to receive(:existing_pr).and_return(double(title: Faker::Lorem.word)).at_least(:once)
       expect(subject).to receive(:merge_method).and_return('rebase').at_least(:once)
       expect(subject).to receive(:pr_id).and_return(Faker::Number.number).at_least(:once)
-      allow(octokit_client_client).to receive(:merge_pull_request).and_return(double(sha: Faker::Internet.password))
+      allow(github_client).to receive(:merge_pull_request).and_return(double(sha: Faker::Internet.password))
       subject.merge
     end
 
@@ -66,7 +65,7 @@ describe GitHelper::GitHubPullRequest do
       allow(subject).to receive(:existing_pr).and_return(double(title: Faker::Lorem.word))
       allow(subject).to receive(:merge_method).and_return('rebase')
       allow(subject).to receive(:pr_id).and_return(Faker::Number.number)
-      allow(octokit_client_client).to receive(:merge_pull_request).and_raise(StandardError)
+      allow(github_client).to receive(:merge_pull_request).and_raise(StandardError)
       expect(subject.merge).to eq(nil)
     end
   end
@@ -233,24 +232,24 @@ describe GitHelper::GitHubPullRequest do
   end
 
   describe '#existing_project' do
-    it 'should call the octokit client' do
-      expect(octokit_client_client).to receive(:repository).and_return(:repository)
+    it 'should call the GitHub client' do
+      expect(github_client).to receive(:repository).and_return(:repository)
       subject.send(:existing_project)
     end
   end
 
   describe '#existing_pr' do
-    it 'should call the octokit client' do
+    it 'should call the GitHub client' do
       allow(highline_wrapper).to receive(:ask).and_return(Faker::Number.number)
-      expect(octokit_client_client).to receive(:pull_request).and_return(:pull_request)
+      expect(github_client).to receive(:pull_request).and_return(:pull_request)
       subject.send(:existing_pr)
     end
   end
 
-  describe '#octokit_client' do
-    it 'should call the octokit client' do
-      expect(GitHelper::OctokitClient).to receive(:new).and_return(octokit_client)
-      subject.send(:octokit_client)
+  describe '#github_client' do
+    it 'should call the GitHub client' do
+      expect(GitHelper::GitHubClient).to receive(:new).and_return(github_client)
+      subject.send(:github_client)
     end
   end
 end

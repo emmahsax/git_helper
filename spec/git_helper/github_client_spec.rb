@@ -3,75 +3,75 @@
 require 'spec_helper'
 require 'git_helper'
 
-describe GitHelper::GitLabClient do
-  let(:git_config_reader) { double(:git_config_reader, gitlab_token: :token) }
+describe GitHelper::GitHubClient do
+  let(:git_config_reader) { double(:git_config_reader, github_token: :token) }
 
-  subject { GitHelper::GitLabClient.new }
+  subject { GitHelper::GitHubClient.new }
 
   before do
     allow(GitHelper::GitConfigReader).to receive(:new).and_return(git_config_reader)
   end
 
-  describe '#project' do
+  describe '#repository' do
     it 'should call to run a query' do
       expect(subject).to receive(:run)
-      subject.project(Faker::Lorem.word)
+      subject.repository(Faker::Lorem.word)
     end
 
     it "should return the run command's answer" do
       expect(subject).to receive(:run).and_return(:command_complete)
-      expect(subject.project(Faker::Lorem.word)).to eq(:command_complete)
+      expect(subject.repository(Faker::Lorem.word)).to eq(:command_complete)
     end
   end
 
-  describe '#merge_request' do
+  describe '#pull_request' do
     it 'should call to run a query' do
       expect(subject).to receive(:run)
-      subject.merge_request(Faker::Lorem.word, Faker::Number.number)
+      subject.pull_request(Faker::Lorem.word, Faker::Number.number)
     end
 
     it "should return the run command's answer" do
       expect(subject).to receive(:run).and_return(:command_complete)
-      expect(subject.merge_request(Faker::Lorem.word, Faker::Number.number)).to eq(:command_complete)
+      expect(subject.pull_request(Faker::Lorem.word, Faker::Number.number)).to eq(:command_complete)
     end
   end
 
-  describe '#create_merge_request' do
+  describe '#create_pull_request' do
     it 'should call to run a query' do
       expect(subject).to receive(:run)
-      subject.create_merge_request(Faker::Lorem.word, {})
+      subject.create_pull_request(Faker::Lorem.word, {})
     end
 
     it 'should generate a string list of options' do
       expect(subject).to receive(:format_options).with({})
-      subject.create_merge_request(Faker::Lorem.word, {})
+      subject.create_pull_request(Faker::Lorem.word, {})
     end
 
     it "should return the run command's answer" do
       expect(subject).to receive(:run).and_return(:command_complete)
-      expect(subject.create_merge_request(Faker::Lorem.word, {})).to eq(:command_complete)
+      expect(subject.create_pull_request(Faker::Lorem.word, {})).to eq(:command_complete)
     end
   end
 
-  describe '#accept_merge_request' do
+  describe '#merge_pull_request' do
     it 'should call to run a query' do
       expect(subject).to receive(:run)
-      subject.accept_merge_request(Faker::Lorem.word, Faker::Number.number, {})
+      subject.merge_pull_request(Faker::Lorem.word, Faker::Number.number, {})
     end
 
     it 'should generate a string list of options' do
       expect(subject).to receive(:format_options).with({})
-      subject.accept_merge_request(Faker::Lorem.word, Faker::Number.number, {})
+      subject.merge_pull_request(Faker::Lorem.word, Faker::Number.number, {})
     end
 
     it "should return the run command's answer" do
       expect(subject).to receive(:run).and_return(:command_complete)
-      expect(subject.accept_merge_request(Faker::Lorem.word, Faker::Number.number, {})).to eq(:command_complete)
+      expect(subject.merge_pull_request(Faker::Lorem.word, Faker::Number.number, {})).to eq(:command_complete)
     end
   end
 
   describe '#format_options' do
-    it 'will make a list of hash options into a URL string' do
+    it 'will make a list of hash options into a JSON parsed chunk of key/value pairs as string' do
       options = {
         key1: 'value1',
         key2: true,
@@ -79,7 +79,9 @@ describe GitHelper::GitLabClient do
         key4: false,
         key5: 'value5'
       }
-      result = '?key1=value1&key2=true&key4=false&key5=value5'
+      # rubocop:disable Style/StringLiterals
+      result = "{\"key1\":\"value1\",\"key2\":true,\"key4\":false,\"key5\":\"value5\"}"
+      # rubocop:enable Style/StringLiterals
       expect(subject.send(:format_options, options)).to eq(result)
     end
 
@@ -100,38 +102,23 @@ describe GitHelper::GitLabClient do
   describe '#run' do
     it 'should call CURL' do
       expect(subject).to receive(:`).and_return('{}')
-      subject.send(:run, 'GET', "/projects/#{Faker::Lorem.word}")
+      subject.send(:run, Faker::Lorem.word, 'GET', "/projects/#{Faker::Lorem.word}")
     end
 
     it 'should use JSON to parse the response' do
       expect(JSON).to receive(:parse).and_return({})
-      subject.send(:run, 'GET', "/projects/#{Faker::Lorem.word}")
+      subject.send(:run, Faker::Lorem.word, 'GET', "/projects/#{Faker::Lorem.word}")
     end
 
     it 'should use OpenStruct to turn the hash into an object' do
       expect(OpenStruct).to receive(:new).and_return(OpenStruct.new)
-      subject.send(:run, 'GET', "/projects/#{Faker::Lorem.word}")
+      subject.send(:run, Faker::Lorem.word, 'GET', "/projects/#{Faker::Lorem.word}")
     end
   end
 
-  describe '#url_encode' do
-    let(:group_name) { Faker::Lorem.word }
-    let(:project_name) { Faker::Lorem.word }
-
-    it 'should return the same string as passed in but with no spaces' do
-      expect(subject.send(:url_encode, "#{group_name}/#{project_name}")).to eq("#{group_name}%2F#{project_name}")
-    end
-
-    it 'should never include a space or a slash' do
-      resp = subject.send(:url_encode, "#{group_name} #{Faker::Lorem.word}/#{project_name}")
-      expect(resp).not_to include(' ')
-      expect(resp).not_to include('/')
-    end
-  end
-
-  describe '#gitlab_token' do
+  describe '#github_token' do
     it 'should return a token' do
-      expect(subject.send(:gitlab_token)).to eq(:token)
+      expect(subject.send(:github_token)).to eq(:token)
     end
   end
 
