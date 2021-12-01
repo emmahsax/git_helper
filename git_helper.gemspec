@@ -12,6 +12,7 @@ Gem::Specification.new do |gem|
   gem.homepage              = 'https://github.com/emmahsax/git_helper'
   gem.license               = 'BSD-3-Clause'
   gem.required_ruby_version = '>= 2.5'
+  gem.metadata              = { 'rubygems_mfa_required' => 'true' }
 
   gem.executables   = Dir['bin/*'].map { |f| File.basename(f) }
   gem.files         = Dir['lib/git_helper/*.rb'] + Dir['lib/*.rb'] + Dir['bin/*']
