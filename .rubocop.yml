@@ -101,6 +101,9 @@ Style/MixinUsage:
 Style/NegatedIfElseCondition:
   Enabled: true
 
+Style/OpenStructUse:
+  Enabled: false
+
 Style/OptionalBooleanParameter:
   Enabled: true
   # AllowedMethods: method_missing
