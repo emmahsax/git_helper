@@ -199,7 +199,7 @@ describe GitHelper::LocalCode do
 
   describe '#read_template' do
     it 'should call File.open' do
-      expect(File).to receive(:open).and_return(double(read: true))
+      expect(File).to receive(:read).and_return(double)
       subject.read_template('.gitignore')
     end
   end

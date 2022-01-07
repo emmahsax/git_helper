@@ -108,7 +108,7 @@ module GitHelper
     # rubocop:enable Metrics/AbcSize
 
     def read_template(file_name)
-      File.open(file_name).read
+      File.read(file_name)
     end
 
     # rubocop:disable Metrics/AbcSize
