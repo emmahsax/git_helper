@@ -122,14 +122,14 @@ module GitHelper
         branch_arr.first.capitalize
       elsif branch_arr[0].scan(/(\w+)/).any? && branch_arr[1].scan(/(\d+)/).any? # branch includes jira_123 at beginning
         issue = "#{branch_arr[0].upcase}-#{branch_arr[1]}"
-        description = branch_arr[2..-1].join(' ')
+        description = branch_arr[2..].join(' ')
         "#{issue} #{description.capitalize}"
       elsif branch_arr[0].scan(/(\w+-\d+)/).any? # branch includes string jira-123 at beginning
         issue = branch_arr[0].upcase
-        description = branch_arr[1..-1].join(' ')
+        description = branch_arr[1..].join(' ')
         "#{issue} #{description.capitalize}"
       else # plain words
-        branch_arr[0..-1].join(' ').capitalize
+        branch_arr[0..].join(' ').capitalize
       end
     end
     # rubocop:enable Metrics/MethodLength
