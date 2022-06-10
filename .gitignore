@@ -1,12 +1,12 @@
-.bundle
-.config
-.DS_Store
-.idea
 *.gem
 *.rbc
-coverage
+.DS_Store
+.bundle
+.config
+.idea
 Gemfile.lock
 InstalledFiles
+coverage
 lib/bundler/man
 log/
 pkg
