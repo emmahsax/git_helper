@@ -19,7 +19,6 @@ Gem::Specification.new do |gem|
   gem.require_paths         = ['lib']
   gem.required_ruby_version = '>= 2.5'
   gem.summary               = 'A set of GitHub and GitLab workflow scripts'
-  gem.test_files            = Dir['spec/spec_helper.rb'] + Dir['spec/git_helper/*.rb']
   gem.version               = GitHelper::VERSION
 
   gem.add_dependency 'gli', '~> 2.13'
