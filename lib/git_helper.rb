@@ -6,7 +6,7 @@ require 'highline_wrapper'
 
 files = "#{File.expand_path(File.join(File.dirname(File.absolute_path(__FILE__)), 'git_helper'))}/**/*.rb"
 
-Dir[files].each do |file|
+Dir[files].sort.each do |file|
   require_relative file
 end
 
