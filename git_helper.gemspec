@@ -3,23 +3,24 @@
 require File.expand_path('lib/git_helper/version.rb', __dir__)
 
 Gem::Specification.new do |gem|
-  gem.name                  = 'git_helper'
-  gem.version               = GitHelper::VERSION
   gem.authors               = ['Emma Sax']
-  gem.summary               = 'A set of GitHub and GitLab workflow scripts'
   gem.description           = 'A set of GitHub and GitLab workflow scripts to provide a smoother development ' \
                               'process for your git projects.'
-  gem.homepage              = 'https://github.com/emmahsax/git_helper'
-  gem.license               = 'BSD-3-Clause'
-  gem.required_ruby_version = '>= 2.5'
-  gem.metadata              = { 'rubygems_mfa_required' => 'true' }
+  gem.executables           = Dir['bin/*'].map { |f| File.basename(f) }
 
-  gem.executables   = Dir['bin/*'].map { |f| File.basename(f) }
-  gem.files         = Dir['lib/git_helper/*.rb'] + Dir['lib/*.rb'] + Dir['bin/*']
+  gem.files = Dir['lib/git_helper/*.rb'] + Dir['lib/*.rb'] + Dir['bin/*']
   gem.files += Dir['[A-Z]*'] + Dir['test/**/*']
   gem.files.reject! { |fn| fn.include? '.gem' }
-  gem.test_files    = Dir['spec/spec_helper.rb'] + Dir['spec/git_helper/*.rb']
-  gem.require_paths = ['lib']
+
+  gem.homepage              = 'https://github.com/emmahsax/git_helper'
+  gem.license               = 'BSD-3-Clause'
+  gem.metadata              = { 'rubygems_mfa_required' => 'true' }
+  gem.name                  = 'git_helper'
+  gem.require_paths         = ['lib']
+  gem.required_ruby_version = '>= 2.5'
+  gem.summary               = 'A set of GitHub and GitLab workflow scripts'
+  gem.test_files            = Dir['spec/spec_helper.rb'] + Dir['spec/git_helper/*.rb']
+  gem.version               = GitHelper::VERSION
 
   gem.add_dependency 'gli', '~> 2.13'
   gem.add_dependency 'highline_wrapper', '~> 1.1'
