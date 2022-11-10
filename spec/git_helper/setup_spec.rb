@@ -153,15 +153,6 @@ describe GitHelper::Setup do
       subject.send(:create_or_update_plugin_files)
     end
 
-    it 'should not create the directory if it already exists' do
-      allow(File).to receive(:exist?).and_return(true)
-      allow(File).to receive(:open).and_return(nil)
-      expect(Dir).not_to receive(:mkdir)
-      allow(subject).to receive(:`).and_return(plugins_json)
-      allow(JSON).to receive(:parse).and_return(plugins)
-      subject.send(:create_or_update_plugin_files)
-    end
-
     it 'should curl the GitHub API' do
       allow(Dir).to receive(:mkdir).and_return(true)
       allow(File).to receive(:exists?).and_return(true)
