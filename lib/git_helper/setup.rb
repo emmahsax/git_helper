@@ -32,7 +32,7 @@ module GitHelper
       return unless answer
 
       create_or_update_plugin_files
-      puts "\nNow add this line to your ~/.bash_profile:\n " \
+      puts "\nNow add this line to your ~/.bash_profile:\n  " \
            'export PATH=/path/to/computer/home/.git_helper/plugins:$PATH'
       puts "\nDone!"
     end
