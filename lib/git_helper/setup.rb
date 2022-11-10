@@ -88,7 +88,7 @@ module GitHelper
       token = git_config_reader.github_token
       user = git_config_reader.github_user
 
-      Dir.mkdir(plugins_dir)
+      FileUtils.mkdir_p(plugins_dir)
 
       all_plugins = JSON.parse(`curl -s -u #{user}:#{token} -H "#{header}" -L "#{plugins_url}"`)
 

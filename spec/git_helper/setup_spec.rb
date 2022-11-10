@@ -147,7 +147,7 @@ describe GitHelper::Setup do
     it 'should create the directory if it does not exist' do
       allow(File).to receive(:exist?).and_return(false)
       allow(File).to receive(:open).and_return(nil)
-      expect(Dir).to receive(:mkdir)
+      expect(FileUtils).to receive(:mkdir_p)
       allow(subject).to receive(:`).and_return(plugins_json)
       allow(JSON).to receive(:parse).and_return(plugins)
       subject.send(:create_or_update_plugin_files)
