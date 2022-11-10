@@ -98,6 +98,7 @@ module GitHelper
       end
     end
     # rubocop:enable Metrics/MethodLength
+
     private def config_file
       git_config_reader.git_config_file_path
     end
