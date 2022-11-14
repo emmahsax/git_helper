@@ -32,8 +32,8 @@ module GitHelper
       return unless answer
 
       create_or_update_plugin_files
-      puts "\nNow add this line to your ~/.bash_profile:\n" \
-           '  export PATH=/path/to/computer/home/.git_helper/plugins:$PATH'
+      puts "\nNow add this line to your ~/.bash_profile:\n  " \
+           'export PATH=/path/to/computer/home/.git_helper/plugins:$PATH'
       puts "\nDone!"
     end
 
@@ -66,8 +66,8 @@ module GitHelper
         file_contents << ":gitlab_user:  #{ask_question('GitLab username?')}\n"
         file_contents << ':gitlab_token: ' \
           "#{ask_question(
-            'GitLab personal access token? (Navigate to https://gitlab.com/-/profile/personal_access_tokens' \
-            ' to create a new personal access token)',
+            'GitLab personal access token? (Navigate to https://gitlab.com/-/profile/personal_access_tokens ' \
+            'to create a new personal access token)',
             secret: true
           )}\n"
       end
@@ -81,7 +81,6 @@ module GitHelper
     end
 
     # rubocop:disable Metrics/MethodLength
-    # rubocop:disable Metrics/AbcSize
     private def create_or_update_plugin_files
       plugins_dir = "#{Dir.pwd.scan(%r{\A/\w*/\w*/}).first}.git_helper/plugins"
       plugins_url = 'https://api.github.com/repos/emmahsax/git_helper/contents/plugins'
@@ -89,7 +88,7 @@ module GitHelper
       token = git_config_reader.github_token
       user = git_config_reader.github_user
 
-      Dir.mkdir(plugins_dir) unless File.exist?(plugins_dir)
+      FileUtils.mkdir_p(plugins_dir)
 
       all_plugins = JSON.parse(`curl -s -u #{user}:#{token} -H "#{header}" -L "#{plugins_url}"`)
 
@@ -99,7 +98,6 @@ module GitHelper
       end
     end
     # rubocop:enable Metrics/MethodLength
-    # rubocop:enable Metrics/AbcSize
 
     private def config_file
       git_config_reader.git_config_file_path

@@ -13,7 +13,7 @@ env:
     'QPHNXYfNwA1m1LTF7c8xY8pfj5t13vzb0GkA3ZoU',
     'tEBvYBpZi4OIRtS43mLpjLdR6Sp14xSbMZgBgNsv'
   ]"
-  GITLEAKS_VERSION: v8.8.7
+  GITLEAKS_VERSION: v8.15.0
   RUN_DEFAULT_ON_ALL_COMMITS: 'true'
 
 ###########################################################
