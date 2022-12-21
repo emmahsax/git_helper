@@ -56,6 +56,24 @@ describe GitHelper::GitLabMergeRequest do
       allow(gitlab_client).to receive(:create_merge_request).and_raise(StandardError)
       expect(subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word })).to eq(nil)
     end
+
+    context 'when diff_refs is nil' do
+      let(:merge_request) do
+        double(:merge_request,
+               message: Faker::Lorem.sentence,
+               diff_refs: nil,
+               web_url: Faker::Internet.url,
+               merge_commit_sha: Faker::Internet.password)
+      end
+
+      it 'should continue if diff_refs is nil' do
+        allow(subject).to receive(:squash_merge_request).and_return(true)
+        allow(subject).to receive(:remove_source_branch).and_return(false)
+        allow(subject).to receive(:new_mr_body).and_return('')
+        allow(gitlab_client).to receive(:create_merge_request)
+        expect { subject.create({ base_branch: Faker::Lorem.word, new_title: Faker::Lorem.word }) }.not_to raise_error
+      end
+    end
   end
 
   describe '#merge' do

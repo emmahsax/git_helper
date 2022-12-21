@@ -29,21 +29,16 @@ module GitHelper
       puts "Creating merge request: #{new_mr_title}"
       mr = gitlab_client.create_merge_request(local_project, options)
 
-      raise StandardError, mr.message if mr.diff_refs.nil? || mr.web_url.nil?
-
-      if mr.diff_refs['base_sha'] == mr.diff_refs['head_sha']
+      if mr.web_url && mr.diff_refs && (mr.diff_refs['base_sha'] == mr.diff_refs['head_sha'])
         puts "Merge request was created, but no commits have been pushed to GitLab: #{mr.web_url}"
-      else
+      elsif mr.web_url
         puts "Merge request successfully created: #{mr.web_url}"
+      else
+        raise StandardError, (mr.message.instance_of?(Array) ? mr.message.first : mr.message)
       end
     rescue StandardError => e
       puts 'Could not create merge request:'
-
-      if e.message.include?('Another open merge request already exists')
-        puts '  A merge request already exists for this branch'
-      else
-        puts "  #{e.message}"
-      end
+      puts "  #{e.message}"
     end
     # rubocop:enable Metrics/AbcSize
     # rubocop:enable Metrics/MethodLength
