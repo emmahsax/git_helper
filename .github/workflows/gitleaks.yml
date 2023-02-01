@@ -8,7 +8,7 @@ on:
 
 jobs:
   gitleaks:
-    uses: emmahsax/reusable-github-actions-workflows/.github/workflows/gitleaks.yml@test
+    uses: emmahsax/github-actions/.github/workflows/gitleaks.yml@main
     with:
       gitleaks_config_regexes: "[
         'QPHNXYfNwA1m1LTF7c8xY8pfj5t13vzb0GkA3ZoU',
