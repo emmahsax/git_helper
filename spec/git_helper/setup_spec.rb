@@ -18,7 +18,7 @@ describe GitHelper::Setup do
   describe '#execute' do
     it 'only asks the user one question if the config file does not exist' do
       allow(subject).to receive(:config_file_exists?).and_return(false)
-      allow(File).to receive(:exists?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect(highline_wrapper).to receive(:ask_yes_no).and_return(true).exactly(:once)
       allow(subject).to receive(:create_or_update_config_file).and_return(true)
       allow(subject).to receive(:create_or_update_plugin_files)
@@ -27,7 +27,7 @@ describe GitHelper::Setup do
 
     it 'should ask two questions if the config file exists' do
       allow(subject).to receive(:config_file_exists?).and_return(true)
-      allow(File).to receive(:exists?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect(highline_wrapper).to receive(:ask_yes_no).and_return(true).at_least(:twice)
       allow(subject).to receive(:create_or_update_config_file).and_return(true)
       allow(subject).to receive(:create_or_update_plugin_files)
@@ -35,7 +35,7 @@ describe GitHelper::Setup do
     end
 
     it 'should call to create or update the config file' do
-      allow(File).to receive(:exists?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       allow(highline_wrapper).to receive(:ask_yes_no).and_return(true)
       expect(subject).to receive(:create_or_update_config_file).and_return(true)
       allow(subject).to receive(:create_or_update_plugin_files)
@@ -43,7 +43,7 @@ describe GitHelper::Setup do
     end
 
     it 'should skip if the user opts not to continue' do
-      allow(File).to receive(:exists?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       allow(subject).to receive(:config_file_exists?).and_return(true)
       allow(highline_wrapper).to receive(:ask_yes_no).and_return(false)
       expect(subject).not_to receive(:create_or_update_config_file)
@@ -155,7 +155,7 @@ describe GitHelper::Setup do
 
     it 'should curl the GitHub API' do
       allow(Dir).to receive(:mkdir).and_return(true)
-      allow(File).to receive(:exists?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       allow(File).to receive(:open).and_return(nil)
       allow(subject).to receive(:`).and_return(plugins_json)
       expect(JSON).to receive(:parse).with(plugins_json).and_return(plugins)
@@ -164,7 +164,7 @@ describe GitHelper::Setup do
 
     it 'should go through the loop for each plugin' do
       allow(Dir).to receive(:mkdir).and_return(true)
-      allow(File).to receive(:exists?).and_return(true)
+      allow(File).to receive(:exist?).and_return(true)
       allow(File).to receive(:open).and_return(nil)
       expect(subject).to receive(:`).exactly(3).times
       allow(JSON).to receive(:parse).and_return(plugins)
