@@ -12,7 +12,7 @@ Once the gem is installed, run this to view the help screen:
 git-helper --help
 ```
 
-To see what version of git_helper you're running, run:
+To see what version of Git Helper you're running, run:
 
 ```bash
 git-helper --version
@@ -47,7 +47,7 @@ git-helper clean-branches             git clean-branches
 git-helper code-request               git code-request
 ```
 
-Running the following will give you the option to set this up:
+Running the `setup` command will give you the option to set this up:
 
 ```bash
 git-helper setup
@@ -63,7 +63,7 @@ git config --global alias.nb new-branch
 
 And then running `git nb` maps to `git new-branch`, which through the plugin, maps to `git-helper new-branch`.
 
-Or you can set the alias through your `~/.bashrc` (which is my preferred method because it can make the command even shorter, and doesn't require the plugin usage). To do this, add lines like this to the `~/.bashrc` file and run `source ~/.bashrc`:
+Or you can set the alias through your `~/.zshrc` (which is my preferred method because it can make the command even shorter, and doesn't require the plugin usage). To do this, add lines like this to the `~/.zshrc` file and run `source ~/.zshrc`:
 
 ```bash
 alias gnb="git new-branch"
