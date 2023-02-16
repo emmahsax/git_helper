@@ -32,7 +32,6 @@ module GitHelper
       return unless answer
 
       create_or_update_plugin_files
-      `export PATH="$HOME/.git_helper/plugins:$PATH"`
       puts "\nNow add this line to your ~/.zshrc:\n  " \
            'export PATH="$HOME/.git_helper/plugins:$PATH"'
       puts "\nDone!"
