@@ -32,14 +32,16 @@ module GitHelper
       return unless answer
 
       create_or_update_plugin_files
-      puts "\nNow add this line to your ~/.bash_profile:\n  " \
-           'export PATH=/path/to/computer/home/.git_helper/plugins:$PATH'
+      `export PATH="$HOME/.git_helper/plugins:$PATH"`
+      puts "\nNow add this line to your ~/.zshrc:\n  " \
+           'export PATH="$HOME/.git_helper/plugins:$PATH"'
       puts "\nDone!"
     end
 
     private def create_or_update_config_file
       contents = generate_file_contents
       puts "Creating or updating your #{config_file} file..."
+      FileUtils.mkdir_p("#{Dir.home}/.git_helper")
       File.open(config_file, 'w') { |file| file.puts contents }
       puts "\nDone!\n\n"
     end
@@ -82,7 +84,7 @@ module GitHelper
 
     # rubocop:disable Metrics/MethodLength
     private def create_or_update_plugin_files
-      plugins_dir = "#{Dir.pwd.scan(%r{\A/\w*/\w*/}).first}.git_helper/plugins"
+      plugins_dir = "#{Dir.home}/.git_helper/plugins"
       plugins_url = 'https://api.github.com/repos/emmahsax/git_helper/contents/plugins'
       header = 'Accept: application/vnd.github.v3.raw'
       token = git_config_reader.github_token
