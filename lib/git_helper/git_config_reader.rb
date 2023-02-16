@@ -19,7 +19,7 @@ module GitHelper
     end
 
     def git_config_file_path
-      "#{Dir.pwd.scan(%r{\A/\w*/\w*/}).first}.git_helper/config.yml"
+      "#{Dir.home}/.git_helper/config.yml"
     end
 
     private def config_file

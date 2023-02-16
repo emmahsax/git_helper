@@ -77,13 +77,13 @@ describe GitHelper::GitConfigReader do
 
   describe '#git_config_file_path' do
     it 'should look in the current directory' do
-      expect(Dir).to receive(:pwd).and_return("/Users/#{Faker::Name.first_name}/#{Faker::Lorem.word}")
+      expect(Dir).to receive(:home).and_return("/Users/#{Faker::Name.first_name}/#{Faker::Lorem.word}")
       subject.send(:git_config_file_path)
     end
 
     it 'should return the base path with the git config file at the end' do
       user = Faker::Name.first_name
-      allow(Dir).to receive(:pwd).and_return("/Users/#{user}/#{Faker::Lorem.word}")
+      allow(Dir).to receive(:home).and_return("/Users/#{user}")
       expect(subject.send(:git_config_file_path)).to eq("/Users/#{user}/.git_helper/config.yml")
     end
   end

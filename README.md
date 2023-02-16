@@ -6,7 +6,27 @@
 gem install git_helper
 ```
 
-Some of the commands in this gem can be used without any additional configuration. However, others utilize special GitHub or GitLab configuration. To provide access tokens for this, create a `~/.git_helper/config.yml` file. The contents should look like this:
+Once the gem is installed, run this to view the help screen:
+
+```bash
+git-helper --help
+```
+
+To see what version of Git Helper you're running, run:
+
+```bash
+git-helper --version
+```
+
+Some of the commands in this gem can be used without any additional configuration. However, others utilize special GitHub or GitLab configuration. To set up access with GitHub/GitLab, run:
+
+```bash
+git-helper setup
+```
+
+This will give you the option to set up credentials at GitHub and/or GitLab, as well as give you the choice to set up Git Helper as a plugin or not (see below).
+
+The final result will be a `~/.git_helper/config.yml` file with the contents in this form:
 
 ```
 :github_user:  GITHUB-USERNAME
@@ -16,21 +36,6 @@ Some of the commands in this gem can be used without any additional configuratio
 ```
 
 To create or see what access tokens you have, look [here for GitHub personal access tokens](https://github.com/settings/tokens) and [here for GitLab access tokens](https://gitlab.com/profile/personal_access_tokens). You could either have one set of tokens for each computer you use, or just have one set of tokens for all computers that you rotate periodically.
-
-Once the gem is installed, run this to view the help screen:
-```bash
-git-helper --help
-```
-
-To see what version of git_helper you're running, run:
-```bash
-git-helper --version
-```
-
-To help you create the `~/.git_helper/config.yml` file and set up the plugins (see below), run this command and allow the command to walk you through the prompts:
-```bash
-git-helper setup
-```
 
 ## Plugin Usage
 
@@ -42,20 +47,11 @@ git-helper clean-branches             git clean-branches
 git-helper code-request               git code-request
 ```
 
-To do this, download the `plugins.zip` file in the root of this directory. Unzip and place the contents in the appropriate location:
+Running the `setup` command will give you the option to set this up:
 
 ```bash
-mkdir ~/.git_helper
-unzip path/to/downloaded/plugins.zip -d ~/.git_helper
+git-helper setup
 ```
-
-Now, the plugins will live in `~/.git_helper/plugins/*`. Add the following line to your `~/.bash_profile`:
-
-```bash
-export PATH=/path/to/computer/home/.git_helper/plugins:$PATH
-```
-
-And then run `source ~/.bash_profile`.
 
 ## Alias Usage
 
@@ -67,7 +63,7 @@ git config --global alias.nb new-branch
 
 And then running `git nb` maps to `git new-branch`, which through the plugin, maps to `git-helper new-branch`.
 
-Or you can set the alias through your `~/.bashrc` (which is my preferred method because it can make the command even shorter, and doesn't require the plugin usage). To do this, add lines like this to the `~/.bashrc` file and run `source ~/.bashrc`:
+Or you can set the alias through your `~/.zshrc` (which is my preferred method because it can make the command even shorter, and doesn't require the plugin usage). To do this, add lines like this to the `~/.zshrc` file and run `source ~/.zshrc`:
 
 ```bash
 alias gnb="git new-branch"
