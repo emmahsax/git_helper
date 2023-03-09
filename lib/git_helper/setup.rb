@@ -80,7 +80,6 @@ module GitHelper
       highline.ask(prompt, { required: true, secret: secret })
     end
 
-    # rubocop:disable Metrics/MethodLength
     private def create_or_update_plugin_files
       plugins_dir = "#{Dir.home}/.git_helper/plugins"
       plugins_url = 'https://api.github.com/repos/emmahsax/git_helper/contents/plugins'
@@ -95,7 +94,6 @@ module GitHelper
         File.open("#{plugins_dir}/#{plugin['name']}", 'w') { |file| file.puts plugin_content }
       end
     end
-    # rubocop:enable Metrics/MethodLength
 
     private def config_file
       git_config_reader.git_config_file_path
