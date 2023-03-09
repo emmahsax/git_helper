@@ -24,8 +24,7 @@ module GitHelper
 
     private def execute_plugins
       answer = highline.ask_yes_no(
-        'Do you wish to set up the Git Helper plugins? (y/n) (This process will ' \
-        'attempt to use your GitHub personal access token to authenticate)',
+        'Do you wish to set up the Git Helper plugins? (y/n)',
         { required: true }
       )
 
@@ -86,15 +85,13 @@ module GitHelper
       plugins_dir = "#{Dir.home}/.git_helper/plugins"
       plugins_url = 'https://api.github.com/repos/emmahsax/git_helper/contents/plugins'
       header = 'Accept: application/vnd.github.v3.raw'
-      token = git_config_reader.github_token
-      user = git_config_reader.github_user
 
       FileUtils.mkdir_p(plugins_dir)
 
-      all_plugins = JSON.parse(`curl -s -u #{user}:#{token} -H "#{header}" -L "#{plugins_url}"`)
+      all_plugins = JSON.parse(`curl -s -H "#{header}" -L "#{plugins_url}"`)
 
       all_plugins.each do |plugin|
-        plugin_content = `curl -s -u #{user}:#{token} -H "#{header}" -L "#{plugins_url}/#{plugin['name']}"`
+        plugin_content = `curl -s -H "#{header}" -L "#{plugins_url}/#{plugin['name']}"`
         File.open("#{plugins_dir}/#{plugin['name']}", 'w') { |file| file.puts plugin_content }
       end
     end
