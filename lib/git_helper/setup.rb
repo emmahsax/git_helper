@@ -91,7 +91,7 @@ module GitHelper
 
       all_plugins.each do |plugin|
         plugin_content = `curl -s -H "#{header}" -L "#{plugins_url}/#{plugin['name']}"`
-        File.open("#{plugins_dir}/#{plugin['name']}", 'w') { |file| file.puts plugin_content }
+        File.open("#{plugins_dir}/#{plugin['name']}", 'w', 0o755) { |file| file.puts plugin_content }
       end
     end
 
