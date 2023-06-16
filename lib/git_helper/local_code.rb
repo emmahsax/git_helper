@@ -66,11 +66,11 @@ module GitHelper
     end
 
     def github_repo?
-      remotes.select { |remote| remote.include?('github') }.any?
+      remotes.any? { |remote| remote.include?('github') }
     end
 
     def gitlab_project?
-      remotes.select { |remote| remote.include?('gitlab') }.any?
+      remotes.any? { |remote| remote.include?('gitlab') }
     end
 
     def project_name
