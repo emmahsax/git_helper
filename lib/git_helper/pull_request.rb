@@ -90,7 +90,7 @@ module GitHelper
     private def determine_template
       if pr_template_options.count == 1
         apply_single_template = highline.ask_yes_no(
-          "Apply the pull request template from #{pr_template_options.first}? (y/n)"
+          "Apply the pull request template from #{pr_template_options.first}? (Y/n)"
         )
         @template_name_to_apply = pr_template_options.first if apply_single_template
       else

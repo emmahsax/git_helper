@@ -96,7 +96,7 @@ module GitHelper
     private def determine_template
       if mr_template_options.count == 1
         apply_single_template = highline.ask_yes_no(
-          "Apply the merge request template from #{mr_template_options.first}? (y/n)"
+          "Apply the merge request template from #{mr_template_options.first}? (Y/n)"
         )
         @template_name_to_apply = mr_template_options.first if apply_single_template
       else
@@ -132,14 +132,14 @@ module GitHelper
         when 'never'
           false
         else # 'default_off' or anything else
-          highline.ask_yes_no('Squash merge request? (y/n)')
+          highline.ask_yes_no('Squash merge request? (Y/n)')
         end
     end
 
     private def remove_source_branch
       @remove_source_branch ||=
         existing_project.remove_source_branch_after_merge || highline.ask_yes_no(
-          'Remove source branch after merging? (y/n)'
+          'Remove source branch after merging? (Y/n)'
         )
     end
 
