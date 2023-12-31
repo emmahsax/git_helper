@@ -1,5 +1,10 @@
 # Git Helper
 
+#### This version of `git_helper`, codified in Ruby, has been replaced with a [new version, codified in Go](https://github.com/emmahsax/go-git-helper)! The Go version has _almost_ all of the same functionality that the Ruby version had (the only command not copied over was `merge-code-request`, which I found more buggy and irritating than it was to just press the `Merge` button in the UI). The Go version also has better performance. Check it out today to install or migrate:
+
+* Installation instructions: https://github.com/emmahsax/go-git-helper#installation
+* Migration instructions: https://github.com/emmahsax/go-git-helper#migrating-from-the-ruby-version-of-git-helper
+
 ## Gem Usage
 
 ```bash
@@ -204,3 +209,11 @@ To make a new release of this gem:
 6. Run `rm *.gem` to clean up your local repository
 
 To set up your local machine to push to RubyGems via the API, see the [RubyGems documentation](https://guides.rubygems.org/publishing/#publishing-to-rubygemsorg).
+
+### Archival Notice
+
+This repository has been archived and designated as read-only. From GitHub's documentation:
+
+> This will make the emmahsax/git_helper repository, issues, pull requests, labels, milestones, projects, wiki, releases, commits, tags, branches, reactions and comments read-only and disable any future comments. The repository can still be forked.
+
+To unarchive this repository at any time, please reach out to me at https://emmasax.com/contact-me/.
